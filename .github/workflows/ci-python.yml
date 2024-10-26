@@ -23,7 +23,6 @@ jobs:
           cacheFrom: ghcr.io/${{ github.repository }}/corpora-ci
           push: never
           runCmd: |
-            docker compose --verbose -f .devcontainer/docker-compose.yaml up -d
             flake8 /workspace/py
             pytest /workspace/py
 
