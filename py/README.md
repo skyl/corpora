@@ -31,11 +31,3 @@ git clone https://github.com/skyl/corpora.git
 2. Open the repository in Visual Studio Code.
 
 3. CMD+Shift+P (Ctrl+Shift+P on Windows) to open the command palette and select `Remote-Containers: Reopen in Container`.
-
-
-<!-- To preserve your history in the devcontainer, create a history file ON YOUR HOST:
-
-```bash
-mkdir -p ~/.vscode-zsh-histories
-touch ~/.vscode-zsh-histories/corpora.zsh_history
-``` -->

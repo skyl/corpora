@@ -18,9 +18,9 @@
         }
     },
     "mounts": [
-        "source=${env:HOME}/.corpora.zsh_history,target=/home/vscode/.zsh_history,type=bind"
+        "source=${env:HOME}/.corpora.zsh_history,target=/home/vscode/.corpora.zsh_history,type=bind"
     ],
-    "postCreateCommand": "/workspace/.devcontainer/setup.sh",
+    "postCreateCommand": "/workspace/.devcontainer/setup.sh && zsh",
     "forwardPorts": [
         8000,
         5432

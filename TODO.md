@@ -1,6 +1,5 @@
 # TODO
 
-- devcontainer history
 - GH actions build/test/lint python
 - testproj README, all READMEs at all levels
 - Model Files / Splits - how to interface as customer? Internal should be same?
@@ -15,3 +14,4 @@
 - LICENSE
 - how to install postgres
 - devcontainer
+- devcontainer history
