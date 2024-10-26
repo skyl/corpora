@@ -1,33 +1,35 @@
-name: CI Python
+name: Python CI
 
 on:
   pull_request:
     paths:
       - 'py/**'
       - '.github/**'
-      - 'devcontainer/**'
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      CI: true
+
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Set up Dev Container and run commands
-        uses: devcontainers/ci@v0.3
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          imageName: ghcr.io/${{ github.repository }}/corpora-ci
-          cacheFrom: ghcr.io/${{ github.repository }}/corpora-ci
-          push: never
-          runCmd: |
-            flake8 /workspace/py
-            pytest /workspace/py
+          python-version: ${{ matrix.python-version }}
 
-      - name: Capture Container Logs on Failure
-        if: failure()
+      - name: Install dependencies
         run: |
-          echo "Collecting logs from the app container..."
-          docker compose -f .devcontainer/docker-compose.yaml logs app || true
+          python -m pip install --upgrade pip
+          pip install -r py/requirements.txt
+
+      - name: Lint with flake8
+        run: flake8 py/
+
+      - name: Run tests with pytest
+        run: pytest py/
