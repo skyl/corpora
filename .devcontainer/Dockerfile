@@ -11,5 +11,5 @@ SHELL ["/bin/zsh", "-c"]
 
 # Set up the workspace and install Python dependencies
 WORKDIR /workspace
-COPY py/requirements.txt /workspace/py/requirements.txt
+COPY py/ /workspace/py/
 RUN pip install -r /workspace/py/requirements.txt

@@ -3,16 +3,18 @@ version: '3.8'
 services:
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
     volumes:
-      - .:/workspace
+      - ..:/workspace
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
+      PYTHONPATH: "/workspace/py/packages"
     depends_on:
       - db
     ports:
       - "8000:8000"
+    command: sleep infinity
 
   db:
     image: postgres:17
