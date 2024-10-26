@@ -6,6 +6,9 @@
     "customizations": {
         "vscode": {
             "settings": {
+                "python.formatting.provider": "black",
+                "editor.formatOnSave": true,
+                "python.linting.enabled": true,
                 "python.pythonPath": "/usr/local/bin/python",
                 "python.analysis.autoImportCompletions": true,
                 "terminal.integrated.shell.linux": "/bin/zsh"

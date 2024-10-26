@@ -1,7 +1,8 @@
 # TODO
 
 - GH actions build/test/lint python
-  - Same devcontainer works for both
+  - Same devcontainer works for both? no.
+  - choose python linting tool
 - main branch protection
 
 - testproj README, all READMEs at all levels
