@@ -1,0 +1,47 @@
+name: CI Python
+
+on:
+  pull_request:
+    paths:
+      - 'py/**'
+      - '.github/**'
+      - 'devcontainer/**'
+
+jobs:
+  # Define the `build` job to set up the environment and test requirements
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      # Set up Docker to use the devcontainer setup
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build devcontainer
+        run: docker build -f .devcontainer/Dockerfile -t corpora-ci .
+
+  # Job to lint Python code using flake8
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run flake8 Linting
+        run: docker run corpora-ci flake8 /workspace/py
+
+  # Job to run tests with pytest
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Pytest
+        run: docker run corpora-ci pytest /workspace/py

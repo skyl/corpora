@@ -12,6 +12,8 @@
             "extensions": [
                 "ms-python.python",
                 "ms-azuretools.vscode-docker",
+                "github.vscode-github-actions",
+                // not sure about these below
                 "mtxr.sqltools",
                 "mtxr.sqltools-driver-pg"
             ]
