@@ -16,6 +16,8 @@ jobs:
 
       - name: Set up Dev Container and run commands
         uses: devcontainers/ci@v0.3
+        # env:
+        #   CI: true
         with:
           imageName: ghcr.io/${{ github.repository }}/corpora-ci
           cacheFrom: ghcr.io/${{ github.repository }}/corpora-ci

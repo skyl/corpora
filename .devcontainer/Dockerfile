@@ -1,4 +1,3 @@
-# Use a Python base image
 FROM mcr.microsoft.com/devcontainers/python:3.12
 
 # Install PostgreSQL client and Zsh

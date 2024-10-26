@@ -1,6 +1,7 @@
 # TODO
 
 - GH actions build/test/lint python
+  - Same devcontainer works for both
 - main branch protection
 
 - testproj README, all READMEs at all levels
