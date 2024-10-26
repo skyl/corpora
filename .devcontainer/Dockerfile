@@ -1,0 +1,15 @@
+# Use a Python base image
+FROM mcr.microsoft.com/devcontainers/python:3.12
+
+# Install PostgreSQL client and Zsh
+RUN apt-get update && apt-get install -y \
+    postgresql-client zsh && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Set Zsh as the default shell
+SHELL ["/bin/zsh", "-c"]
+
+# Set up the workspace and install Python dependencies
+WORKDIR /workspace
+COPY py/requirements.txt /workspace/py/requirements.txt
+RUN pip install -r /workspace/py/requirements.txt
