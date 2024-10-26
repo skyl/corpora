@@ -7,13 +7,13 @@ services:
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - ..:/workspace
-      - ${HOME}/.gnupg:/home/vscode/.gnupg
+      # - ${HOME}/.gnupg:/home/vscode/.gnupg
       - ${HOME}/.gitconfig:/home/vscode/.gitconfig:ro
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
       PYTHONPATH: "/workspace/py/packages"
-      GPG_TTY: "/dev/pts/0" # GPG_TTY configured
-      GNUPGHOME: "/home/vscode/.gnupg"
+      # GPG_TTY: "/dev/pts/0" # GPG_TTY configured
+      # GNUPGHOME: "/home/vscode/.gnupg"
       # GPG_TTY: "$(tty)"
       # GNUPGHOME: "/root/.gnupg"
     depends_on:
