@@ -32,4 +32,6 @@ jobs:
         run: black --check py/
 
       - name: Run tests with pytest
+        env:
+          PYTHONPATH: py/packages
         run: pytest py/
