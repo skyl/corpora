@@ -2,10 +2,13 @@
 
 Python codebase for **Corpora** — a collection of tools to enhance and evolve arbitrary corpora.
 
-## Contents
+# Python Codebase
 
-- [**packages/**](packages/README.md): Python packages
-- [**requirements.txt**](requirements.txt): Combined dependencies for all Python packages and development tools.
+Contains the primary Python code and configurations for the project.
+
+- [**packages/**](packages/README.md): Core packages and apps.
+- [**requirements.txt**](../requirements.txt): Main dependencies.
+- [**requirements-dev.txt**](../requirements-dev.txt): Development dependencies.
 
 ## Quickstart
 

@@ -1,5 +1,5 @@
 {
-    "name": "Django + PostgreSQL DevContainer",
+    "name": "Corpora DevContainer",
     "dockerComposeFile": "docker-compose.yaml",
     "service": "app",
     "workspaceFolder": "/workspace",

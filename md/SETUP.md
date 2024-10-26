@@ -19,3 +19,4 @@ pip install -r py/requirements.txt
 <!-- Wait, shouldn't we just have a devcontainer? -->
 
 See [../.devcontainer/devcontainer.json](../.devcontainer/devcontainer.json).
+and [../py/README.md](../py/README.md).
