@@ -1,6 +1,8 @@
 # TODO
 
 - GH actions build/test/lint python
+- main branch protection
+
 - testproj README, all READMEs at all levels
 - Model Files / Splits - how to interface as customer? Internal should be same?
 
