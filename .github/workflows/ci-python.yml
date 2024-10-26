@@ -15,6 +15,7 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+
       - name: Set up Dev Container and run commands
         uses: devcontainers/ci@v0.3
         with:
@@ -24,3 +25,9 @@ jobs:
           runCmd: |
             flake8 /workspace/py
             pytest /workspace/py
+
+      - name: Capture Container Logs on Failure
+        if: failure()
+        run: |
+          echo "Collecting logs from the app container..."
+          docker compose -f .devcontainer/docker-compose.yaml logs app || true
