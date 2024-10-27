@@ -1,10 +1,9 @@
 # TODO
 
-- .devcontainer/README.md
+- main branch protection
 
 # Next
 
-- main branch protection
 - Model Files / Splits - how to interface as customer? Internal should be same?
 - consider ruff
 - pr-agent only on comments?
@@ -22,3 +21,5 @@
   - choose python linting tool (black)
 - testproj README, all READMEs at all levels
 - add pr-agent?
+- .devcontainer/README.md
+
