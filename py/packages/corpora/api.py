@@ -4,14 +4,17 @@ from corpora.lib.files import calculate_checksum
 from corpora.lib.dj.decorators import async_raise_not_found
 from .models import Corpus, File
 from .schema import CorpusSchema, CorpusResponseSchema, FileSchema, FileResponseSchema
+from .auth import BearerAuth
 
-api = NinjaAPI()
+api = NinjaAPI(auth=BearerAuth())
 
 
 @api.post("/corpus", response={201: CorpusResponseSchema})
 async def create_corpus(request, payload: CorpusSchema):
     """Create a new Corpus."""
-    corpus = await Corpus.objects.acreate(name=payload.name, url=payload.url)
+    corpus = await Corpus.objects.acreate(
+        name=payload.name, url=payload.url, owner=request.user
+    )
     return corpus
 
 

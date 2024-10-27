@@ -1,7 +1,10 @@
 import uuid
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 from pgvector.django import VectorField
+
+User = get_user_model()
 
 
 class Corpus(models.Model):
@@ -13,6 +16,12 @@ class Corpus(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="corpora",
+        help_text="User who owns the corpus.",
+    )
     url = models.URLField(
         null=True,
         blank=True,
