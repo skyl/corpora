@@ -8,7 +8,7 @@ services:
       # careful, you can change your host config from inside the container
       - ${HOME}/.gitconfig:/home/vscode/.gitconfig
     environment:
-      DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
+      # DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
       PYTHONPATH: "/workspace/py/packages"
     depends_on:
       - db
@@ -27,6 +27,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    # Install pgvector after container is up
+    entrypoint: bash -c "apt-get update && apt-get install -y postgresql-17-pgvector && docker-entrypoint.sh postgres"
 
 volumes:
   postgres-data:

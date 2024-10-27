@@ -7,6 +7,7 @@
         "vscode": {
             "settings": {
                 "python.formatting.provider": "black",
+                "python.formatting.formatOnSave": true,
                 "python.formatting.blackArgs": [
                     "--line-length",
                     "88",
