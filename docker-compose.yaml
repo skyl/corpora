@@ -1,14 +1,14 @@
 services:
   app:
     build:
-      context: ..
+      context: .
       dockerfile: .devcontainer/Dockerfile
     volumes:
-      - ..:/workspace
+      - .:/workspace
       # careful, you can change your host config from inside the container
       - ${HOME}/.gitconfig:/home/vscode/.gitconfig
     environment:
-      DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
+      # DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
       PYTHONPATH: "/workspace/py/packages"
     depends_on:
       - db
@@ -18,7 +18,9 @@ services:
     # entrypoint: "./.devcontainer/entrypoint.sh"
 
   db:
-    image: postgres:17
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.pgvector
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

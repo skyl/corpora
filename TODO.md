@@ -1,7 +1,10 @@
 # TODO
 
-- Model Files / Splits - how to interface as customer? Internal should be same?
-  - CLI, API, is there a way to talk to DB directly? LFG
+
+- API
+- CLI that hits API
+  - API spec, generation (?)
+- play with models in admin and management commands with direct DB access
 
 # Next
 
@@ -23,4 +26,8 @@
 - add pr-agent?
 - .devcontainer/README.md
 - main branch protection
+- Start core models
+- Model Files / Splits - how to interface as customer? Internal should be same?
+  - (think) CLI, API, is there a way to talk to DB directly? LFG
+
 
