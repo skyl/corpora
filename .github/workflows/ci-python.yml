@@ -52,14 +52,13 @@ jobs:
             sleep 2;
           done
 
-      # Install pgvector
       - name: Install pgvector in PostgreSQL
         env:
           POSTGRES_DB: postgres
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         run: |
-          apt-get update && apt-get install -y postgresql-17-pgvector && \
+          sudo apt-get update && sudo apt-get install -y postgresql-17-pgvector && \
           psql -h localhost -U postgres -d postgres -c "CREATE EXTENSION IF NOT EXISTS vector;"
 
       - name: Black
