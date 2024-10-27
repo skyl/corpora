@@ -4,22 +4,21 @@ from .models import Corpus, File, Split
 
 @admin.register(Corpus)
 class CorpusAdmin(admin.ModelAdmin):
-    list_display = ("name", "uuid", "url", "created_at", "updated_at")
-    search_fields = ("name", "uuid", "url")
-    list_filter = ("created_at", "updated_at")
+    list_display = ("name", "id", "url", "created_at", "updated_at")
+    search_fields = ("name", "id", "url")
     ordering = ("-updated_at",)
-    readonly_fields = ("uuid", "created_at", "updated_at")
+    readonly_fields = ("id", "created_at", "updated_at")
     fieldsets = (
-        (None, {"fields": ("name", "uuid", "url")}),
+        (None, {"fields": ("name", "id", "url")}),
         ("Timestamps", {"fields": ("created_at", "updated_at")}),
     )
 
 
 @admin.register(File)
 class FileAdmin(admin.ModelAdmin):
+    autocomplete_fields = ("corpus",)
     list_display = ("path", "corpus", "checksum", "created_at", "updated_at")
     search_fields = ("path", "checksum", "corpus__name")
-    list_filter = ("corpus", "created_at", "updated_at")
     ordering = ("corpus", "path")
     readonly_fields = ("checksum", "created_at", "updated_at")
     fieldsets = (
@@ -31,9 +30,9 @@ class FileAdmin(admin.ModelAdmin):
 
 @admin.register(Split)
 class SplitAdmin(admin.ModelAdmin):
+    autocomplete_fields = ("file",)
     list_display = ("file", "order", "content_preview", "metadata")
     search_fields = ("file__path", "content")
-    list_filter = ("file__corpus", "file")
     ordering = ("file", "order")
     readonly_fields = ("vector",)
     fieldsets = (
