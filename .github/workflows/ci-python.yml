@@ -14,6 +14,25 @@ jobs:
       matrix:
         python-version: ["3.12"]
 
+    services:
+      # Add a PostgreSQL 17 service with pgvector installation
+      postgres:
+        image: postgres:17
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        entrypoint: bash -c "apt-get update &&
+                             apt-get install -y postgresql-17-pgvector &&
+                             docker-entrypoint.sh postgres"
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -28,10 +47,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r py/requirements.txt
 
+      # Wait for PostgreSQL to be ready
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL...";
+            sleep 2;
+          done
+
+      - name: Set up pgvector extension
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -c "CREATE EXTENSION IF NOT EXISTS vector;"
+
       - name: Black
         run: black --check py/
 
       - name: Run tests with pytest
         env:
           PYTHONPATH: py/packages
+          POSTGRES_HOST: localhost
         run: pytest py/
