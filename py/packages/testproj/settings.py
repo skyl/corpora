@@ -18,7 +18,9 @@ import os
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-&amtx9f($xhj8vof6pn#gczuu6c!0^3!^9po+l_279q(6h_soa")
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY", "django-insecure-&amtx9f($xhj8vof6pn#gczuu6c!0^3!^9po+l_279q(6h_soa"
+)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = []
