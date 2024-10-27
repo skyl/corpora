@@ -1,7 +1,10 @@
 name: Build and Push PostgreSQL with pgvector
 
 on:
-  push:  # This will trigger on any branch push
+  # push:  # This will trigger on any branch push
+  # for now can be manually triggered occasionally
+  # gh auth login
+  # gh workflow run .github/workflows/pgvector17.yml --ref main
   workflow_dispatch:
 
 jobs:
