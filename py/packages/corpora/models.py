@@ -50,7 +50,7 @@ class File(models.Model):
         ordering = ["path"]
 
     def __str__(self):
-        return f"File {self.path} in {self.corpus.name}"
+        return f"{self.corpus.name}:{self.path}"
 
 
 class Split(models.Model):
@@ -66,4 +66,4 @@ class Split(models.Model):
         ordering = ["file", "order"]
 
     def __str__(self):
-        return f"Split {self.order} of {self.file.path} in {self.file.corpus.name}"
+        return f"{self.file.corpus.name}:{self.file.path}:{self.order}"
