@@ -1,0 +1,35 @@
+{
+    "name": "Corpora DevContainer",
+    "dockerComposeFile": "docker-compose.yaml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.formatting.provider": "black",
+                "editor.formatOnSave": true,
+                "python.linting.enabled": true,
+                "python.pythonPath": "/usr/local/bin/python",
+                "python.analysis.autoImportCompletions": true,
+                "terminal.integrated.shell.linux": "/bin/zsh"
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-azuretools.vscode-docker",
+                "github.vscode-github-actions",
+                // not sure about these below
+                "mtxr.sqltools",
+                "mtxr.sqltools-driver-pg"
+            ]
+        }
+    },
+    "mounts": [
+        "source=${env:HOME}/.corpora.zsh_history,target=/home/vscode/.corpora.zsh_history,type=bind"
+    ],
+    "postCreateCommand": "/workspace/.devcontainer/setup.sh",
+    "forwardPorts": [
+        8000,
+        5432
+    ],
+    "remoteUser": "vscode"
+}
