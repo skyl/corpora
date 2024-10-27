@@ -15,11 +15,8 @@ jobs:
         python-version: ["3.12"]
 
     services:
-      # PostgreSQL 17 service
       postgres:
-        build:
-          context: .
-          dockerfile: docker/Dockerfile.pgvector
+        image: ghcr.io/${{ github.repository_owner }}/postgres-pgvector:17
         ports:
           - 5432:5432
         env:
@@ -45,14 +42,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r py/requirements.txt
-
-      # Wait for PostgreSQL to be ready
-      - name: Wait for PostgreSQL
-        run: |
-          until pg_isready -h localhost -p 5432 -U postgres; do
-            echo "Waiting for PostgreSQL...";
-            sleep 2;
-          done
 
       - name: Black
         run: black --check py/
