@@ -4,13 +4,13 @@ from .models import Corpus, File, Split
 
 @admin.register(Corpus)
 class CorpusAdmin(admin.ModelAdmin):
-    list_display = ("name", "uuid", "url", "created_at", "updated_at")
-    search_fields = ("name", "uuid", "url")
+    list_display = ("name", "id", "url", "created_at", "updated_at")
+    search_fields = ("name", "id", "url")
     list_filter = ("created_at", "updated_at")
     ordering = ("-updated_at",)
-    readonly_fields = ("uuid", "created_at", "updated_at")
+    readonly_fields = ("id", "created_at", "updated_at")
     fieldsets = (
-        (None, {"fields": ("name", "uuid", "url")}),
+        (None, {"fields": ("name", "id", "url")}),
         ("Timestamps", {"fields": ("created_at", "updated_at")}),
     )
 

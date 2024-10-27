@@ -11,13 +11,7 @@ class Corpus(models.Model):
     tracking its origin, such as a GitHub repository.
     """
 
-    uuid = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
-        unique=True,
-        help_text="Unique identifier for each corpus, used as the primary key.",
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     url = models.URLField(
         null=True,
@@ -37,10 +31,11 @@ class Corpus(models.Model):
         verbose_name_plural = "corpora"
 
     def __str__(self):
-        return f"Corpus: {self.name} ({self.uuid})"
+        return self.name
 
 
 class File(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     corpus = models.ForeignKey(Corpus, on_delete=models.CASCADE, related_name="files")
     path = models.CharField(max_length=1024)
     content = models.TextField(blank=True)
@@ -58,10 +53,10 @@ class File(models.Model):
         return f"File {self.path} in {self.corpus.name}"
 
 
-# Split model to store split content with vectorization, ordering within files
 class Split(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     file = models.ForeignKey(File, on_delete=models.CASCADE, related_name="splits")
-    order = models.PositiveIntegerField()  # Ordering for splits within the file
+    order = models.PositiveIntegerField()
     content = models.TextField(blank=True)
     vector = VectorField(dimensions=300, null=True, blank=True)
     metadata = models.JSONField(default=dict, blank=True)

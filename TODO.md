@@ -5,6 +5,7 @@
 - CLI that hits API
   - API spec, generation (?)
 - play with models in admin and management commands with direct DB access
+- auth/auth for API endpoints, Corpus ownership
 
 # Next
 
