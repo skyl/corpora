@@ -2,10 +2,18 @@ on:
   pull_request:
     types: [opened, reopened, ready_for_review]
   issue_comment:
+# TODO: in the future we probably want to only run on demand
+# on:
+#   issue_comment:
+#     types: [created]
 
 jobs:
   pr_agent_job:
     if: ${{ github.event.sender.type != 'Bot' }}
+    # TODO: on demand at some point?
+    # if: >
+    #   github.event.issue.pull_request &&
+    #   (github.event.comment.body == '/review' || github.event.comment.body == '/describe')
     runs-on: ubuntu-latest
     permissions:
       issues: write
