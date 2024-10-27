@@ -10,15 +10,12 @@ services:
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
       PYTHONPATH: "/workspace/py/packages"
-      # Set CI to true in the environment or default to false
-      CI: ${CI:-false}
     depends_on:
       - db
     ports:
       - "8000:8000"
-    # command: sleep infinity
-    # shell: /bin/zsh
-    entrypoint: "./.devcontainer/entrypoint.sh"
+    # runs CMD from Dockerfile right now
+    # entrypoint: "./.devcontainer/entrypoint.sh"
 
   db:
     image: postgres:17

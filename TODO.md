@@ -1,13 +1,12 @@
 # TODO
 
-- add pr-agent?
-- .devcontainer/README.md
+- Model Files / Splits - how to interface as customer? Internal should be same?
+  - CLI, API, is there a way to talk to DB directly? LFG
 
 # Next
 
-- main branch protection
-- Model Files / Splits - how to interface as customer? Internal should be same?
 - consider ruff
+- pr-agent only on comments?
 - SaaS versus internal, dogfood
 
 # Done
@@ -21,3 +20,7 @@
   - Same devcontainer works for both? no, maybe later, still early
   - choose python linting tool (black)
 - testproj README, all READMEs at all levels
+- add pr-agent?
+- .devcontainer/README.md
+- main branch protection
+
