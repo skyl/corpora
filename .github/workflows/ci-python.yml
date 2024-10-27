@@ -17,7 +17,9 @@ jobs:
     services:
       # PostgreSQL 17 service
       postgres:
-        image: postgres:17
+        build:
+          context: .
+          dockerfile: docker/Dockerfile.pgvector
         ports:
           - 5432:5432
         env:
@@ -51,15 +53,6 @@ jobs:
             echo "Waiting for PostgreSQL...";
             sleep 2;
           done
-
-      - name: Install pgvector in PostgreSQL
-        env:
-          POSTGRES_DB: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        run: |
-          sudo apt-get update && sudo apt-get install -y postgresql-17-pgvector && \
-          psql -h localhost -U postgres -d postgres -c "CREATE EXTENSION IF NOT EXISTS vector;"
 
       - name: Black
         run: black --check py/

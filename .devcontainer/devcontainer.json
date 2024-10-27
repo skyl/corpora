@@ -1,6 +1,6 @@
 {
     "name": "Corpora DevContainer",
-    "dockerComposeFile": "docker-compose.yaml",
+    "dockerComposeFile": "../docker-compose.yaml",
     "service": "app",
     "workspaceFolder": "/workspace",
     "customizations": {

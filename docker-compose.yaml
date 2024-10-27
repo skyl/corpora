@@ -1,10 +1,10 @@
 services:
   app:
     build:
-      context: ..
+      context: .
       dockerfile: .devcontainer/Dockerfile
     volumes:
-      - ..:/workspace
+      - .:/workspace
       # careful, you can change your host config from inside the container
       - ${HOME}/.gitconfig:/home/vscode/.gitconfig
     environment:
@@ -18,7 +18,9 @@ services:
     # entrypoint: "./.devcontainer/entrypoint.sh"
 
   db:
-    image: postgres:17
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.pgvector
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -27,8 +29,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    # Install pgvector after container is up
-    entrypoint: bash -c "apt-get update && apt-get install -y postgresql-17-pgvector && docker-entrypoint.sh postgres"
 
 volumes:
   postgres-data:
