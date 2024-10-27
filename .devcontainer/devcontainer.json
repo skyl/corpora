@@ -7,6 +7,17 @@
         "vscode": {
             "settings": {
                 "python.formatting.provider": "black",
+                "python.formatting.blackArgs": [
+                    "--line-length",
+                    "88",
+                    "--config",
+                    "/workspace/py/pyproject.toml"
+                ],
+                // meh, you might need to uninstall autopep8 manually
+                // ... if the editor is formatting wrongly
+                // then uninstall autopep8 extension.
+                // some day Microsoft will fix this?
+                "python.formatting.autopep8Path": "",
                 "editor.formatOnSave": true,
                 "python.linting.enabled": true,
                 "python.pythonPath": "/usr/local/bin/python",
@@ -15,7 +26,9 @@
             },
             "extensions": [
                 "ms-python.python",
-                "ms-azuretools.vscode-docker"
+                "ms-python.black-formatter",
+                "ms-azuretools.vscode-docker",
+                "tamasfe.even-better-toml"
             ]
         }
     },
