@@ -1,4 +1,3 @@
-# .pr_agent.toml
 [config]
 model = "gpt-4o"
 model_turbo = "gpt-4o"
