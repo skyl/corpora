@@ -1,8 +1,8 @@
 import typer
 
-from .commands import corpus, file
-from .config import load_config
-from .auth import AuthResolver, AuthError
+from corpora_cli.commands import corpus, file
+from corpora_cli.config import load_config
+from corpora_cli.auth import AuthResolver, AuthError
 
 app = typer.Typer(help="Corpora CLI: Manage and process your corpora")
 
