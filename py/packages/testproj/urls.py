@@ -29,4 +29,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("o/", include(oauth2_urls)),
     path("api/", router.urls),
+    path("api/docs", router.get_openapi_schema),
 ]
