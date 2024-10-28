@@ -17,7 +17,9 @@ client = TestAsyncClient(api)
 # Helper functions to generate an access token and headers
 @sync_to_async
 def create_user_and_token():
-    user, _ = User.objects.get_or_create(username="testuser")
+    user, _ = User.objects.get_or_create(
+        username="testuser", defaults={"password": "password123"}
+    )
     application, _ = Application.objects.get_or_create(
         name="Test App",
         client_id="testclientid",

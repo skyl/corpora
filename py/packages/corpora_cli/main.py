@@ -2,13 +2,20 @@ import typer
 
 from .commands import corpus, file
 from .config import load_config
-from .auth import authenticate
+from .auth import AuthResolver, AuthError
 
 app = typer.Typer(help="Corpora CLI: Manage and process your corpora")
 
-# Load config and authenticate globally for the CLI session
+# Load config for the session
 config = load_config()
-auth_token = authenticate(config["auth"]["client_id"], config["auth"]["client_secret"])
+
+# Initialize AuthResolver and authenticate
+try:
+    auth_resolver = AuthResolver(config)
+    auth_token = auth_resolver.resolve_auth()
+except AuthError as e:
+    typer.echo(str(e), err=True)
+    raise typer.Exit(code=1)
 
 # Register commands
 app.add_typer(corpus.app, name="corpus", help="Commands for managing corpora")

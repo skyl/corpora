@@ -18,8 +18,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from oauth2_provider import urls as oauth2_urls
+from ninja import NinjaAPI
+
+from corpora.api import api as corpora_router
+
+router = NinjaAPI()
+router.add_router("corpora", corpora_router)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("o/", include(oauth2_urls)),
+    path("api/", router.urls),
 ]

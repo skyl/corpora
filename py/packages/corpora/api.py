@@ -1,12 +1,15 @@
 import uuid
-from ninja import NinjaAPI
-from corpora.lib.files import calculate_checksum
-from corpora.lib.dj.decorators import async_raise_not_found
+
+# from ninja import NinjaAPI
+from ninja import Router
+
+from .lib.files import calculate_checksum
+from .lib.dj.decorators import async_raise_not_found
 from .models import Corpus, File
 from .schema import CorpusSchema, CorpusResponseSchema, FileSchema, FileResponseSchema
 from .auth import BearerAuth
 
-api = NinjaAPI(auth=BearerAuth())
+api = Router(tags=["corpora"], auth=BearerAuth())
 
 
 @api.post("/corpus", response={201: CorpusResponseSchema})
