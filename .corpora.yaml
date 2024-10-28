@@ -1,0 +1,51 @@
+# .corpora.yaml
+
+server:
+  base_url: "http://localhost:8000"  # Modify as needed
+
+auth:
+  # TODO: support 3-legged OAuth for user authentication wit browser
+  client_id: "${CORPORA_CLIENT_ID}"
+  client_secret: "${CORPORA_CLIENT_SECRET}"
+
+corpora:
+  # Default corpus includes all files as a catch-all
+  - name: "default"
+    globs:
+      - "**/*.*"
+
+  # Python source files, including configuration files within py/
+  - name: "py"
+    globs:
+      - "**/*.py"           # All Python files across the entire repository
+      - "py/**/*.txt"       # txt config files within py/
+      - "py/**/*.md"        # md files within py/
+      - "py/**/*.toml"      # toml config files within py/
+    description: "Python source and related configuration files"
+
+  # CI/CD configurations, devcontainer, and Docker setup
+  - name: "ci"
+    globs:
+      - ".github/workflows/*.yml"  # GitHub Actions workflows
+      - ".devcontainer/**/*"       # Devcontainer files
+      - "docker/**/*"              # Docker configurations
+      - "docker-compose.yaml"      # Docker Compose configuration
+
+  # Markdown files across the repository
+  - name: "md"
+    globs:
+      - "**/*.md"                  # All markdown files
+
+  # Development corpus that includes subcorpora: py, ci, and md
+  - name: "dev"
+    subcorpora:
+      - "py"
+      - "ci"
+      - "md"
+    description: "Combined corpus for development including Python, CI/CD, and documentation files"
+
+# CLI options and settings
+cli:
+  output:
+    color: true
+    verbose: false

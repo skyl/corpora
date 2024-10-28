@@ -1,2 +1,3 @@
 -r packages/corpora/requirements.txt
+-r packages/corpora_cli/requirements.txt
 -r requirements-dev.txt
