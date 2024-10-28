@@ -14,3 +14,6 @@ def create(name: str, url: str = None):
 def list():
     """List all corpora."""
     rprint("Listing all corpora...")
+    from corpora_cli.main import auth_token, config
+    rprint(f"Auth token: {auth_token}")
+    rprint(f"Config: {config}")
