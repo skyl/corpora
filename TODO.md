@@ -1,5 +1,7 @@
 # TODO
 
+- corpora_client generated
+
 - auth/auth for API endpoints, Corpus ownership
 - CLI that hits API
   - API spec, generation (?)
@@ -10,6 +12,8 @@
 - consider ruff
 - pr-agent only on comments?
 - SaaS versus internal, dogfood
+- add full oauth 3 leg to CLI
+  - https://django-oauth-toolkit.readthedocs.io/en/latest/getting_started.html#
 
 # Done
 
