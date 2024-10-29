@@ -1,6 +1,7 @@
 .github/workflows/python.yml
 .gitignore
 .gitlab-ci.yml
+.openapi-generator-ignore
 .travis.yml
 README.md
 corpora_client/__init__.py
@@ -29,4 +30,9 @@ setup.cfg
 setup.py
 test-requirements.txt
 test/__init__.py
+test/test_corpora_api.py
+test/test_corpus_response_schema.py
+test/test_corpus_schema.py
+test/test_file_response_schema.py
+test/test_file_schema.py
 tox.ini

@@ -1,7 +1,7 @@
 #!/bin/bash
-set -e  # Exit on any error
+set -e
 
-rm -rf gen/core_client
+rm -rf gen/corpora_client
 openapi-generator-cli generate -i http://127.0.0.1:8000/api/openapi.json \
     -g python -o gen/corpora_client \
     --additional-properties=packageName=corpora_client \
