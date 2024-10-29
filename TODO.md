@@ -9,6 +9,7 @@
 
 # Next
 
+- publish to pypi
 - consider ruff
 - pr-agent only on comments?
 - SaaS versus internal, dogfood
@@ -25,7 +26,7 @@
 - GH actions build/test/lint python
   - Same devcontainer works for both? no, maybe later, still early
   - choose python linting tool (black)
-- testproj README, all READMEs at all levels
+- corpora_proj README, all READMEs at all levels
 - add pr-agent?
 - .devcontainer/README.md
 - main branch protection
