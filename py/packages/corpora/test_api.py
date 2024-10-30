@@ -26,9 +26,10 @@ def create_user_and_token():
         client_secret="testclientsecret",
         client_type=Application.CLIENT_CONFIDENTIAL,
         authorization_grant_type=Application.GRANT_CLIENT_CREDENTIALS,
+        user=user,
     )
     access_token = AccessToken.objects.create(
-        user=user,
+        # user=user,
         application=application,
         token="testaccesstoken",
         expires=timezone.now() + timedelta(days=1),

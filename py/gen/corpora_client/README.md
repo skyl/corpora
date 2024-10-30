@@ -73,14 +73,14 @@ configuration = corpora_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-async with corpora_client.ApiClient(configuration) as api_client:
+with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.CorporaApi(api_client)
     corpus_schema = corpora_client.CorpusSchema() # CorpusSchema | 
 
     try:
         # Create Corpus
-        api_response = await api_instance.corpora_api_create_corpus(corpus_schema)
+        api_response = api_instance.corpora_api_create_corpus(corpus_schema)
         print("The response of CorporaApi->corpora_api_create_corpus:\n")
         pprint(api_response)
     except ApiException as e:

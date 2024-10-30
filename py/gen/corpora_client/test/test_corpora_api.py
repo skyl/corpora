@@ -17,44 +17,44 @@ import unittest
 from corpora_client.api.corpora_api import CorporaApi
 
 
-class TestCorporaApi(unittest.IsolatedAsyncioTestCase):
+class TestCorporaApi(unittest.TestCase):
     """CorporaApi unit test stubs"""
 
-    async def asyncSetUp(self) -> None:
+    def setUp(self) -> None:
         self.api = CorporaApi()
 
-    async def asyncTearDown(self) -> None:
+    def tearDown(self) -> None:
         pass
 
-    async def test_corpora_api_create_corpus(self) -> None:
+    def test_corpora_api_create_corpus(self) -> None:
         """Test case for corpora_api_create_corpus
 
         Create Corpus
         """
         pass
 
-    async def test_corpora_api_create_file(self) -> None:
+    def test_corpora_api_create_file(self) -> None:
         """Test case for corpora_api_create_file
 
         Create File
         """
         pass
 
-    async def test_corpora_api_get_corpus(self) -> None:
+    def test_corpora_api_get_corpus(self) -> None:
         """Test case for corpora_api_get_corpus
 
         Get Corpus
         """
         pass
 
-    async def test_corpora_api_get_file(self) -> None:
+    def test_corpora_api_get_file(self) -> None:
         """Test case for corpora_api_get_file
 
         Get File
         """
         pass
 
-    async def test_corpora_api_list_corpora(self) -> None:
+    def test_corpora_api_list_corpora(self) -> None:
         """Test case for corpora_api_list_corpora
 
         List Corpora

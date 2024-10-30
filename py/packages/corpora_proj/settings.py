@@ -81,7 +81,8 @@ DATABASES = {
         # db is from the docker compose service name
         "HOST": os.environ.get("POSTGRES_HOST", "db"),
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
-        "ATOMIC_REQUESTS": True,
+        # not usable with async
+        # "ATOMIC_REQUESTS": True,
     }
 }
 

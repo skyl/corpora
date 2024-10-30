@@ -46,14 +46,14 @@ configuration = corpora_client.Configuration(
 )
 
 # Enter a context with an instance of the API client
-async with corpora_client.ApiClient(configuration) as api_client:
+with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.CorporaApi(api_client)
     corpus_schema = corpora_client.CorpusSchema() # CorpusSchema | 
 
     try:
         # Create Corpus
-        api_response = await api_instance.corpora_api_create_corpus(corpus_schema)
+        api_response = api_instance.corpora_api_create_corpus(corpus_schema)
         print("The response of CorporaApi->corpora_api_create_corpus:\n")
         pprint(api_response)
     except Exception as e:
@@ -125,14 +125,14 @@ configuration = corpora_client.Configuration(
 )
 
 # Enter a context with an instance of the API client
-async with corpora_client.ApiClient(configuration) as api_client:
+with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.CorporaApi(api_client)
     file_schema = corpora_client.FileSchema() # FileSchema | 
 
     try:
         # Create File
-        api_response = await api_instance.corpora_api_create_file(file_schema)
+        api_response = api_instance.corpora_api_create_file(file_schema)
         print("The response of CorporaApi->corpora_api_create_file:\n")
         pprint(api_response)
     except Exception as e:
@@ -203,14 +203,14 @@ configuration = corpora_client.Configuration(
 )
 
 # Enter a context with an instance of the API client
-async with corpora_client.ApiClient(configuration) as api_client:
+with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.CorporaApi(api_client)
     corpus_id = 'corpus_id_example' # str | 
 
     try:
         # Get Corpus
-        api_response = await api_instance.corpora_api_get_corpus(corpus_id)
+        api_response = api_instance.corpora_api_get_corpus(corpus_id)
         print("The response of CorporaApi->corpora_api_get_corpus:\n")
         pprint(api_response)
     except Exception as e:
@@ -281,14 +281,14 @@ configuration = corpora_client.Configuration(
 )
 
 # Enter a context with an instance of the API client
-async with corpora_client.ApiClient(configuration) as api_client:
+with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.CorporaApi(api_client)
     file_id = 'file_id_example' # str | 
 
     try:
         # Get File
-        api_response = await api_instance.corpora_api_get_file(file_id)
+        api_response = api_instance.corpora_api_get_file(file_id)
         print("The response of CorporaApi->corpora_api_get_file:\n")
         pprint(api_response)
     except Exception as e:
@@ -359,13 +359,13 @@ configuration = corpora_client.Configuration(
 )
 
 # Enter a context with an instance of the API client
-async with corpora_client.ApiClient(configuration) as api_client:
+with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.CorporaApi(api_client)
 
     try:
         # List Corpora
-        api_response = await api_instance.corpora_api_list_corpora()
+        api_response = api_instance.corpora_api_list_corpora()
         print("The response of CorporaApi->corpora_api_list_corpora:\n")
         pprint(api_response)
     except Exception as e:

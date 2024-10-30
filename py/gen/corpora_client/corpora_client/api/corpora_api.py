@@ -41,7 +41,7 @@ class CorporaApi:
         self.api_client = api_client
 
     @validate_call
-    async def corpora_api_create_corpus(
+    def corpora_api_create_corpus(
         self,
         corpus_schema: CorpusSchema,
         _request_timeout: Union[
@@ -95,17 +95,17 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "CorpusResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
-        await response_data.read()
+        response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
     @validate_call
-    async def corpora_api_create_corpus_with_http_info(
+    def corpora_api_create_corpus_with_http_info(
         self,
         corpus_schema: CorpusSchema,
         _request_timeout: Union[
@@ -159,17 +159,17 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "CorpusResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
-        await response_data.read()
+        response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
     @validate_call
-    async def corpora_api_create_corpus_without_preload_content(
+    def corpora_api_create_corpus_without_preload_content(
         self,
         corpus_schema: CorpusSchema,
         _request_timeout: Union[
@@ -223,7 +223,7 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "CorpusResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
         return response_data.response
@@ -293,7 +293,7 @@ class CorporaApi:
         )
 
     @validate_call
-    async def corpora_api_create_file(
+    def corpora_api_create_file(
         self,
         file_schema: FileSchema,
         _request_timeout: Union[
@@ -347,17 +347,17 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "FileResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
-        await response_data.read()
+        response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
     @validate_call
-    async def corpora_api_create_file_with_http_info(
+    def corpora_api_create_file_with_http_info(
         self,
         file_schema: FileSchema,
         _request_timeout: Union[
@@ -411,17 +411,17 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "FileResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
-        await response_data.read()
+        response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
     @validate_call
-    async def corpora_api_create_file_without_preload_content(
+    def corpora_api_create_file_without_preload_content(
         self,
         file_schema: FileSchema,
         _request_timeout: Union[
@@ -475,7 +475,7 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "FileResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
         return response_data.response
@@ -545,7 +545,7 @@ class CorporaApi:
         )
 
     @validate_call
-    async def corpora_api_get_corpus(
+    def corpora_api_get_corpus(
         self,
         corpus_id: StrictStr,
         _request_timeout: Union[
@@ -599,17 +599,17 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "CorpusResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
-        await response_data.read()
+        response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
     @validate_call
-    async def corpora_api_get_corpus_with_http_info(
+    def corpora_api_get_corpus_with_http_info(
         self,
         corpus_id: StrictStr,
         _request_timeout: Union[
@@ -663,17 +663,17 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "CorpusResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
-        await response_data.read()
+        response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
     @validate_call
-    async def corpora_api_get_corpus_without_preload_content(
+    def corpora_api_get_corpus_without_preload_content(
         self,
         corpus_id: StrictStr,
         _request_timeout: Union[
@@ -727,7 +727,7 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "CorpusResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
         return response_data.response
@@ -787,7 +787,7 @@ class CorporaApi:
         )
 
     @validate_call
-    async def corpora_api_get_file(
+    def corpora_api_get_file(
         self,
         file_id: StrictStr,
         _request_timeout: Union[
@@ -841,17 +841,17 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "FileResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
-        await response_data.read()
+        response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
     @validate_call
-    async def corpora_api_get_file_with_http_info(
+    def corpora_api_get_file_with_http_info(
         self,
         file_id: StrictStr,
         _request_timeout: Union[
@@ -905,17 +905,17 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "FileResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
-        await response_data.read()
+        response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
     @validate_call
-    async def corpora_api_get_file_without_preload_content(
+    def corpora_api_get_file_without_preload_content(
         self,
         file_id: StrictStr,
         _request_timeout: Union[
@@ -969,7 +969,7 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "FileResponseSchema",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
         return response_data.response
@@ -1029,7 +1029,7 @@ class CorporaApi:
         )
 
     @validate_call
-    async def corpora_api_list_corpora(
+    def corpora_api_list_corpora(
         self,
         _request_timeout: Union[
             None,
@@ -1079,17 +1079,17 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "List[CorpusResponseSchema]",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
-        await response_data.read()
+        response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
     @validate_call
-    async def corpora_api_list_corpora_with_http_info(
+    def corpora_api_list_corpora_with_http_info(
         self,
         _request_timeout: Union[
             None,
@@ -1139,17 +1139,17 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "List[CorpusResponseSchema]",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
-        await response_data.read()
+        response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
     @validate_call
-    async def corpora_api_list_corpora_without_preload_content(
+    def corpora_api_list_corpora_without_preload_content(
         self,
         _request_timeout: Union[
             None,
@@ -1199,7 +1199,7 @@ class CorporaApi:
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "List[CorpusResponseSchema]",
         }
-        response_data = await self.api_client.call_api(
+        response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
         )
         return response_data.response

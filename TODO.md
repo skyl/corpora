@@ -1,10 +1,6 @@
 # TODO
 
-- corpora_client generated
-  - prove client works
-- auth/auth for API endpoints, Corpus ownership
-- CLI that hits API
-  - API spec, generation (?)
+- why does "Authenticating by encoding client credentials" get called twice?
 
 # Next
 
@@ -33,3 +29,8 @@
 - Model Files / Splits - how to interface as customer? Internal should be same?
   - (think) CLI, API, is there a way to talk to DB directly? LFG
 - Start API
+- corpora_client generated
+  - prove client works
+- auth/auth for API endpoints, Corpus ownership
+- CLI that hits API
+  - API spec, generation (?)
