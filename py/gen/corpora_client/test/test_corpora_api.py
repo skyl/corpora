@@ -54,6 +54,13 @@ class TestCorporaApi(unittest.IsolatedAsyncioTestCase):
         """
         pass
 
+    async def test_corpora_api_list_corpora(self) -> None:
+        """Test case for corpora_api_list_corpora
+
+        List Corpora
+        """
+        pass
+
 
 if __name__ == "__main__":
     unittest.main()

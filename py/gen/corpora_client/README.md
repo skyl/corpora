@@ -98,6 +98,7 @@ Class | Method | HTTP request | Description
 *CorporaApi* | [**corpora_api_create_file**](docs/CorporaApi.md#corpora_api_create_file) | **POST** /api/corpora/file | Create File
 *CorporaApi* | [**corpora_api_get_corpus**](docs/CorporaApi.md#corpora_api_get_corpus) | **GET** /api/corpora/corpus/{corpus_id} | Get Corpus
 *CorporaApi* | [**corpora_api_get_file**](docs/CorporaApi.md#corpora_api_get_file) | **GET** /api/corpora/file/{file_id} | Get File
+*CorporaApi* | [**corpora_api_list_corpora**](docs/CorporaApi.md#corpora_api_list_corpora) | **GET** /api/corpora/corpus | List Corpora
 
 
 ## Documentation For Models

@@ -1,11 +1,10 @@
 # TODO
 
 - corpora_client generated
-
+  - prove client works
 - auth/auth for API endpoints, Corpus ownership
 - CLI that hits API
   - API spec, generation (?)
-- play with models in admin and management commands with direct DB access
 
 # Next
 

@@ -1,5 +1,7 @@
 -r packages/corpora/requirements.txt
 -r packages/corpora_cli/requirements.txt
 -r requirements-dev.txt
-# required by the CLI
+# required by the CLI,
+# still some reconciling to do between local and packaged
+# right now for local we just run this in devcontainer setup.sh
 # -e ./gen/corpora_client
