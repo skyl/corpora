@@ -12,8 +12,9 @@ class BearerAuth(HttpBearer):
                 "user",
                 "application",
             ).aget(token=token, expires__gt=timezone.now())
-            # HRM: client credential bearer is the owner of the application
+            # TODO: client credential bearer is the owner of the application
             # in 3LO, the user is the owner of the token
+            # we need to differentiate better than this magic string
             if (
                 access_token.application.authorization_grant_type
                 == "client-credentials"

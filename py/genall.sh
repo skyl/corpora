@@ -8,4 +8,5 @@ openapi-generator-cli generate -i http://127.0.0.1:8000/api/openapi.json \
     # --additional-properties=library=asyncio
     # --additional-properties=generateSourceCodeOnly=true
 black .
+# TODO: doesn't resolve in the IDE - so ... do something about that.
 pip install -e /workspace/py/gen/corpora_client

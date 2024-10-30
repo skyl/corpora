@@ -1,8 +1,8 @@
 import typer
 from rich import print as rprint
 
-
 app = typer.Typer(help="Corpus commands")
+# TODO: Implement the corpus commands
 
 
 @app.command()

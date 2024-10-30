@@ -2,6 +2,7 @@ import typer
 from rich import print as rprint
 
 app = typer.Typer(help="File operations within a corpus")
+# TODO: Implement the file commands
 
 
 @app.command()

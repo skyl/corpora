@@ -1,5 +1,7 @@
 # TODO
 
+- `import corpora_client` in editor doesn't resolve
+- harden devops
 - why does "Authenticating by encoding client credentials" get called twice?
 
 # Next
