@@ -1,6 +1,8 @@
 # TODO
 
 - collect corpus, upload tarball to API
+- name should be unique per owner?
+
 - CorpusRevision
   - Basic commands: init and sync with hashes, efficiently
 

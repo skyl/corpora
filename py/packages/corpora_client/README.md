@@ -76,11 +76,13 @@ configuration = corpora_client.Configuration(
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.CorporaApi(api_client)
-    corpus_schema = corpora_client.CorpusSchema() # CorpusSchema | 
+    name = 'name_example' # str | 
+    tarball = None # bytearray | 
+    url = 'url_example' # str |  (optional)
 
     try:
         # Create Corpus
-        api_response = api_instance.corpora_api_create_corpus(corpus_schema)
+        api_response = api_instance.corpora_api_create_corpus(name, tarball, url=url)
         print("The response of CorporaApi->corpora_api_create_corpus:\n")
         pprint(api_response)
     except ApiException as e:
