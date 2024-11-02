@@ -1,5 +1,6 @@
 # TODO
 
+- collect corpus, upload tarball to API
 - CorpusRevision
   - Basic commands: init and sync with hashes, efficiently
 
