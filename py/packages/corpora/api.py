@@ -1,7 +1,6 @@
 from typing import List
 import uuid
 
-# from ninja import NinjaAPI
 from ninja import Router
 from asgiref.sync import sync_to_async
 
