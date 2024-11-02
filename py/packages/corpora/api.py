@@ -1,18 +1,34 @@
+from typing import List
 import uuid
-from ninja import NinjaAPI
-from corpora.lib.files import calculate_checksum
-from corpora.lib.dj.decorators import async_raise_not_found
+
+# from ninja import NinjaAPI
+from ninja import Router
+from asgiref.sync import sync_to_async
+
+from .lib.files import calculate_checksum
+from .lib.dj.decorators import async_raise_not_found
 from .models import Corpus, File
 from .schema import CorpusSchema, CorpusResponseSchema, FileSchema, FileResponseSchema
+from .auth import BearerAuth
 
-api = NinjaAPI()
+api = Router(tags=["corpora"], auth=BearerAuth())
 
 
 @api.post("/corpus", response={201: CorpusResponseSchema})
 async def create_corpus(request, payload: CorpusSchema):
     """Create a new Corpus."""
-    corpus = await Corpus.objects.acreate(name=payload.name, url=payload.url)
+    corpus = await Corpus.objects.acreate(
+        name=payload.name, url=payload.url, owner=request.user
+    )
     return corpus
+
+
+@api.get("/corpus", response={200: List[CorpusResponseSchema]})
+async def list_corpora(request):
+    """List all Corpora."""
+    # TODO .. pagination .. ?
+    corpora = await sync_to_async(list)(Corpus.objects.filter(owner=request.user))
+    return corpora
 
 
 @api.get("/corpus/{corpus_id}", response=CorpusResponseSchema)

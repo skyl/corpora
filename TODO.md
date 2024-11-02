@@ -1,15 +1,17 @@
 # TODO
 
-- auth/auth for API endpoints, Corpus ownership
-- CLI that hits API
-  - API spec, generation (?)
-- play with models in admin and management commands with direct DB access
+- CorpusRevision
+  - Basic commands: init and sync with hashes, efficiently
 
 # Next
 
+- why does "Authenticating by encoding client credentials" get called twice?
+- publish to pypi
 - consider ruff
 - pr-agent only on comments?
 - SaaS versus internal, dogfood
+- add full oauth 3 leg to CLI
+  - https://django-oauth-toolkit.readthedocs.io/en/latest/getting_started.html#
 
 # Done
 
@@ -21,7 +23,7 @@
 - GH actions build/test/lint python
   - Same devcontainer works for both? no, maybe later, still early
   - choose python linting tool (black)
-- testproj README, all READMEs at all levels
+- corpora_proj README, all READMEs at all levels
 - add pr-agent?
 - .devcontainer/README.md
 - main branch protection
@@ -29,3 +31,10 @@
 - Model Files / Splits - how to interface as customer? Internal should be same?
   - (think) CLI, API, is there a way to talk to DB directly? LFG
 - Start API
+- corpora_client generated
+  - prove client works
+- auth/auth for API endpoints, Corpus ownership
+- CLI that hits API
+  - API spec, generation (?)
+- `import corpora_client` in editor doesn't resolve
+- harden devops
