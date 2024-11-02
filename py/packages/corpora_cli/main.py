@@ -1,12 +1,13 @@
 import typer
 from rich.console import Console
 from rich.text import Text
-import corpora_client
 
+import corpora_client
 from corpora_cli.commands import corpus, file
 from corpora_cli.config import load_config
 from corpora_cli.auth import AuthResolver, AuthError
 from corpora_cli.constants import NO_AUTHENTICATION_MESSAGE
+from corpora_cli.context import ContextObject
 
 app = typer.Typer(help="Corpora CLI: Manage and process your corpora")
 
@@ -38,7 +39,11 @@ def main(ctx: typer.Context):
     """Main entry point. Sets up configuration and API client."""
     # Load config and pass it to the context
     config = load_config()
-    ctx.obj = {"api_client": get_api_client(config), "config": config}
+    ctx.obj = ContextObject(
+        api_client=get_api_client(config),
+        config=config,
+        console=Console(),
+    )
 
 
 # Register commands with the app
