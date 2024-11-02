@@ -72,11 +72,8 @@ class APITestCase(TestCase):
             FILES={"tarball": file},
             headers=headers,
         )
-        # print(response.json())
 
-        # Assert the response status code
         assert response.status_code == 201
-        # Parse and assert the response data
         response_data = response.json()
         assert response_data["name"] == "Test Corpus"
         assert response_data["url"] == "https://example.com/repo"
