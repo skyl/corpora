@@ -1,11 +1,11 @@
 # TODO
 
-- `import corpora_client` in editor doesn't resolve
-- harden devops
-- why does "Authenticating by encoding client credentials" get called twice?
+- CorpusRevision
+  - Basic commands: init and sync with hashes, efficiently
 
 # Next
 
+- why does "Authenticating by encoding client credentials" get called twice?
 - publish to pypi
 - consider ruff
 - pr-agent only on comments?
@@ -36,3 +36,5 @@
 - auth/auth for API endpoints, Corpus ownership
 - CLI that hits API
   - API spec, generation (?)
+- `import corpora_client` in editor doesn't resolve
+- harden devops
