@@ -33,100 +33,116 @@ https://github.com/skyl/corpora
 ├── md
 │   ├── README.md
 │   ├── SETUP.md
+│   ├── notes
+│   │   └── uploads.md
 │   └── prompts
 │       └── corpora
 │           ├── about-structure.md
 │           └── ai-summary.md
-└── py
-    ├── .gitignore
-    ├── README.md
-    ├── genall.sh
-    ├── openapitools.json
-    ├── packages
-    │   ├── README.md
-    │   ├── corpora
-    │   │   ├── README.md
-    │   │   ├── __init__.py
-    │   │   ├── admin.py
-    │   │   ├── api.py
-    │   │   ├── apps.py
-    │   │   ├── auth.py
-    │   │   ├── docs
-    │   │   │   └── json_field_metadata.md
-    │   │   ├── lib
-    │   │   │   ├── README.md
-    │   │   │   ├── __init__.py
-    │   │   │   ├── dj
-    │   │   │   │   ├── __init__.py
-    │   │   │   │   ├── decorators.py
-    │   │   │   │   └── test_decorators.py
-    │   │   │   ├── files.py
-    │   │   │   └── test_files.py
-    │   │   ├── migrations
-    │   │   │   ├── 0001_enable_vector_extension.py
-    │   │   │   ├── 0002_initial.py
-    │   │   │   ├── 0003_corpus_owner.py
-    │   │   │   └── __init__.py
-    │   │   ├── models.py
-    │   │   ├── requirements.txt
-    │   │   ├── schema.py
-    │   │   ├── test_api.py
-    │   │   └── test_models.py
-    │   ├── corpora_cli
-    │   │   ├── README.md
-    │   │   ├── __init__py
-    │   │   ├── auth.py
-    │   │   ├── commands
-    │   │   │   ├── __init__.py
-    │   │   │   ├── corpus.py
-    │   │   │   └── file.py
-    │   │   ├── config.py
-    │   │   ├── constants.py
-    │   │   ├── main.py
-    │   │   ├── requirements.txt
-    │   │   ├── test_auth.py
-    │   │   └── test_config.py
-    │   ├── corpora_client
-    │   │   ├── README.md
-    │   │   ├── __init__.py
-    │   │   ├── api
-    │   │   │   ├── __init__.py
-    │   │   │   └── corpora_api.py
-    │   │   ├── api_client.py
-    │   │   ├── api_response.py
-    │   │   ├── configuration.py
-    │   │   ├── docs
-    │   │   │   ├── CorporaApi.md
-    │   │   │   ├── CorpusResponseSchema.md
-    │   │   │   ├── CorpusSchema.md
-    │   │   │   ├── FileResponseSchema.md
-    │   │   │   └── FileSchema.md
-    │   │   ├── exceptions.py
-    │   │   ├── models
-    │   │   │   ├── __init__.py
-    │   │   │   ├── corpus_response_schema.py
-    │   │   │   ├── corpus_schema.py
-    │   │   │   ├── file_response_schema.py
-    │   │   │   └── file_schema.py
-    │   │   ├── py.typed
-    │   │   ├── requirements.txt
-    │   │   ├── rest.py
-    │   │   ├── setup.py
-    │   │   └── test-requirements.txt
-    │   └── corpora_proj
-    │       ├── README.md
-    │       ├── __init__.py
-    │       ├── asgi.py
-    │       ├── manage.py
-    │       ├── settings.py
-    │       ├── urls.py
-    │       └── wsgi.py
-    ├── pyproject.toml
-    ├── pytest.ini
-    ├── requirements-dev.txt
-    └── requirements.txt
+├── py
+│   ├── .gitignore
+│   ├── README.md
+│   ├── genall.sh
+│   ├── openapitools.json
+│   ├── packages
+│   │   ├── README.md
+│   │   ├── corpora
+│   │   │   ├── README.md
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── api.py
+│   │   │   ├── apps.py
+│   │   │   ├── auth.py
+│   │   │   ├── docs
+│   │   │   │   └── json_field_metadata.md
+│   │   │   ├── lib
+│   │   │   │   ├── README.md
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── dj
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── decorators.py
+│   │   │   │   │   └── test_decorators.py
+│   │   │   │   ├── files.py
+│   │   │   │   └── test_files.py
+│   │   │   ├── migrations
+│   │   │   │   ├── 0001_enable_vector_extension.py
+│   │   │   │   ├── 0002_initial.py
+│   │   │   │   ├── 0003_corpus_owner.py
+│   │   │   │   └── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── requirements.txt
+│   │   │   ├── schema.py
+│   │   │   ├── test_api.py
+│   │   │   └── test_models.py
+│   │   ├── corpora_cli
+│   │   │   ├── README.md
+│   │   │   ├── __init__py
+│   │   │   ├── auth.py
+│   │   │   ├── commands
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── corpus.py
+│   │   │   │   └── file.py
+│   │   │   ├── config.py
+│   │   │   ├── constants.py
+│   │   │   ├── context.py
+│   │   │   ├── main.py
+│   │   │   ├── requirements.txt
+│   │   │   ├── test_auth.py
+│   │   │   ├── test_config.py
+│   │   │   └── utils
+│   │   │       ├── collectors.py
+│   │   │       └── test_collectors.py
+│   │   ├── corpora_client
+│   │   │   ├── README.md
+│   │   │   ├── __init__.py
+│   │   │   ├── api
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── corpora_api.py
+│   │   │   ├── api_client.py
+│   │   │   ├── api_response.py
+│   │   │   ├── configuration.py
+│   │   │   ├── docs
+│   │   │   │   ├── CorporaApi.md
+│   │   │   │   ├── CorpusResponseSchema.md
+│   │   │   │   ├── CorpusSchema.md
+│   │   │   │   ├── FileResponseSchema.md
+│   │   │   │   └── FileSchema.md
+│   │   │   ├── exceptions.py
+│   │   │   ├── models
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── corpus_response_schema.py
+│   │   │   │   ├── corpus_schema.py
+│   │   │   │   ├── file_response_schema.py
+│   │   │   │   └── file_schema.py
+│   │   │   ├── py.typed
+│   │   │   ├── requirements.txt
+│   │   │   ├── rest.py
+│   │   │   ├── setup.py
+│   │   │   ├── test
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── test_corpora_api.py
+│   │   │   │   ├── test_corpus_response_schema.py
+│   │   │   │   ├── test_corpus_schema.py
+│   │   │   │   ├── test_file_response_schema.py
+│   │   │   │   └── test_file_schema.py
+│   │   │   └── test-requirements.txt
+│   │   └── corpora_proj
+│   │       ├── README.md
+│   │       ├── __init__.py
+│   │       ├── asgi.py
+│   │       ├── manage.py
+│   │       ├── settings.py
+│   │       ├── urls.py
+│   │       └── wsgi.py
+│   ├── pyproject.toml
+│   ├── pytest.ini
+│   ├── requirements-dev.txt
+│   └── requirements.txt
+└── sh
+    ├── alias-tree.sh
+    └── git-delete-local-branches.sh
 
-23 directories, 99 files
+27 directories, 111 files
 ```
 
 The purpose of the Corpora project is to build tools that will help build other corpora.

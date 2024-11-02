@@ -1,11 +1,12 @@
 # TODO
 
+- handle the file (sync/async) upload in the API
 - name should be unique per owner?
-
 - CorpusRevision
   - Basic commands: init and sync with hashes, efficiently
 
 - consider include/exclude in corpora.yaml or similar? Right now just use git ls-files...
+- default command is init/sync ?
 
 # Next
 
