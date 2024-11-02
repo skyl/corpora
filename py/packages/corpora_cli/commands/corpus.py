@@ -22,13 +22,13 @@ def init(ctx: typer.Context):
     files = collector.collect_files()
     c.console.print(f"Collected {len(files)} files.")
     # c.console.print(files, style="dim")
-    tarball = collector.create_tarball(files, repo_root)
-    c.console.print(f"Tarball created: {tarball} - {len(tarball.getvalue())} bytes")
+    tarball = collector.create_tarball(files, repo_root).getvalue()
+    c.console.print(f"Tarball created: {len(tarball)} bytes")
     c.console.print("Uploading corpus tarball to server...")
     res = c.api_client.corpora_api_create_corpus(
-        name="corpora",  # TODO: get from git? argument?
-        url=None,  # get from git? cmdline?
-        tarball=tarball.getvalue(),
+        name="corpora",
+        url=None,
+        tarball=tarball,
     )
     c.console.print(f"{res.name} created!")
 

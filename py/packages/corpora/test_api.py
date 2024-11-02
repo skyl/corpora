@@ -3,6 +3,7 @@ import pytest
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.core.files.uploadedfile import SimpleUploadedFile
 from ninja.testing import TestAsyncClient
 from oauth2_provider.models import AccessToken, Application
 from asgiref.sync import sync_to_async
@@ -51,13 +52,32 @@ class APITestCase(TestCase):
     @pytest.mark.django_db
     async def test_create_corpus(self):
         _, headers = await create_user_and_token()
-        payload = {"name": "Test Corpus", "url": "https://example.com/repo"}
-        response = await client.post("/corpus", json=payload, headers=headers)
 
+        # Form data
+        data = {
+            "name": "Test Corpus",
+            "url": "https://example.com/repo",
+        }
+
+        # Create a sample tar.gz file
+        file_content = b"Dummy tarball content"
+        file = SimpleUploadedFile(
+            "test.tar.gz", file_content, content_type="application/gzip"
+        )
+        response = await client.post(
+            "/corpus",
+            data=data,
+            FILES={"tarball": file},
+            headers=headers,
+        )
+        # print(response.json())
+
+        # Assert the response status code
         assert response.status_code == 201
-        data = response.json()
-        assert data["name"] == "Test Corpus"
-        assert data["url"] == "https://example.com/repo"
+        # Parse and assert the response data
+        response_data = response.json()
+        assert response_data["name"] == "Test Corpus"
+        assert response_data["url"] == "https://example.com/repo"
 
     @pytest.mark.django_db
     async def test_get_corpus(self):
