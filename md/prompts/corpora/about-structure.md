@@ -34,7 +34,9 @@ https://github.com/skyl/corpora
 │   ├── README.md
 │   ├── SETUP.md
 │   └── prompts
-│       └── about-corpora.md
+│       └── corpora
+│           ├── about-structure.md
+│           └── ai-summary.md
 └── py
     ├── .gitignore
     ├── README.md
@@ -79,36 +81,36 @@ https://github.com/skyl/corpora
     │   │   │   ├── corpus.py
     │   │   │   └── file.py
     │   │   ├── config.py
+    │   │   ├── constants.py
     │   │   ├── main.py
     │   │   ├── requirements.txt
     │   │   ├── test_auth.py
     │   │   └── test_config.py
     │   ├── corpora_client
     │   │   ├── README.md
-    │   │   ├── corpora_client
+    │   │   ├── __init__.py
+    │   │   ├── api
     │   │   │   ├── __init__.py
-    │   │   │   ├── api
-    │   │   │   │   ├── __init__.py
-    │   │   │   │   └── corpora_api.py
-    │   │   │   ├── api_client.py
-    │   │   │   ├── api_response.py
-    │   │   │   ├── configuration.py
-    │   │   │   ├── exceptions.py
-    │   │   │   ├── models
-    │   │   │   │   ├── __init__.py
-    │   │   │   │   ├── corpus_response_schema.py
-    │   │   │   │   ├── corpus_schema.py
-    │   │   │   │   ├── file_response_schema.py
-    │   │   │   │   └── file_schema.py
-    │   │   │   ├── py.typed
-    │   │   │   └── rest.py
+    │   │   │   └── corpora_api.py
+    │   │   ├── api_client.py
+    │   │   ├── api_response.py
+    │   │   ├── configuration.py
     │   │   ├── docs
     │   │   │   ├── CorporaApi.md
     │   │   │   ├── CorpusResponseSchema.md
     │   │   │   ├── CorpusSchema.md
     │   │   │   ├── FileResponseSchema.md
     │   │   │   └── FileSchema.md
+    │   │   ├── exceptions.py
+    │   │   ├── models
+    │   │   │   ├── __init__.py
+    │   │   │   ├── corpus_response_schema.py
+    │   │   │   ├── corpus_schema.py
+    │   │   │   ├── file_response_schema.py
+    │   │   │   └── file_schema.py
+    │   │   ├── py.typed
     │   │   ├── requirements.txt
+    │   │   ├── rest.py
     │   │   ├── setup.py
     │   │   └── test-requirements.txt
     │   └── corpora_proj
@@ -124,7 +126,7 @@ https://github.com/skyl/corpora
     ├── requirements-dev.txt
     └── requirements.txt
 
-23 directories, 97 files
+23 directories, 99 files
 ```
 
 The purpose of the Corpora project is to build tools that will help build other corpora.
