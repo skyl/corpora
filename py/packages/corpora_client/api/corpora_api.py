@@ -16,10 +16,9 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import StrictStr
-from typing import List
+from pydantic import StrictBytes, StrictStr
+from typing import List, Optional, Tuple, Union
 from corpora_client.models.corpus_response_schema import CorpusResponseSchema
-from corpora_client.models.corpus_schema import CorpusSchema
 from corpora_client.models.file_response_schema import FileResponseSchema
 from corpora_client.models.file_schema import FileSchema
 
@@ -43,7 +42,9 @@ class CorporaApi:
     @validate_call
     def corpora_api_create_corpus(
         self,
-        corpus_schema: CorpusSchema,
+        name: StrictStr,
+        tarball: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
+        url: Optional[StrictStr] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -58,10 +59,14 @@ class CorporaApi:
     ) -> CorpusResponseSchema:
         """Create Corpus
 
-        Create a new Corpus.
+        Create a new Corpus with an uploaded tarball.
 
-        :param corpus_schema: (required)
-        :type corpus_schema: CorpusSchema
+        :param name: (required)
+        :type name: str
+        :param tarball: (required)
+        :type tarball: bytearray
+        :param url:
+        :type url: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -85,7 +90,9 @@ class CorporaApi:
         """  # noqa: E501
 
         _param = self._corpora_api_create_corpus_serialize(
-            corpus_schema=corpus_schema,
+            name=name,
+            tarball=tarball,
+            url=url,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -107,7 +114,9 @@ class CorporaApi:
     @validate_call
     def corpora_api_create_corpus_with_http_info(
         self,
-        corpus_schema: CorpusSchema,
+        name: StrictStr,
+        tarball: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
+        url: Optional[StrictStr] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -122,10 +131,14 @@ class CorporaApi:
     ) -> ApiResponse[CorpusResponseSchema]:
         """Create Corpus
 
-        Create a new Corpus.
+        Create a new Corpus with an uploaded tarball.
 
-        :param corpus_schema: (required)
-        :type corpus_schema: CorpusSchema
+        :param name: (required)
+        :type name: str
+        :param tarball: (required)
+        :type tarball: bytearray
+        :param url:
+        :type url: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -149,7 +162,9 @@ class CorporaApi:
         """  # noqa: E501
 
         _param = self._corpora_api_create_corpus_serialize(
-            corpus_schema=corpus_schema,
+            name=name,
+            tarball=tarball,
+            url=url,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -171,7 +186,9 @@ class CorporaApi:
     @validate_call
     def corpora_api_create_corpus_without_preload_content(
         self,
-        corpus_schema: CorpusSchema,
+        name: StrictStr,
+        tarball: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
+        url: Optional[StrictStr] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -186,10 +203,14 @@ class CorporaApi:
     ) -> RESTResponseType:
         """Create Corpus
 
-        Create a new Corpus.
+        Create a new Corpus with an uploaded tarball.
 
-        :param corpus_schema: (required)
-        :type corpus_schema: CorpusSchema
+        :param name: (required)
+        :type name: str
+        :param tarball: (required)
+        :type tarball: bytearray
+        :param url:
+        :type url: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -213,7 +234,9 @@ class CorporaApi:
         """  # noqa: E501
 
         _param = self._corpora_api_create_corpus_serialize(
-            corpus_schema=corpus_schema,
+            name=name,
+            tarball=tarball,
+            url=url,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -230,7 +253,9 @@ class CorporaApi:
 
     def _corpora_api_create_corpus_serialize(
         self,
-        corpus_schema,
+        name,
+        tarball,
+        url,
         _request_auth,
         _content_type,
         _headers,
@@ -254,9 +279,13 @@ class CorporaApi:
         # process the query parameters
         # process the header parameters
         # process the form parameters
+        if name is not None:
+            _form_params.append(("name", name))
+        if url is not None:
+            _form_params.append(("url", url))
+        if tarball is not None:
+            _files["tarball"] = tarball
         # process the body parameter
-        if corpus_schema is not None:
-            _body_params = corpus_schema
 
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
@@ -269,7 +298,7 @@ class CorporaApi:
             _header_params["Content-Type"] = _content_type
         else:
             _default_content_type = self.api_client.select_header_content_type(
-                ["application/json"]
+                ["multipart/form-data"]
             )
             if _default_content_type is not None:
                 _header_params["Content-Type"] = _default_content_type

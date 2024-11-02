@@ -1,4 +1,3 @@
-from gc import collect
 from pathlib import Path
 import typer
 
@@ -10,32 +9,7 @@ app = typer.Typer(help="Corpus commands")
 
 @app.command()
 def init(ctx: typer.Context):
-    """Initialize a new corpus - Upload a tarball.
-
-    Step-by-Step Ideal CLI Workflow Identify Files in Version Control:
-
-    Use git ls-files to get a list of files tracked by git. This automatically
-    respects .gitignore and provides a reliable way to only gather files in
-    version control.
-
-    Filter Files Based on corpora.yaml:
-
-    After gathering the list of files, apply filters based on configuration in
-    corpora.yaml. For instance, this config file might specify directories or
-    file patterns to include/exclude.
-
-    Create an In-Memory Tarball:
-
-    Using Python's tarfile module and io.BytesIO, create a .tar.gz archive in
-    memory. This avoids creating temporary files on disk, keeping it efficient
-    and straightforward for uploading.
-
-    Upload to the Server:
-
-    Once the tarball is prepared, upload it to the server using the API client.
-    You can use requests (or any HTTP client your API client library provides)
-    to send the tarball as a file in a multipart/form-data request.
-    """
+    """Initialize a new corpus - Upload a tarball."""
     # Access the API client from the context
     c: ContextObject = ctx.obj
     repo_root = Path.cwd()
@@ -48,13 +22,16 @@ def init(ctx: typer.Context):
     files = collector.collect_files()
     c.console.print(f"Collected {len(files)} files.")
     # c.console.print(files, style="dim")
-    tarball = collector.create_tarball(files, repo_root)
-    c.console.print(f"Tarball created: {tarball} - {len(tarball.getvalue())} bytes")
+    tarball = collector.create_tarball(files, repo_root).getvalue()
+    c.console.print(f"Tarball created: {len(tarball)} bytes")
     c.console.print("Uploading corpus tarball to server...")
-    # response = c.api_client.corpora_api_create_corpus(
-    #     tarball=tarball,
-    #     filename="corpus.tar.gz"
-    # )
+    # TODO: async? progress bar?
+    res = c.api_client.corpora_api_create_corpus(
+        name="corpora",
+        url=None,
+        tarball=tarball,
+    )
+    c.console.print(f"{res.name} created!")
 
 
 @app.command()

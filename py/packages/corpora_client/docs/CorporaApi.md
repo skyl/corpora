@@ -12,11 +12,11 @@ Method | HTTP request | Description
 
 
 # **corpora_api_create_corpus**
-> CorpusResponseSchema corpora_api_create_corpus(corpus_schema)
+> CorpusResponseSchema corpora_api_create_corpus(name, tarball, url=url)
 
 Create Corpus
 
-Create a new Corpus.
+Create a new Corpus with an uploaded tarball.
 
 ### Example
 
@@ -25,7 +25,6 @@ Create a new Corpus.
 ```python
 import corpora_client
 from corpora_client.models.corpus_response_schema import CorpusResponseSchema
-from corpora_client.models.corpus_schema import CorpusSchema
 from corpora_client.rest import ApiException
 from pprint import pprint
 
@@ -49,11 +48,13 @@ configuration = corpora_client.Configuration(
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.CorporaApi(api_client)
-    corpus_schema = corpora_client.CorpusSchema() # CorpusSchema | 
+    name = 'name_example' # str | 
+    tarball = None # bytearray | 
+    url = 'url_example' # str |  (optional)
 
     try:
         # Create Corpus
-        api_response = api_instance.corpora_api_create_corpus(corpus_schema)
+        api_response = api_instance.corpora_api_create_corpus(name, tarball, url=url)
         print("The response of CorporaApi->corpora_api_create_corpus:\n")
         pprint(api_response)
     except Exception as e:
@@ -67,7 +68,9 @@ with corpora_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **corpus_schema** | [**CorpusSchema**](CorpusSchema.md)|  | 
+ **name** | **str**|  | 
+ **tarball** | **bytearray**|  | 
+ **url** | **str**|  | [optional] 
 
 ### Return type
 
@@ -79,7 +82,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: multipart/form-data
  - **Accept**: application/json
 
 ### HTTP response details

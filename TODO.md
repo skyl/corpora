@@ -1,11 +1,15 @@
 # TODO
 
+- name should be unique per owner?
+
 - CorpusRevision
   - Basic commands: init and sync with hashes, efficiently
 
+- consider include/exclude in corpora.yaml or similar? Right now just use git ls-files...
+
 # Next
 
-- why does "Authenticating by encoding client credentials" get called twice?
+- async upload, progress bard ... ?
 - publish to pypi
 - consider ruff
 - pr-agent only on comments?
@@ -37,3 +41,5 @@
   - API spec, generation (?)
 - `import corpora_client` in editor doesn't resolve
 - harden devops
+- why does "Authenticating by encoding client credentials" get called twice?
+- collect corpus, upload tarball to API
