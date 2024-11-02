@@ -1,5 +1,6 @@
 # TODO
 
+- introduce celery (?) or similar for async tasks
 - handle the file (sync/async) upload in the API
 - name should be unique per owner?
 - CorpusRevision
