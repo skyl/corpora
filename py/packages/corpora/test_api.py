@@ -67,6 +67,8 @@ class APITestCase(TestCase):
         response = await client.post(
             "/corpus",
             data=data,
+            # Some hint I found
+            # https://github.com/vitalik/django-ninja/issues/765
             FILES={"tarball": file},
             headers=headers,
         )
