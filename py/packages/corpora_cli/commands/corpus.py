@@ -1,4 +1,3 @@
-from gc import collect
 from pathlib import Path
 import typer
 

@@ -4,6 +4,8 @@
 - CorpusRevision
   - Basic commands: init and sync with hashes, efficiently
 
+- consider include/exclude in corpora.yaml or similar? Right now just use git ls-files...
+
 # Next
 
 - why does "Authenticating by encoding client credentials" get called twice?

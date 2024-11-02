@@ -1,7 +1,8 @@
 from typing import List
 import uuid
 
-from ninja import Router
+from ninja import Router, Form, File
+from ninja.files import UploadedFile
 from asgiref.sync import sync_to_async
 
 from .lib.files import calculate_checksum
@@ -20,6 +21,33 @@ async def create_corpus(request, payload: CorpusSchema):
         name=payload.name, url=payload.url, owner=request.user
     )
     return corpus
+
+
+@api.post("/corpus", response={201: CorpusResponseSchema})
+async def create_corpus(
+    request,
+    corpus: CorpusSchema = Form(...),
+    tarball: UploadedFile = File(...),
+):
+    """Create a new Corpus with an uploaded tarball."""
+
+    # Read tarball content and calculate checksum (for now, defer processing of individual files)
+    tarball_content = await sync_to_async(tarball.read)()
+    # checksum = calculate_checksum(tarball_content)
+
+    print(f"Received tarball: {len(tarball_content)} bytes")
+
+    # Create the corpus instance asynchronously
+    corpus_instance = await Corpus.objects.acreate(
+        name=corpus.name,
+        url=corpus.url,
+        owner=request.user,
+        # tarball=tarball_content,  # Store tarball as-is for now
+        # tarball_checksum=checksum,
+    )
+
+    # Return the created corpus, automatically serialized by `CorpusResponseSchema`
+    return corpus_instance
 
 
 @api.get("/corpus", response={200: List[CorpusResponseSchema]})
