@@ -1,6 +1,5 @@
 import typer
 
-# pip install -e gen/corpora_client doesn't give it to the editor. :|
 import corpora_client
 
 from corpora_cli.commands import corpus, file
