@@ -9,7 +9,6 @@
 - publish to pypi
 - consider ruff
 - pr-agent only on comments?
-- SaaS versus internal, dogfood
 - add full oauth 3 leg to CLI
   - https://django-oauth-toolkit.readthedocs.io/en/latest/getting_started.html#
 
