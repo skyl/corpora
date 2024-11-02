@@ -24,7 +24,7 @@ def get_api_client(config) -> corpora_client.CorporaApi:
     except AuthError as e:
         console = Console()
         console.print(Text(str(e), style="bold red"))
-        console.print(Text(NO_AUTHENTICATION_MESSAGE, style="bold yellow"))
+        console.print(NO_AUTHENTICATION_MESSAGE, style="yellow")
         raise typer.Exit(code=1)
 
     # Configure and return the authenticated API client
