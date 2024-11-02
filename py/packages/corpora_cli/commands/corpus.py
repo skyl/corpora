@@ -25,6 +25,7 @@ def init(ctx: typer.Context):
     tarball = collector.create_tarball(files, repo_root).getvalue()
     c.console.print(f"Tarball created: {len(tarball)} bytes")
     c.console.print("Uploading corpus tarball to server...")
+    # TODO: async? progress bar?
     res = c.api_client.corpora_api_create_corpus(
         name="corpora",
         url=None,
