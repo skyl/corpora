@@ -40,6 +40,13 @@ class TestCorporaApi(unittest.TestCase):
         """
         pass
 
+    def test_corpora_api_delete_corpus(self) -> None:
+        """Test case for corpora_api_delete_corpus
+
+        Delete Corpus
+        """
+        pass
+
     def test_corpora_api_get_corpus(self) -> None:
         """Test case for corpora_api_get_corpus
 

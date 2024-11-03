@@ -57,6 +57,15 @@ async def create_corpus(
     return 201, corpus_instance
 
 
+@api.delete("/corpus", response={204: str, 404: str})
+@async_raise_not_found
+async def delete_corpus(request, corpus_name: str):
+    """Delete a Corpus by ID."""
+    corpus = await Corpus.objects.aget(owner=request.user, name=corpus_name)
+    await sync_to_async(corpus.delete)()
+    return 204, "Corpus deleted."
+
+
 @api.get("/corpus", response={200: List[CorpusResponseSchema]})
 async def list_corpora(request):
     """List all Corpora."""

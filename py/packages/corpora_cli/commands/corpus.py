@@ -41,6 +41,21 @@ def init(ctx: typer.Context):
 
 
 @app.command()
+def delete(ctx: typer.Context):
+    c: ContextObject = ctx.obj
+    corpus_name = c.config["name"]
+    c.console.print(f"Deleting corpus: {corpus_name}")
+    try:
+        c.api_client.corpora_api_delete_corpus(corpus_name)
+        c.console.print("Corpus deleted.", style="green")
+    except ApiException as e:
+        if e.status == 404:
+            c.console.print("Corpus not found.", style="red")
+            exit(1)
+        c.console.print(f"An error occurred. {e}", style="red")
+
+
+@app.command()
 def list(ctx: typer.Context):
     """List all corpora."""
     c: ContextObject = ctx.obj
