@@ -1,13 +1,24 @@
 # TODO
 
-- introduce celery (?) or similar for async tasks
-- handle the file (sync/async) upload in the API
-- name should be unique per owner?
-- CorpusRevision
+- for small corpora, we could get away with a mega-task but let's break into many single responsibilities
+  - finish ingest for real
+  - Start building the real records for the `corpora` corpus
+    - name should be unique per owner?
+    - handle validation errors in the CLI
+
+- logging in celery - logging best practive everywhere.
+
+- CorpusRevision (?), models migration pass
   - Basic commands: init and sync with hashes, efficiently
+  - easy to do whole tarballs with small corpus, but we should try on larger soon
 
 - consider include/exclude in corpora.yaml or similar? Right now just use git ls-files...
-- default command is init/sync ?
+- default command is init/sync and it's smart to know which
+  - normal workflow is just to run `corpora` to init or sync
+
+- **Start interactive?** Could be cool to just say things to do "rewrite foo/bar/baz.py with BazPlex"
+  - agents ... function calling ... maybe we have a menu of function `mkdir`, `create file`, `rewrite file`
+    * Take input. Analyze problem. Choose sequence of agents. Let agents execute in order. Report back to user.
 
 # Next
 
@@ -45,3 +56,6 @@
 - harden devops
 - why does "Authenticating by encoding client credentials" get called twice?
 - collect corpus, upload tarball to API
+- introduce celery (?) or similar for async tasks
+- handle the file (sync/async) upload in the API
+
