@@ -3,4 +3,5 @@
 -r packages/corpora_client/requirements.txt
 -r packages/corpora_client/test-requirements.txt
 -r packages/corpora_proj/requirements.txt
+-r packages/corpora_ai_openai/requirements.txt
 -r requirements-dev.txt
