@@ -1,15 +1,9 @@
 import io
 import tarfile
-import hashlib
 from celery import shared_task
-from .models import Corpus, File as CorpusFile
 
-
-def compute_checksum(content: bytes) -> str:
-    """Compute checksum compatible with Git blob format."""
-    size = str(len(content))
-    sha = hashlib.sha1(f"blob {size}\0".encode() + content).hexdigest()
-    return sha
+from .lib.files import compute_checksum
+from .models import Corpus, CorpusTextFile
 
 
 @shared_task
@@ -30,7 +24,7 @@ def process_tarball(corpus_id: str, tarball: bytes) -> None:
                 print(f"{checksum}")
 
                 # Save each extracted file as a `CorpusFile` entry
-                cf = CorpusFile.objects.create(
+                cf = CorpusTextFile.objects.create(
                     corpus=corpus,
                     path=member.name,
                     content=file_content.decode("utf-8", errors="replace"),

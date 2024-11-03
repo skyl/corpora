@@ -44,7 +44,11 @@ class Corpus(models.Model):
         return self.name
 
 
-class File(models.Model):
+class CorpusTextFile(models.Model):
+    """
+    A file with UTF-8 text content associated with a Corpus.
+    """
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     corpus = models.ForeignKey(Corpus, on_delete=models.CASCADE, related_name="files")
     path = models.CharField(max_length=1024)
@@ -69,7 +73,9 @@ class File(models.Model):
 
 class Split(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    file = models.ForeignKey(File, on_delete=models.CASCADE, related_name="splits")
+    file = models.ForeignKey(
+        CorpusTextFile, on_delete=models.CASCADE, related_name="splits"
+    )
     order = models.PositiveIntegerField()
     content = models.TextField(blank=True)
     vector = VectorField(dimensions=300, null=True, blank=True)

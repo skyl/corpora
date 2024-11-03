@@ -633,6 +633,7 @@ class CorporaApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "204": "str",
+            "404": "str",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -697,6 +698,7 @@ class CorporaApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "204": "str",
+            "404": "str",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -761,6 +763,7 @@ class CorporaApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "204": "str",
+            "404": "str",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout

@@ -21,3 +21,4 @@ cp gen/corpora_client/requirements.txt packages/corpora_client/requirements.txt
 cp gen/corpora_client/test-requirements.txt packages/corpora_client/test-requirements.txt
 rm -rf gen/corpora_client
 black .
+pytest
