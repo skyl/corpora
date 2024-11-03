@@ -50,7 +50,11 @@ class File(models.Model):
     content = models.TextField(blank=True)
     ai_summary = models.TextField(blank=True)
     vector_of_summary = VectorField(dimensions=300, null=True, blank=True)
-    checksum = models.CharField(max_length=32, editable=False)  # MD5 or SHA hash
+    checksum = models.CharField(
+        max_length=40,
+        editable=False,
+        help_text="SHA1 checksum of the file content as in `git hash-object`",
+    )
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
 
