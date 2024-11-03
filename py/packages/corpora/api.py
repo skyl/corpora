@@ -25,7 +25,7 @@ async def create_corpus(
     request,
     corpus: CorpusSchema = Form(...),
     tarball: UploadedFile = File(...),
-) -> CorpusResponseSchema:
+):
     """Create a new Corpus with an uploaded tarball."""
 
     # Read the tarball content
