@@ -3,7 +3,7 @@ import tarfile
 from celery import shared_task
 
 from .lib.files import compute_checksum
-from .models import Corpus, CorpusTextFile as CorpusFile
+from .models import Corpus, CorpusTextFile
 
 
 @shared_task
@@ -24,7 +24,7 @@ def process_tarball(corpus_id: str, tarball: bytes) -> None:
                 print(f"{checksum}")
 
                 # Save each extracted file as a `CorpusFile` entry
-                cf = CorpusFile.objects.create(
+                cf = CorpusTextFile.objects.create(
                     corpus=corpus,
                     path=member.name,
                     content=file_content.decode("utf-8", errors="replace"),

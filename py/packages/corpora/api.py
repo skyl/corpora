@@ -11,7 +11,7 @@ from asgiref.sync import sync_to_async
 
 from .lib.files import compute_checksum
 from .lib.dj.decorators import async_raise_not_found
-from .models import Corpus, CorpusTextFile as CorpusFile
+from .models import Corpus, CorpusTextFile
 from .schema import CorpusSchema, CorpusResponseSchema, FileSchema, FileResponseSchema
 from .auth import BearerAuth
 from .tasks import process_tarball
@@ -88,7 +88,7 @@ async def create_file(request, payload: FileSchema):
     """Create a new File within a Corpus."""
     corpus = await Corpus.objects.aget(id=payload.corpus_id)
     checksum = compute_checksum(payload.content)
-    file = await CorpusFile.objects.acreate(
+    file = await CorpusTextFile.objects.acreate(
         path=payload.path,
         content=payload.content,
         checksum=checksum,
@@ -101,5 +101,5 @@ async def create_file(request, payload: FileSchema):
 @async_raise_not_found
 async def get_file(request, file_id: uuid.UUID):
     """Retrieve a File by ID."""
-    file = await CorpusFile.objects.select_related("corpus").aget(id=file_id)
+    file = await CorpusTextFile.objects.select_related("corpus").aget(id=file_id)
     return file
