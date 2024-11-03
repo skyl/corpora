@@ -1,3 +1,4 @@
+from enum import unique
 import uuid
 from django.db import models
 from django.utils import timezone
@@ -37,6 +38,7 @@ class Corpus(models.Model):
     )
 
     class Meta:
+        unique_together = ("name", "owner")
         verbose_name_plural = "corpora"
 
     def __str__(self):

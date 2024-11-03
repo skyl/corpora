@@ -1,8 +1,10 @@
 from pathlib import Path
 import typer
 
+from corpora_cli.constants import CORPUS_EXISTS_MESSAGE
 from corpora_cli.context import ContextObject
 from corpora_cli.utils.collectors import get_best_collector
+from corpora_client.exceptions import ApiException
 
 app = typer.Typer(help="Corpus commands")
 
@@ -25,13 +27,17 @@ def init(ctx: typer.Context):
     tarball = collector.create_tarball(files, repo_root).getvalue()
     c.console.print(f"Tarball created: {len(tarball)} bytes")
     c.console.print("Uploading corpus tarball to server...")
-    # TODO: async? progress bar?
-    res = c.api_client.corpora_api_create_corpus(
-        name="corpora",
-        url=None,
-        tarball=tarball,
-    )
-    c.console.print(f"{res.name} created!")
+    try:
+        res = c.api_client.corpora_api_create_corpus(
+            name=c.config["name"],  # TODO: git repo name?
+            url=c.config["url"],  # TODO: get url from git?
+            tarball=tarball,
+        )
+        c.console.print(f"{res.name} created!", style="green")
+    except ApiException as e:
+        if e.status == 409:
+            c.console.print(CORPUS_EXISTS_MESSAGE, style="red")
+            exit(1)
 
 
 @app.command()
