@@ -15,7 +15,7 @@ class CorpusAdmin(admin.ModelAdmin):
 
 
 @admin.register(CorpusTextFile)
-class FileAdmin(admin.ModelAdmin):
+class CorpusTextFileAdmin(admin.ModelAdmin):
     autocomplete_fields = ("corpus",)
     list_display = ("path", "corpus", "checksum", "created_at", "updated_at")
     search_fields = ("path", "checksum", "corpus__name")
