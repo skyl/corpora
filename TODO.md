@@ -1,5 +1,7 @@
 # TODO
 
+- vector length in models versus oai implementation
+
 - for small corpora, we could get away with a mega-task but let's break into many single responsibilities
   - finish ingest for real
   - Start building the real records for the `corpora` corpus
