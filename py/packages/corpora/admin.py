@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Corpus, File, Split
+from .models import Corpus, CorpusTextFile, Split
 
 
 @admin.register(Corpus)
@@ -14,7 +14,7 @@ class CorpusAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(File)
+@admin.register(CorpusTextFile)
 class FileAdmin(admin.ModelAdmin):
     autocomplete_fields = ("corpus",)
     list_display = ("path", "corpus", "checksum", "created_at", "updated_at")

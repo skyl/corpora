@@ -12,17 +12,15 @@ app = typer.Typer(help="Corpus commands")
 @app.command()
 def init(ctx: typer.Context):
     """Initialize a new corpus - Upload a tarball."""
-    # Access the API client from the context
     c: ContextObject = ctx.obj
     repo_root = Path.cwd()
-    # api_client = c.api_client
-    # console: Console = ctx.obj["console"]
     c.console.print("Initializing a new corpus...")
     collector = get_best_collector(repo_root, c.config)
     c.console.print("Gathering files...")
     c.console.print(collector, style="dim")
     files = collector.collect_files()
     c.console.print(f"Collected {len(files)} files.")
+    # TODO: debug/verbose mode
     # c.console.print(files, style="dim")
     tarball = collector.create_tarball(files, repo_root).getvalue()
     c.console.print(f"Tarball created: {len(tarball)} bytes")

@@ -1,15 +1,9 @@
 import io
 import tarfile
-import hashlib
 from celery import shared_task
-from .models import Corpus, File as CorpusFile
 
-
-def compute_checksum(content: bytes) -> str:
-    """Compute checksum compatible with Git blob format."""
-    size = str(len(content))
-    sha = hashlib.sha1(f"blob {size}\0".encode() + content).hexdigest()
-    return sha
+from .lib.files import compute_checksum
+from .models import Corpus, CorpusTextFile as CorpusFile
 
 
 @shared_task

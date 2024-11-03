@@ -9,9 +9,9 @@ from ninja.errors import HttpError
 
 from asgiref.sync import sync_to_async
 
-from .lib.files import calculate_checksum
+from .lib.files import compute_checksum
 from .lib.dj.decorators import async_raise_not_found
-from .models import Corpus, File as CorpusFile
+from .models import Corpus, CorpusTextFile as CorpusFile
 from .schema import CorpusSchema, CorpusResponseSchema, FileSchema, FileResponseSchema
 from .auth import BearerAuth
 from .tasks import process_tarball
@@ -87,9 +87,12 @@ async def get_corpus(request, corpus_id: uuid.UUID):
 async def create_file(request, payload: FileSchema):
     """Create a new File within a Corpus."""
     corpus = await Corpus.objects.aget(id=payload.corpus_id)
-    checksum = calculate_checksum(payload.content)
+    checksum = compute_checksum(payload.content)
     file = await CorpusFile.objects.acreate(
-        path=payload.path, content=payload.content, checksum=checksum, corpus=corpus
+        path=payload.path,
+        content=payload.content,
+        checksum=checksum,
+        corpus=corpus,
     )
     return file
 

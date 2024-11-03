@@ -10,7 +10,7 @@ from oauth2_provider.models import AccessToken, Application
 from asgiref.sync import sync_to_async
 
 from .api import api
-from .models import Corpus, File
+from .models import Corpus, CorpusTextFile
 
 User = get_user_model()
 client = TestAsyncClient(api)
@@ -46,7 +46,7 @@ def create_corpus(name, url, owner):
 
 @sync_to_async
 def create_file(corpus, path, content):
-    return File.objects.create(corpus=corpus, path=path, content=content)
+    return CorpusTextFile.objects.create(corpus=corpus, path=path, content=content)
 
 
 class APITestCase(TestCase):
