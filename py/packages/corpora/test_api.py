@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from datetime import timedelta
 import pytest
 from django.test import TestCase
@@ -64,19 +65,24 @@ class APITestCase(TestCase):
         file = SimpleUploadedFile(
             "test.tar.gz", file_content, content_type="application/gzip"
         )
-        response = await client.post(
-            "/corpus",
-            data=data,
-            # Some hint I found
-            # https://github.com/vitalik/django-ninja/issues/765
-            FILES={"tarball": file},
-            headers=headers,
-        )
 
-        assert response.status_code == 201
-        response_data = response.json()
-        assert response_data["name"] == "Test Corpus"
-        assert response_data["url"] == "https://example.com/repo"
+        # Mock process_tarball.delay to prevent it from connecting to Redis
+        with patch("corpora.tasks.process_tarball.delay") as mock_delay:
+            response = await client.post(
+                "/corpus",
+                data=data,
+                FILES={"tarball": file},
+                headers=headers,
+            )
+
+            # Ensure the Celery task is called with the expected arguments
+            mock_delay.assert_called_once_with(file_content)
+
+            # Check the response and returned data
+            assert response.status_code == 201
+            response_data = response.json()
+            assert response_data["name"] == "Test Corpus"
+            assert response_data["url"] == "https://example.com/repo"
 
     @pytest.mark.django_db
     async def test_get_corpus(self):
