@@ -13,6 +13,7 @@ COPY py/packages/corpora/requirements.txt /workspace/packages/corpora/requiremen
 COPY py/packages/corpora_cli/requirements.txt /workspace/packages/corpora_cli/requirements.txt
 COPY py/packages/corpora_client/requirements.txt /workspace/packages/corpora_client/requirements.txt
 COPY py/packages/corpora_client/test-requirements.txt /workspace/packages/corpora_client/test-requirements.txt
+COPY py/packages/corpora_ai_openai/requirements.txt /workspace/packages/corpora_ai_openai/requirements.txt
 RUN pip install --no-cache-dir -r /workspace/requirements.txt
 
 # Set zsh as the default shell for the vscode user
