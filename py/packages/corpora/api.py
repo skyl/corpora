@@ -1,8 +1,12 @@
 from typing import List
 import uuid
 
+from django.db import IntegrityError
+from django.core.exceptions import ValidationError
 from ninja import Router, Form, File
 from ninja.files import UploadedFile
+from ninja.errors import HttpError
+
 from asgiref.sync import sync_to_async
 
 from .lib.files import calculate_checksum
@@ -16,7 +20,7 @@ from .tasks import process_tarball
 api = Router(tags=["corpora"], auth=BearerAuth())
 
 
-@api.post("/corpus", response={201: CorpusResponseSchema})
+@api.post("/corpus", response={201: CorpusResponseSchema, 400: str, 409: str})
 async def create_corpus(
     request,
     corpus: CorpusSchema = Form(...),
@@ -24,26 +28,42 @@ async def create_corpus(
 ):
     """Create a new Corpus with an uploaded tarball."""
 
-    # Read tarball content and calculate checksum (for now, defer processing of individual files)
-    # maybe we just add the whole file to `process_tarball`
+    # Read the tarball content
     tarball_content: bytes = await sync_to_async(tarball.read)()
     print(f"Received tarball: {len(tarball_content)} bytes")
 
-    # Create the corpus instance
-    # TODO: validate unique name .. or ... init/sync ...
-    # return 4XX and tell the client to try sync instead of init?
-    corpus_instance = await Corpus.objects.acreate(
-        name=corpus.name,
-        url=corpus.url,
-        owner=request.user,
-        # TODO: what to do with the tarball?
-        # tarball=tarball_content,  # Store tarball as-is for now
-        # tarball_checksum=checksum,
-    )
+    try:
+        # Attempt to create the Corpus instance
+        corpus_instance = await Corpus.objects.acreate(
+            name=corpus.name,
+            url=corpus.url,
+            owner=request.user,
+        )
+
+    except IntegrityError as e:
+        # Handle unique constraint violations (name/owner combo)
+        raise HttpError(
+            409, "A corpus with this name already exists for this owner."
+        ) from e
+
+    except ValidationError as e:
+        # Handle other model validation issues if any
+        raise HttpError(400, "Invalid data provided.") from e
+
+    # Task creation to process the tarball asynchronously
     process_tarball.delay(str(corpus_instance.id), tarball_content)
 
-    # Return the created corpus, automatically serialized by `CorpusResponseSchema`
-    return corpus_instance
+    # Return the created Corpus instance
+    return 201, corpus_instance
+
+
+@api.delete("/corpus", response={204: str, 404: str})
+@async_raise_not_found
+async def delete_corpus(request, corpus_name: str):
+    """Delete a Corpus by ID."""
+    corpus = await Corpus.objects.aget(owner=request.user, name=corpus_name)
+    await sync_to_async(corpus.delete)()
+    return 204, "Corpus deleted."
 
 
 @api.get("/corpus", response={200: List[CorpusResponseSchema]})

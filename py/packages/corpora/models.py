@@ -37,6 +37,7 @@ class Corpus(models.Model):
     )
 
     class Meta:
+        unique_together = ("name", "owner")
         verbose_name_plural = "corpora"
 
     def __str__(self):

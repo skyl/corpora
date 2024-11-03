@@ -20,6 +20,8 @@
   - agents ... function calling ... maybe we have a menu of function `mkdir`, `create file`, `rewrite file`
     * Take input. Analyze problem. Choose sequence of agents. Let agents execute in order. Report back to user.
 
+- rm unused imports, for instance (on save, in CI..)
+
 # Next
 
 - async upload, progress bard ... ?

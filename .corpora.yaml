@@ -1,5 +1,8 @@
 # .corpora.yaml
 
+name: "corpora"
+url: "https://github.com/skyl/corpora"
+
 server:
   base_url: "http://localhost:8000"  # Modify as needed
 

@@ -17,3 +17,11 @@ export CORPORA_CLIENT_SECRET="{your_client_secret}"
 ```
 """
 )
+
+CORPUS_EXISTS_MESSAGE = Markdown(
+    """
+A corpus with this name already exists for this owner.
+
+Call `corpus delete` to delete the existing corpus or use a different name.
+"""
+)
