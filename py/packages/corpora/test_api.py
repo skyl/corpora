@@ -76,11 +76,9 @@ class APITestCase(TestCase):
             )
 
             # Ensure the Celery task is called with the expected arguments
-            mock_delay.assert_called_once_with(file_content)
-
-            # Check the response and returned data
-            assert response.status_code == 201
             response_data = response.json()
+            mock_delay.assert_called_once_with(response_data["id"], file_content)
+            assert response.status_code == 201
             assert response_data["name"] == "Test Corpus"
             assert response_data["url"] == "https://example.com/repo"
 

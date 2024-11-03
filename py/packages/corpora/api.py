@@ -27,7 +27,6 @@ async def create_corpus(
     # Read tarball content and calculate checksum (for now, defer processing of individual files)
     # maybe we just add the whole file to `process_tarball`
     tarball_content: bytes = await sync_to_async(tarball.read)()
-
     print(f"Received tarball: {len(tarball_content)} bytes")
 
     # Create the corpus instance
@@ -41,7 +40,7 @@ async def create_corpus(
         # tarball=tarball_content,  # Store tarball as-is for now
         # tarball_checksum=checksum,
     )
-    process_tarball.delay(tarball_content)
+    process_tarball.delay(str(corpus_instance.id), tarball_content)
 
     # Return the created corpus, automatically serialized by `CorpusResponseSchema`
     return corpus_instance
