@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import List
 
+from corpora_ai.prompts import SUMMARIZE_SYSTEM_MESSAGE
+
 
 @dataclass
 class ChatCompletionTextMessage:
@@ -32,7 +34,7 @@ class LLMBaseInterface(ABC):
         pass
 
     @abstractmethod
-    def generate_embedding(self, text: str) -> List[float]:
+    def get_embedding(self, text: str) -> List[float]:
         """
         Generates an embedding vector for the input text, suitable for a pgvector VectorField.
 
@@ -43,3 +45,26 @@ class LLMBaseInterface(ABC):
             List[float]: The embedding vector.
         """
         pass
+
+    def get_summary(self, text: str) -> str:
+        """
+        Generates a summary of the input text.
+
+        Args:
+            text (str): The text to summarize.
+
+        Returns:
+            str: The generated summary text.
+        """
+        return self.get_text_completion(
+            [
+                ChatCompletionTextMessage(
+                    role="system",
+                    content=SUMMARIZE_SYSTEM_MESSAGE,
+                ),
+                ChatCompletionTextMessage(
+                    role="user",
+                    content=f"Summarize the following:\n {text}",
+                ),
+            ]
+        )

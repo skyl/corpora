@@ -71,7 +71,7 @@ from django.db.models import F
 from pgvector.django import CosineDistance
 
 def find_similar_documents(query_text):
-    query_embedding = client.generate_embedding(query_text)
+    query_embedding = client.get_embedding(query_text)
     return Document.objects.annotate(
         similarity=CosineDistance(F("embedding_1536"), query_embedding)
     ).order_by("similarity")[:10]

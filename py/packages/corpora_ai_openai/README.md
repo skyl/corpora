@@ -33,7 +33,7 @@ print(response)
 ### Generating an Embedding
 
 ```python
-embedding = llm.generate_embedding("Sample text for embedding")
+embedding = llm.get_embedding("Sample text for embedding")
 print(embedding)
 ```
 

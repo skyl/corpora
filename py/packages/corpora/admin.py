@@ -23,8 +23,11 @@ class CorpusTextFileAdmin(admin.ModelAdmin):
     readonly_fields = ("checksum", "created_at", "updated_at")
     fieldsets = (
         (None, {"fields": ("corpus", "path", "content")}),
-        ("AI Summary", {"fields": ("ai_summary", "vector_of_summary")}),
-        ("Metadata", {"fields": ("checksum", "created_at", "updated_at")}),
+        ("AI Summary", {"fields": ("ai_summary",)}),
+        (
+            "Metadata",
+            {"fields": ("checksum", "created_at", "updated_at")},
+        ),
     )
 
 

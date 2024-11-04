@@ -105,7 +105,7 @@ from pgvector.django import CosineDistance
 
 def find_similar_documents(query_text):
     # Generate multi-vector embeddings for query text
-    query_embeddings = generate_embeddings_for_text(query_text)
+    query_embeddings = get_embeddings_for_text(query_text)
 
     # Perform similarity search against stored embeddings
     results = Document.objects.annotate(
