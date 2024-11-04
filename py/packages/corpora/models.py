@@ -1,11 +1,14 @@
+import os
 import uuid
-from click import edit
+
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 # from django.contrib.postgres.fields import ArrayField
 from pgvector.django import VectorField
+
+from corpora_ai.split import get_text_splitter
 
 User = get_user_model()
 
@@ -99,14 +102,22 @@ class CorpusTextFile(models.Model):
         self.save(update_fields=["vector_of_summary"])
 
     def split_content(self):
-        # TODO: real split logic
-        # Custom logic to split content into smaller parts
-        # Returns a list of Split instances
-        parts = self.content.split("\n\n")  # Example logic; adjust as needed
+        """
+        Splits the content of the file into smaller parts using an appropriate text splitter.
+        Returns a list of Split instances.
+        """
+        file_name = os.path.basename(self.path)
+        splitter = get_text_splitter(file_name)
+
+        # Split content into parts
+        parts = splitter.split_text(self.content)
         splits = []
+
+        # Create Split instances for each part
         for order, part in enumerate(parts):
             split = Split.objects.create(file=self, order=order, content=part)
             splits.append(split)
+
         return splits
 
 

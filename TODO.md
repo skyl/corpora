@@ -1,6 +1,9 @@
 # TODO
 
-- vector length in models versus oai implementation
+- langchain-text-splitters - split based on type, cohesive approach, python and md
+- compare vector of summary versus vector of splits, create search endpoint(s) test adhoc queries
+- test full init with chained tasks
+
 
 - for small corpora, we could get away with a mega-task but let's break into many single responsibilities
   - finish ingest for real
@@ -62,4 +65,6 @@
 - collect corpus, upload tarball to API
 - introduce celery (?) or similar for async tasks
 - handle the file (sync/async) upload in the API
+- vector length in models versus oai implementation
+
 
