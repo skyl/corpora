@@ -87,6 +87,8 @@ class Split(models.Model):
         help_text="text-embedding-3-small vector of the content",
     )
     # # Multivector: https://huggingface.co/colbert-ir/colbertv2.0
+    # https://github.com/pgvector/pgvector/issues/640
+    # https://docs.djangoproject.com/en/5.1/ref/contrib/postgres/fields/#arrayfield
     # colbert_embeddings = ArrayField(
     #     base_field=VectorField(dimensions=128),
     #     size=None,  # Set to None for variable-length arrays
