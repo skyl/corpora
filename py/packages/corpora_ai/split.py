@@ -1,6 +1,6 @@
 import os
+from typing import Union
 
-from git import Union
 from langchain_text_splitters import (
     PythonCodeTextSplitter,
     MarkdownHeaderTextSplitter,
