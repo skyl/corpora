@@ -2,6 +2,8 @@ import uuid
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.contrib.postgres.fields import ArrayField
+
 from pgvector.django import VectorField
 
 User = get_user_model()
@@ -78,7 +80,17 @@ class Split(models.Model):
     )
     order = models.PositiveIntegerField()
     content = models.TextField(blank=True)
-    vector = VectorField(dimensions=300, null=True, blank=True)
+    vector = VectorField(
+        dimensions=1536,
+        null=True,
+        blank=True,
+        help_text="text-embedding-3-small vector of the content",
+    )
+    # # Multivector: https://huggingface.co/colbert-ir/colbertv2.0
+    # colbert_embeddings = ArrayField(
+    #     base_field=VectorField(dimensions=128),
+    #     size=None,  # Set to None for variable-length arrays
+    # )
     metadata = models.JSONField(default=dict, blank=True)
 
     class Meta:
