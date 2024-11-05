@@ -1,11 +1,11 @@
-# corpora_client.FilesApi
+# corpora_client.FileApi
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_file**](FilesApi.md#create_file) | **POST** /api/corpora/file | Create File
-[**get_file**](FilesApi.md#get_file) | **GET** /api/corpora/file/{file_id} | Get File
+[**create_file**](FileApi.md#create_file) | **POST** /api/corpora/file | Create File
+[**get_file**](FileApi.md#get_file) | **GET** /api/corpora/file/{file_id} | Get File
 
 
 # **create_file**
@@ -45,16 +45,16 @@ configuration = corpora_client.Configuration(
 # Enter a context with an instance of the API client
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = corpora_client.FilesApi(api_client)
+    api_instance = corpora_client.FileApi(api_client)
     file_schema = corpora_client.FileSchema() # FileSchema | 
 
     try:
         # Create File
         api_response = api_instance.create_file(file_schema)
-        print("The response of FilesApi->create_file:\n")
+        print("The response of FileApi->create_file:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling FilesApi->create_file: %s\n" % e)
+        print("Exception when calling FileApi->create_file: %s\n" % e)
 ```
 
 
@@ -124,16 +124,16 @@ configuration = corpora_client.Configuration(
 # Enter a context with an instance of the API client
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = corpora_client.FilesApi(api_client)
+    api_instance = corpora_client.FileApi(api_client)
     file_id = 'file_id_example' # str | 
 
     try:
         # Get File
         api_response = api_instance.get_file(file_id)
-        print("The response of FilesApi->get_file:\n")
+        print("The response of FileApi->get_file:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling FilesApi->get_file: %s\n" % e)
+        print("Exception when calling FileApi->get_file: %s\n" % e)
 ```
 
 

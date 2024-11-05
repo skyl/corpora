@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from rich.console import Console
-from corpora_client import CorpusApi, FilesApi, SplitsApi
+from corpora_client import CorpusApi, FileApi, SplitApi
 from typing import Dict, Any
 
 
 @dataclass
 class ContextObject:
     corpus_api: CorpusApi
-    files_api: FilesApi
-    splits_api: SplitsApi
+    file_api: FileApi
+    split_api: SplitApi
     config: Dict[str, Any]
     console: Console

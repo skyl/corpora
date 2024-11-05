@@ -9,14 +9,13 @@ from corpora_cli.config import load_config
 from corpora_cli.auth import AuthResolver, AuthError
 from corpora_cli.constants import NO_AUTHENTICATION_MESSAGE
 from corpora_cli.context import ContextObject
-from corpora_client.api import corpus_api
 
 app = typer.Typer(help="Corpora CLI: Manage and process your corpora")
 
 
 def get_api_clients(
     config,
-) -> Tuple[corpora_client.CorpusApi, corpora_client.FilesApi, corpora_client.SplitApi]:
+) -> Tuple[corpora_client.CorpusApi, corpora_client.FileApi, corpora_client.SplitApi]:
     """
     Initialize and authenticate API client with given config.
     Returns an authenticated CorporaApi instance.
@@ -37,7 +36,7 @@ def get_api_clients(
     client_config.access_token = auth_token
     return (
         corpora_client.CorpusApi(corpora_client.ApiClient(client_config)),
-        corpora_client.FilesApi(corpora_client.ApiClient(client_config)),
+        corpora_client.FileApi(corpora_client.ApiClient(client_config)),
         corpora_client.SplitApi(corpora_client.ApiClient(client_config)),
     )
 
@@ -45,14 +44,12 @@ def get_api_clients(
 @app.callback()
 def main(ctx: typer.Context):
     """Main entry point. Sets up configuration and API client."""
-    # Load config and pass it to the context
-
     corpus_api, files_api, split_api = get_api_clients(load_config())
 
     config = load_config()
     ctx.obj = ContextObject(
         corpus_api=corpus_api,
-        files_api=files_api,
+        file_api=files_api,
         split_api=split_api,
         config=config,
         console=Console(),

@@ -14,14 +14,14 @@
 
 import unittest
 
-from corpora_client.api.files_api import FilesApi
+from corpora_client.api.file_api import FileApi
 
 
-class TestFilesApi(unittest.TestCase):
-    """FilesApi unit test stubs"""
+class TestFileApi(unittest.TestCase):
+    """FileApi unit test stubs"""
 
     def setUp(self) -> None:
-        self.api = FilesApi()
+        self.api = FileApi()
 
     def tearDown(self) -> None:
         pass

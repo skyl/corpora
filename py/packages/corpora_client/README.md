@@ -100,8 +100,8 @@ Class | Method | HTTP request | Description
 *CorpusApi* | [**delete_corpus**](docs/CorpusApi.md#delete_corpus) | **DELETE** /api/corpora/corpus | Delete Corpus
 *CorpusApi* | [**get_corpus**](docs/CorpusApi.md#get_corpus) | **GET** /api/corpora/corpus/{corpus_id} | Get Corpus
 *CorpusApi* | [**list_corpora**](docs/CorpusApi.md#list_corpora) | **GET** /api/corpora/corpus | List Corpora
-*FilesApi* | [**create_file**](docs/FilesApi.md#create_file) | **POST** /api/corpora/file | Create File
-*FilesApi* | [**get_file**](docs/FilesApi.md#get_file) | **GET** /api/corpora/file/{file_id} | Get File
+*FileApi* | [**create_file**](docs/FileApi.md#create_file) | **POST** /api/corpora/file | Create File
+*FileApi* | [**get_file**](docs/FileApi.md#get_file) | **GET** /api/corpora/file/{file_id} | Get File
 *SplitApi* | [**get_split**](docs/SplitApi.md#get_split) | **GET** /api/corpora/split/{split_id} | Get Split
 *SplitApi* | [**list_splits_for_file**](docs/SplitApi.md#list_splits_for_file) | **GET** /api/corpora/split/file/{file_id} | List Splits For File
 *SplitApi* | [**vector_search**](docs/SplitApi.md#vector_search) | **POST** /api/corpora/split/search | Vector Search
