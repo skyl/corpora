@@ -23,8 +23,11 @@ class CorpusTextFileAdmin(admin.ModelAdmin):
     readonly_fields = ("checksum", "created_at", "updated_at")
     fieldsets = (
         (None, {"fields": ("corpus", "path", "content")}),
-        ("AI Summary", {"fields": ("ai_summary", "vector_of_summary")}),
-        ("Metadata", {"fields": ("checksum", "created_at", "updated_at")}),
+        ("AI Summary", {"fields": ("ai_summary",)}),
+        (
+            "Metadata",
+            {"fields": ("checksum", "created_at", "updated_at")},
+        ),
     )
 
 
@@ -34,10 +37,9 @@ class SplitAdmin(admin.ModelAdmin):
     list_display = ("file", "order", "content_preview", "metadata")
     search_fields = ("file__path", "content")
     ordering = ("file", "order")
-    readonly_fields = ("vector",)
     fieldsets = (
         (None, {"fields": ("file", "order", "content")}),
-        ("Vector Data", {"fields": ("vector", "metadata")}),
+        ("Meta", {"fields": ("metadata",)}),
     )
 
     def content_preview(self, obj):

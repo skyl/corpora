@@ -24,7 +24,7 @@ class TestLoadLLMProvider(unittest.TestCase):
         self.assertIsInstance(provider, LLMBaseInterface)
         self.assertEqual(provider, mock_client_instance)
 
-    @patch.dict(os.environ, {"LLM_PROVIDER": "openai"})
+    @patch.dict(os.environ, {"LLM_PROVIDER": "openai", "OPENAI_API_KEY": ""})
     @patch("corpora_ai.provider_loader.OpenAIClient")
     def test_missing_openai_api_key(self, MockOpenAIClient):
         """

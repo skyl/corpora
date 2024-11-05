@@ -3,34 +3,58 @@ import tarfile
 from celery import shared_task
 
 from .lib.files import compute_checksum
-from .models import Corpus, CorpusTextFile
+from .models import Corpus, CorpusTextFile, Split
 
 
 @shared_task
 def process_tarball(corpus_id: str, tarball: bytes) -> None:
-    """
-    Process a tarball by extracting each file and creating a `CorpusFile`
-    entry for each extracted file in the database.
-    """
-    print(f"Processing tarball... {corpus_id}")
     corpus = Corpus.objects.get(id=corpus_id)
-
     with tarfile.open(fileobj=io.BytesIO(tarball), mode="r:gz") as tar:
         for member in tar.getmembers():
             if member.isfile():
-                file_content = tar.extractfile(member).read()
+                file_content = (
+                    tar.extractfile(member).read().decode("utf-8", errors="replace")
+                )
                 checksum = compute_checksum(file_content)
-                print(f"{member.name}")
-                print(f"{checksum}")
 
-                # Save each extracted file as a `CorpusFile` entry
-                cf = CorpusTextFile.objects.create(
+                # Create a CorpusTextFile and kick off further tasks
+                corpus_file = CorpusTextFile.objects.create(
                     corpus=corpus,
                     path=member.name,
-                    content=file_content.decode("utf-8", errors="replace"),
+                    content=file_content,
                     checksum=checksum,
                 )
-                print(f"Created file: {cf}")
+                generate_summary_task.delay(corpus_file.id)
+                split_file_task.delay(corpus_file.id)
+
+
+@shared_task
+def generate_summary_task(corpus_file_id: str) -> None:
+    corpus_file = CorpusTextFile.objects.get(id=corpus_file_id)
+    corpus_file.get_and_save_summary()
+    corpus_file.get_and_save_vector_of_summary()
+
+
+@shared_task
+def split_file_task(corpus_file_id: str) -> None:
+    corpus_file = CorpusTextFile.objects.get(id=corpus_file_id)
+    splits = corpus_file.split_content()
+    for split in splits:
+        # no need to chain
+        generate_vector_task.delay(split.id)
+        # generate_colbert_vectors_task.delay(split.id)
+
+
+@shared_task
+def generate_vector_task(split_id: str) -> None:
+    split = Split.objects.get(id=split_id)
+    split.get_and_save_vector()
+
+
+# @shared_task
+# def generate_colbert_vectors_task(split_id: str) -> None:
+#     split = Split.objects.get(id=split_id)
+#     split.get_and_save_colbert_vectors()
 
 
 @shared_task

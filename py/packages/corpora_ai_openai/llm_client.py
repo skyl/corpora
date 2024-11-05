@@ -25,7 +25,7 @@ class OpenAIClient(LLMBaseInterface):
         )
         return response.choices[0].message.content
 
-    def generate_embedding(self, text: str) -> List[float]:
+    def get_embedding(self, text: str) -> List[float]:
         if not text:
             raise ValueError("Input text must not be empty.")
         response = self.client.embeddings.create(input=text, model=self.embedding_model)

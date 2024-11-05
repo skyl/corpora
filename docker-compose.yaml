@@ -9,6 +9,9 @@ services:
     environment:
       PYTHONPATH: "/workspace/py/packages"
       REDIS_URL: "redis://redis:6379/0"
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
+    command: python manage.py runserver 0.0.0.0:8000
+    working_dir: /workspace/py/packages/corpora_proj
     depends_on:
       - db
       - redis
@@ -49,6 +52,7 @@ services:
     environment:
       PYTHONPATH: "/workspace/py/packages"
       REDIS_URL: "redis://redis:6379/0"
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
     depends_on:
       redis:
         condition: service_healthy

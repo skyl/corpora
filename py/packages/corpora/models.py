@@ -1,8 +1,14 @@
+import os
 import uuid
+
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+
+# from django.contrib.postgres.fields import ArrayField
 from pgvector.django import VectorField
+
+from corpora_ai.split import get_text_splitter
 
 User = get_user_model()
 
@@ -54,7 +60,13 @@ class CorpusTextFile(models.Model):
     path = models.CharField(max_length=1024)
     content = models.TextField(blank=True)
     ai_summary = models.TextField(blank=True)
-    vector_of_summary = VectorField(dimensions=300, null=True, blank=True)
+    vector_of_summary = VectorField(
+        dimensions=1536,
+        null=True,
+        blank=True,
+        help_text="text-embedding-3-small vector of the content",
+        editable=False,
+    )
     checksum = models.CharField(
         max_length=40,
         editable=False,
@@ -70,6 +82,44 @@ class CorpusTextFile(models.Model):
     def __str__(self):
         return f"{self.corpus.name}:{self.path}"
 
+    def get_and_save_summary(self):
+        from corpora_ai.provider_loader import load_llm_provider
+
+        llm = load_llm_provider()
+        summary = llm.get_summary(self._get_text_representation())
+        self.ai_summary = summary
+        self.save(update_fields=["ai_summary"])
+
+    def _get_text_representation(self):
+        return f"{self.corpus.name}:{self.path}\n\n{self.content}"
+
+    def get_and_save_vector_of_summary(self):
+        from corpora_ai.provider_loader import load_llm_provider
+
+        llm = load_llm_provider()
+        vector = llm.get_embedding(self.ai_summary)
+        self.vector_of_summary = vector
+        self.save(update_fields=["vector_of_summary"])
+
+    def split_content(self):
+        """
+        Splits the content of the file into smaller parts using an appropriate text splitter.
+        Returns a list of Split instances.
+        """
+        file_name = os.path.basename(self.path)
+        splitter = get_text_splitter(file_name)
+
+        # Split content into parts
+        parts = splitter.split_text(self.content)
+        splits = []
+
+        # Create Split instances for each part
+        for order, part in enumerate(parts):
+            split = Split.objects.create(file=self, order=order, content=part)
+            splits.append(split)
+
+        return splits
+
 
 class Split(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -78,7 +128,20 @@ class Split(models.Model):
     )
     order = models.PositiveIntegerField()
     content = models.TextField(blank=True)
-    vector = VectorField(dimensions=300, null=True, blank=True)
+    vector = VectorField(
+        dimensions=1536,
+        null=True,
+        blank=True,
+        help_text="text-embedding-3-small vector of the content",
+        editable=False,
+    )
+    # # Multivector: https://huggingface.co/colbert-ir/colbertv2.0
+    # https://github.com/pgvector/pgvector/issues/640
+    # https://docs.djangoproject.com/en/5.1/ref/contrib/postgres/fields/#arrayfield
+    # colbert_embeddings = ArrayField(
+    #     base_field=VectorField(dimensions=128),
+    #     size=None,  # Set to None for variable-length arrays
+    # )
     metadata = models.JSONField(default=dict, blank=True)
 
     class Meta:
@@ -87,3 +150,17 @@ class Split(models.Model):
 
     def __str__(self):
         return f"{self.file.corpus.name}:{self.file.path}:{self.order}"
+
+    def get_and_save_vector(self):
+        from corpora_ai.provider_loader import load_llm_provider
+
+        llm = load_llm_provider()
+        vector = llm.get_embedding(self.content)
+        self.vector = vector
+        self.save(update_fields=["vector"])
+
+    # # Optionally, for multi-vector storage
+    # def get_and_save_colbert_vectors(self):
+    #     colbert_vectors = generate_colbert_vectors(self.content)  # e.g., a list of 128-dim vectors
+    #     self.colbert_embeddings = colbert_vectors
+    #     self.save(update_fields=["colbert_embeddings"])
