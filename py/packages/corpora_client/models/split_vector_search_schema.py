@@ -17,8 +17,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional, Union
+from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -29,9 +29,9 @@ class SplitVectorSearchSchema(BaseModel):
     """  # noqa: E501
 
     corpus_id: StrictStr
-    vector: List[Union[StrictFloat, StrictInt]]
+    text: StrictStr
     limit: Optional[StrictInt] = 10
-    __properties: ClassVar[List[str]] = ["corpus_id", "vector", "limit"]
+    __properties: ClassVar[List[str]] = ["corpus_id", "text", "limit"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -84,7 +84,7 @@ class SplitVectorSearchSchema(BaseModel):
         _obj = cls.model_validate(
             {
                 "corpus_id": obj.get("corpus_id"),
-                "vector": obj.get("vector"),
+                "text": obj.get("text"),
                 "limit": obj.get("limit") if obj.get("limit") is not None else 10,
             }
         )

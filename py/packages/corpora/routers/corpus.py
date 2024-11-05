@@ -17,7 +17,11 @@ from ..tasks import process_tarball
 corpus_router = Router(tags=["corpus"], auth=BearerAuth())
 
 
-@corpus_router.post("", response={201: CorpusResponseSchema, 400: str, 409: str})
+@corpus_router.post(
+    "",
+    response={201: CorpusResponseSchema, 400: str, 409: str},
+    operation_id="create_corpus",
+)
 async def create_corpus(
     request,
     corpus: CorpusSchema = Form(...),
@@ -40,7 +44,7 @@ async def create_corpus(
     return 201, corpus_instance
 
 
-@corpus_router.delete("", response={204: str, 404: str})
+@corpus_router.delete("", response={204: str, 404: str}, operation_id="delete_corpus")
 @async_raise_not_found
 async def delete_corpus(request, corpus_name: str):
     """Delete a Corpus by name."""
@@ -49,14 +53,18 @@ async def delete_corpus(request, corpus_name: str):
     return 204, "Corpus deleted."
 
 
-@corpus_router.get("", response={200: List[CorpusResponseSchema]})
+@corpus_router.get(
+    "", response={200: List[CorpusResponseSchema]}, operation_id="list_corpora"
+)
 async def list_corpora(request):
     """List all Corpora."""
     corpora = await sync_to_async(list)(Corpus.objects.filter(owner=request.user))
     return corpora
 
 
-@corpus_router.get("/{corpus_id}", response=CorpusResponseSchema)
+@corpus_router.get(
+    "/{corpus_id}", response=CorpusResponseSchema, operation_id="get_corpus"
+)
 @async_raise_not_found
 async def get_corpus(request, corpus_id: uuid.UUID):
     """Retrieve a Corpus by ID."""

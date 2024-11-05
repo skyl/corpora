@@ -37,17 +37,13 @@ class TestSplitVectorSearchSchema(unittest.TestCase):
         if include_optional:
             return SplitVectorSearchSchema(
                 corpus_id = '',
-                vector = [
-                    1.337
-                    ],
+                text = '',
                 limit = 56
             )
         else:
             return SplitVectorSearchSchema(
                 corpus_id = '',
-                vector = [
-                    1.337
-                    ],
+                text = '',
         )
         """
 

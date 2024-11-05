@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **corpus_id** | **str** |  | 
-**vector** | **List[float]** |  | 
+**text** | **str** |  | 
 **limit** | **int** |  | [optional] [default to 10]
 
 ## Example

@@ -26,29 +26,29 @@ class TestCorpusApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_corpora_routers_corpus_create_corpus(self) -> None:
-        """Test case for corpora_routers_corpus_create_corpus
+    def test_create_corpus(self) -> None:
+        """Test case for create_corpus
 
         Create Corpus
         """
         pass
 
-    def test_corpora_routers_corpus_delete_corpus(self) -> None:
-        """Test case for corpora_routers_corpus_delete_corpus
+    def test_delete_corpus(self) -> None:
+        """Test case for delete_corpus
 
         Delete Corpus
         """
         pass
 
-    def test_corpora_routers_corpus_get_corpus(self) -> None:
-        """Test case for corpora_routers_corpus_get_corpus
+    def test_get_corpus(self) -> None:
+        """Test case for get_corpus
 
         Get Corpus
         """
         pass
 
-    def test_corpora_routers_corpus_list_corpora(self) -> None:
-        """Test case for corpora_routers_corpus_list_corpora
+    def test_list_corpora(self) -> None:
+        """Test case for list_corpora
 
         List Corpora
         """

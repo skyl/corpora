@@ -4,12 +4,12 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**corpora_routers_corpustextfile_create_file**](FilesApi.md#corpora_routers_corpustextfile_create_file) | **POST** /api/corpora/file | Create File
-[**corpora_routers_corpustextfile_get_file**](FilesApi.md#corpora_routers_corpustextfile_get_file) | **GET** /api/corpora/file/{file_id} | Get File
+[**create_file**](FilesApi.md#create_file) | **POST** /api/corpora/file | Create File
+[**get_file**](FilesApi.md#get_file) | **GET** /api/corpora/file/{file_id} | Get File
 
 
-# **corpora_routers_corpustextfile_create_file**
-> FileResponseSchema corpora_routers_corpustextfile_create_file(file_schema)
+# **create_file**
+> FileResponseSchema create_file(file_schema)
 
 Create File
 
@@ -50,11 +50,11 @@ with corpora_client.ApiClient(configuration) as api_client:
 
     try:
         # Create File
-        api_response = api_instance.corpora_routers_corpustextfile_create_file(file_schema)
-        print("The response of FilesApi->corpora_routers_corpustextfile_create_file:\n")
+        api_response = api_instance.create_file(file_schema)
+        print("The response of FilesApi->create_file:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling FilesApi->corpora_routers_corpustextfile_create_file: %s\n" % e)
+        print("Exception when calling FilesApi->create_file: %s\n" % e)
 ```
 
 
@@ -88,8 +88,8 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **corpora_routers_corpustextfile_get_file**
-> FileResponseSchema corpora_routers_corpustextfile_get_file(file_id)
+# **get_file**
+> FileResponseSchema get_file(file_id)
 
 Get File
 
@@ -129,11 +129,11 @@ with corpora_client.ApiClient(configuration) as api_client:
 
     try:
         # Get File
-        api_response = api_instance.corpora_routers_corpustextfile_get_file(file_id)
-        print("The response of FilesApi->corpora_routers_corpustextfile_get_file:\n")
+        api_response = api_instance.get_file(file_id)
+        print("The response of FilesApi->get_file:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling FilesApi->corpora_routers_corpustextfile_get_file: %s\n" % e)
+        print("Exception when calling FilesApi->get_file: %s\n" % e)
 ```
 
 

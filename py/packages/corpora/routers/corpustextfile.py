@@ -10,10 +10,12 @@ from ..models import Corpus, CorpusTextFile
 from ..schema import FileSchema, FileResponseSchema
 from ..auth import BearerAuth
 
-file_router = Router(tags=["files"], auth=BearerAuth())
+file_router = Router(tags=["file"], auth=BearerAuth())
 
 
-@file_router.post("", response={201: FileResponseSchema, 409: str})
+@file_router.post(
+    "", response={201: FileResponseSchema, 409: str}, operation_id="create_file"
+)
 @async_raise_not_found
 async def create_file(request, payload: FileSchema):
     """Create a new File within a Corpus."""
@@ -33,7 +35,7 @@ async def create_file(request, payload: FileSchema):
     return 201, file
 
 
-@file_router.get("/{file_id}", response=FileResponseSchema)
+@file_router.get("/{file_id}", response=FileResponseSchema, operation_id="get_file")
 @async_raise_not_found
 async def get_file(request, file_id: uuid.UUID):
     """Retrieve a File by ID."""

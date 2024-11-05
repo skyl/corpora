@@ -38,7 +38,7 @@ class CorpusApi:
         self.api_client = api_client
 
     @validate_call
-    def corpora_routers_corpus_create_corpus(
+    def create_corpus(
         self,
         name: StrictStr,
         tarball: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
@@ -87,7 +87,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_create_corpus_serialize(
+        _param = self._create_corpus_serialize(
             name=name,
             tarball=tarball,
             url=url,
@@ -112,7 +112,7 @@ class CorpusApi:
         ).data
 
     @validate_call
-    def corpora_routers_corpus_create_corpus_with_http_info(
+    def create_corpus_with_http_info(
         self,
         name: StrictStr,
         tarball: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
@@ -161,7 +161,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_create_corpus_serialize(
+        _param = self._create_corpus_serialize(
             name=name,
             tarball=tarball,
             url=url,
@@ -186,7 +186,7 @@ class CorpusApi:
         )
 
     @validate_call
-    def corpora_routers_corpus_create_corpus_without_preload_content(
+    def create_corpus_without_preload_content(
         self,
         name: StrictStr,
         tarball: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
@@ -235,7 +235,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_create_corpus_serialize(
+        _param = self._create_corpus_serialize(
             name=name,
             tarball=tarball,
             url=url,
@@ -255,7 +255,7 @@ class CorpusApi:
         )
         return response_data.response
 
-    def _corpora_routers_corpus_create_corpus_serialize(
+    def _create_corpus_serialize(
         self,
         name,
         tarball,
@@ -326,7 +326,7 @@ class CorpusApi:
         )
 
     @validate_call
-    def corpora_routers_corpus_delete_corpus(
+    def delete_corpus(
         self,
         corpus_name: StrictStr,
         _request_timeout: Union[
@@ -369,7 +369,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_delete_corpus_serialize(
+        _param = self._delete_corpus_serialize(
             corpus_name=corpus_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -391,7 +391,7 @@ class CorpusApi:
         ).data
 
     @validate_call
-    def corpora_routers_corpus_delete_corpus_with_http_info(
+    def delete_corpus_with_http_info(
         self,
         corpus_name: StrictStr,
         _request_timeout: Union[
@@ -434,7 +434,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_delete_corpus_serialize(
+        _param = self._delete_corpus_serialize(
             corpus_name=corpus_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -456,7 +456,7 @@ class CorpusApi:
         )
 
     @validate_call
-    def corpora_routers_corpus_delete_corpus_without_preload_content(
+    def delete_corpus_without_preload_content(
         self,
         corpus_name: StrictStr,
         _request_timeout: Union[
@@ -499,7 +499,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_delete_corpus_serialize(
+        _param = self._delete_corpus_serialize(
             corpus_name=corpus_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -516,7 +516,7 @@ class CorpusApi:
         )
         return response_data.response
 
-    def _corpora_routers_corpus_delete_corpus_serialize(
+    def _delete_corpus_serialize(
         self,
         corpus_name,
         _request_auth,
@@ -573,7 +573,7 @@ class CorpusApi:
         )
 
     @validate_call
-    def corpora_routers_corpus_get_corpus(
+    def get_corpus(
         self,
         corpus_id: StrictStr,
         _request_timeout: Union[
@@ -616,7 +616,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_get_corpus_serialize(
+        _param = self._get_corpus_serialize(
             corpus_id=corpus_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -637,7 +637,7 @@ class CorpusApi:
         ).data
 
     @validate_call
-    def corpora_routers_corpus_get_corpus_with_http_info(
+    def get_corpus_with_http_info(
         self,
         corpus_id: StrictStr,
         _request_timeout: Union[
@@ -680,7 +680,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_get_corpus_serialize(
+        _param = self._get_corpus_serialize(
             corpus_id=corpus_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -701,7 +701,7 @@ class CorpusApi:
         )
 
     @validate_call
-    def corpora_routers_corpus_get_corpus_without_preload_content(
+    def get_corpus_without_preload_content(
         self,
         corpus_id: StrictStr,
         _request_timeout: Union[
@@ -744,7 +744,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_get_corpus_serialize(
+        _param = self._get_corpus_serialize(
             corpus_id=corpus_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -760,7 +760,7 @@ class CorpusApi:
         )
         return response_data.response
 
-    def _corpora_routers_corpus_get_corpus_serialize(
+    def _get_corpus_serialize(
         self,
         corpus_id,
         _request_auth,
@@ -815,7 +815,7 @@ class CorpusApi:
         )
 
     @validate_call
-    def corpora_routers_corpus_list_corpora(
+    def list_corpora(
         self,
         _request_timeout: Union[
             None,
@@ -855,7 +855,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_list_corpora_serialize(
+        _param = self._list_corpora_serialize(
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -875,7 +875,7 @@ class CorpusApi:
         ).data
 
     @validate_call
-    def corpora_routers_corpus_list_corpora_with_http_info(
+    def list_corpora_with_http_info(
         self,
         _request_timeout: Union[
             None,
@@ -915,7 +915,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_list_corpora_serialize(
+        _param = self._list_corpora_serialize(
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -935,7 +935,7 @@ class CorpusApi:
         )
 
     @validate_call
-    def corpora_routers_corpus_list_corpora_without_preload_content(
+    def list_corpora_without_preload_content(
         self,
         _request_timeout: Union[
             None,
@@ -975,7 +975,7 @@ class CorpusApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpus_list_corpora_serialize(
+        _param = self._list_corpora_serialize(
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -990,7 +990,7 @@ class CorpusApi:
         )
         return response_data.response
 
-    def _corpora_routers_corpus_list_corpora_serialize(
+    def _list_corpora_serialize(
         self,
         _request_auth,
         _content_type,

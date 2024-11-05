@@ -1,4 +1,5 @@
 import pytest
+from unittest.mock import patch
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from ninja.testing import TestAsyncClient
@@ -52,13 +53,24 @@ class SplitAPITestCase(TestCase):
         await create_split(file, "Split content 2", [0.2] * 1536, order=2)
 
         payload = {
-            "vector": [0.1] * 1536,
+            "text": "foobar",
             "corpus_id": str(corpus.id),
             "limit": 2,
         }
 
-        response = await client.post(f"/search", json=payload, headers=headers)
-        print(response.content)
-        assert response.status_code == 200
-        data = response.json()
-        assert len(data) > 0  # Should return at least one similar split
+        # Mock the load_llm_provider and its get_embedding function
+        with patch("corpora.routers.split.load_llm_provider") as mock_llm_provider:
+            mock_llm_instance = mock_llm_provider.return_value
+            mock_llm_instance.get_embedding.return_value = [
+                0.1
+            ] * 1536  # Mocked embedding
+
+            # Execute the test request
+            response = await client.post("/search", json=payload, headers=headers)
+            print(response.content)
+
+            # Assertions
+            assert response.status_code == 200
+            data = response.json()
+            assert len(data) > 0  # Should return at least one similar split
+            mock_llm_instance.get_embedding.assert_called_once_with("foobar")

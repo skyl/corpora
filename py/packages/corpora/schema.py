@@ -38,7 +38,7 @@ class FileResponseSchema(Schema):
 
 class SplitVectorSearchSchema(Schema):
     corpus_id: UUID
-    vector: List[float]  # 1536-dimensional vector from user query
+    text: str
     limit: int = 10
 
 

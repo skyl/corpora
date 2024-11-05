@@ -38,7 +38,7 @@ class FilesApi:
         self.api_client = api_client
 
     @validate_call
-    def corpora_routers_corpustextfile_create_file(
+    def create_file(
         self,
         file_schema: FileSchema,
         _request_timeout: Union[
@@ -81,7 +81,7 @@ class FilesApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpustextfile_create_file_serialize(
+        _param = self._create_file_serialize(
             file_schema=file_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -103,7 +103,7 @@ class FilesApi:
         ).data
 
     @validate_call
-    def corpora_routers_corpustextfile_create_file_with_http_info(
+    def create_file_with_http_info(
         self,
         file_schema: FileSchema,
         _request_timeout: Union[
@@ -146,7 +146,7 @@ class FilesApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpustextfile_create_file_serialize(
+        _param = self._create_file_serialize(
             file_schema=file_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -168,7 +168,7 @@ class FilesApi:
         )
 
     @validate_call
-    def corpora_routers_corpustextfile_create_file_without_preload_content(
+    def create_file_without_preload_content(
         self,
         file_schema: FileSchema,
         _request_timeout: Union[
@@ -211,7 +211,7 @@ class FilesApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpustextfile_create_file_serialize(
+        _param = self._create_file_serialize(
             file_schema=file_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -228,7 +228,7 @@ class FilesApi:
         )
         return response_data.response
 
-    def _corpora_routers_corpustextfile_create_file_serialize(
+    def _create_file_serialize(
         self,
         file_schema,
         _request_auth,
@@ -293,7 +293,7 @@ class FilesApi:
         )
 
     @validate_call
-    def corpora_routers_corpustextfile_get_file(
+    def get_file(
         self,
         file_id: StrictStr,
         _request_timeout: Union[
@@ -336,7 +336,7 @@ class FilesApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpustextfile_get_file_serialize(
+        _param = self._get_file_serialize(
             file_id=file_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -357,7 +357,7 @@ class FilesApi:
         ).data
 
     @validate_call
-    def corpora_routers_corpustextfile_get_file_with_http_info(
+    def get_file_with_http_info(
         self,
         file_id: StrictStr,
         _request_timeout: Union[
@@ -400,7 +400,7 @@ class FilesApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpustextfile_get_file_serialize(
+        _param = self._get_file_serialize(
             file_id=file_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -421,7 +421,7 @@ class FilesApi:
         )
 
     @validate_call
-    def corpora_routers_corpustextfile_get_file_without_preload_content(
+    def get_file_without_preload_content(
         self,
         file_id: StrictStr,
         _request_timeout: Union[
@@ -464,7 +464,7 @@ class FilesApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._corpora_routers_corpustextfile_get_file_serialize(
+        _param = self._get_file_serialize(
             file_id=file_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -480,7 +480,7 @@ class FilesApi:
         )
         return response_data.response
 
-    def _corpora_routers_corpustextfile_get_file_serialize(
+    def _get_file_serialize(
         self,
         file_id,
         _request_auth,

@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**corpora_routers_corpus_create_corpus**](CorpusApi.md#corpora_routers_corpus_create_corpus) | **POST** /api/corpora/corpus | Create Corpus
-[**corpora_routers_corpus_delete_corpus**](CorpusApi.md#corpora_routers_corpus_delete_corpus) | **DELETE** /api/corpora/corpus | Delete Corpus
-[**corpora_routers_corpus_get_corpus**](CorpusApi.md#corpora_routers_corpus_get_corpus) | **GET** /api/corpora/corpus/{corpus_id} | Get Corpus
-[**corpora_routers_corpus_list_corpora**](CorpusApi.md#corpora_routers_corpus_list_corpora) | **GET** /api/corpora/corpus | List Corpora
+[**create_corpus**](CorpusApi.md#create_corpus) | **POST** /api/corpora/corpus | Create Corpus
+[**delete_corpus**](CorpusApi.md#delete_corpus) | **DELETE** /api/corpora/corpus | Delete Corpus
+[**get_corpus**](CorpusApi.md#get_corpus) | **GET** /api/corpora/corpus/{corpus_id} | Get Corpus
+[**list_corpora**](CorpusApi.md#list_corpora) | **GET** /api/corpora/corpus | List Corpora
 
 
-# **corpora_routers_corpus_create_corpus**
-> CorpusResponseSchema corpora_routers_corpus_create_corpus(name, tarball, url=url)
+# **create_corpus**
+> CorpusResponseSchema create_corpus(name, tarball, url=url)
 
 Create Corpus
 
@@ -53,11 +53,11 @@ with corpora_client.ApiClient(configuration) as api_client:
 
     try:
         # Create Corpus
-        api_response = api_instance.corpora_routers_corpus_create_corpus(name, tarball, url=url)
-        print("The response of CorpusApi->corpora_routers_corpus_create_corpus:\n")
+        api_response = api_instance.create_corpus(name, tarball, url=url)
+        print("The response of CorpusApi->create_corpus:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling CorpusApi->corpora_routers_corpus_create_corpus: %s\n" % e)
+        print("Exception when calling CorpusApi->create_corpus: %s\n" % e)
 ```
 
 
@@ -94,8 +94,8 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **corpora_routers_corpus_delete_corpus**
-> str corpora_routers_corpus_delete_corpus(corpus_name)
+# **delete_corpus**
+> str delete_corpus(corpus_name)
 
 Delete Corpus
 
@@ -134,11 +134,11 @@ with corpora_client.ApiClient(configuration) as api_client:
 
     try:
         # Delete Corpus
-        api_response = api_instance.corpora_routers_corpus_delete_corpus(corpus_name)
-        print("The response of CorpusApi->corpora_routers_corpus_delete_corpus:\n")
+        api_response = api_instance.delete_corpus(corpus_name)
+        print("The response of CorpusApi->delete_corpus:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling CorpusApi->corpora_routers_corpus_delete_corpus: %s\n" % e)
+        print("Exception when calling CorpusApi->delete_corpus: %s\n" % e)
 ```
 
 
@@ -172,8 +172,8 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **corpora_routers_corpus_get_corpus**
-> CorpusResponseSchema corpora_routers_corpus_get_corpus(corpus_id)
+# **get_corpus**
+> CorpusResponseSchema get_corpus(corpus_id)
 
 Get Corpus
 
@@ -213,11 +213,11 @@ with corpora_client.ApiClient(configuration) as api_client:
 
     try:
         # Get Corpus
-        api_response = api_instance.corpora_routers_corpus_get_corpus(corpus_id)
-        print("The response of CorpusApi->corpora_routers_corpus_get_corpus:\n")
+        api_response = api_instance.get_corpus(corpus_id)
+        print("The response of CorpusApi->get_corpus:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling CorpusApi->corpora_routers_corpus_get_corpus: %s\n" % e)
+        print("Exception when calling CorpusApi->get_corpus: %s\n" % e)
 ```
 
 
@@ -250,8 +250,8 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **corpora_routers_corpus_list_corpora**
-> List[CorpusResponseSchema] corpora_routers_corpus_list_corpora()
+# **list_corpora**
+> List[CorpusResponseSchema] list_corpora()
 
 List Corpora
 
@@ -290,11 +290,11 @@ with corpora_client.ApiClient(configuration) as api_client:
 
     try:
         # List Corpora
-        api_response = api_instance.corpora_routers_corpus_list_corpora()
-        print("The response of CorpusApi->corpora_routers_corpus_list_corpora:\n")
+        api_response = api_instance.list_corpora()
+        print("The response of CorpusApi->list_corpora:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling CorpusApi->corpora_routers_corpus_list_corpora: %s\n" % e)
+        print("Exception when calling CorpusApi->list_corpora: %s\n" % e)
 ```
 
 

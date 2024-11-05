@@ -1,16 +1,16 @@
-# corpora_client.SplitsApi
+# corpora_client.SplitApi
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**corpora_routers_split_get_split**](SplitsApi.md#corpora_routers_split_get_split) | **GET** /api/corpora/split/{split_id} | Get Split
-[**corpora_routers_split_list_splits_for_file**](SplitsApi.md#corpora_routers_split_list_splits_for_file) | **GET** /api/corpora/split/file/{file_id} | List Splits For File
-[**corpora_routers_split_vector_search_splits**](SplitsApi.md#corpora_routers_split_vector_search_splits) | **POST** /api/corpora/split/search | Vector Search Splits
+[**get_split**](SplitApi.md#get_split) | **GET** /api/corpora/split/{split_id} | Get Split
+[**list_splits_for_file**](SplitApi.md#list_splits_for_file) | **GET** /api/corpora/split/file/{file_id} | List Splits For File
+[**vector_search**](SplitApi.md#vector_search) | **POST** /api/corpora/split/search | Vector Search
 
 
-# **corpora_routers_split_get_split**
-> SplitResponseSchema corpora_routers_split_get_split(split_id)
+# **get_split**
+> SplitResponseSchema get_split(split_id)
 
 Get Split
 
@@ -45,16 +45,16 @@ configuration = corpora_client.Configuration(
 # Enter a context with an instance of the API client
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = corpora_client.SplitsApi(api_client)
+    api_instance = corpora_client.SplitApi(api_client)
     split_id = 'split_id_example' # str | 
 
     try:
         # Get Split
-        api_response = api_instance.corpora_routers_split_get_split(split_id)
-        print("The response of SplitsApi->corpora_routers_split_get_split:\n")
+        api_response = api_instance.get_split(split_id)
+        print("The response of SplitApi->get_split:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling SplitsApi->corpora_routers_split_get_split: %s\n" % e)
+        print("Exception when calling SplitApi->get_split: %s\n" % e)
 ```
 
 
@@ -87,8 +87,8 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **corpora_routers_split_list_splits_for_file**
-> List[SplitResponseSchema] corpora_routers_split_list_splits_for_file(file_id)
+# **list_splits_for_file**
+> List[SplitResponseSchema] list_splits_for_file(file_id)
 
 List Splits For File
 
@@ -123,16 +123,16 @@ configuration = corpora_client.Configuration(
 # Enter a context with an instance of the API client
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = corpora_client.SplitsApi(api_client)
+    api_instance = corpora_client.SplitApi(api_client)
     file_id = 'file_id_example' # str | 
 
     try:
         # List Splits For File
-        api_response = api_instance.corpora_routers_split_list_splits_for_file(file_id)
-        print("The response of SplitsApi->corpora_routers_split_list_splits_for_file:\n")
+        api_response = api_instance.list_splits_for_file(file_id)
+        print("The response of SplitApi->list_splits_for_file:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling SplitsApi->corpora_routers_split_list_splits_for_file: %s\n" % e)
+        print("Exception when calling SplitApi->list_splits_for_file: %s\n" % e)
 ```
 
 
@@ -165,10 +165,10 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **corpora_routers_split_vector_search_splits**
-> List[SplitResponseSchema] corpora_routers_split_vector_search_splits(split_vector_search_schema)
+# **vector_search**
+> List[SplitResponseSchema] vector_search(split_vector_search_schema)
 
-Vector Search Splits
+Vector Search
 
 Perform a vector similarity search for splits using a provided query vector.
 
@@ -202,16 +202,16 @@ configuration = corpora_client.Configuration(
 # Enter a context with an instance of the API client
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = corpora_client.SplitsApi(api_client)
+    api_instance = corpora_client.SplitApi(api_client)
     split_vector_search_schema = corpora_client.SplitVectorSearchSchema() # SplitVectorSearchSchema | 
 
     try:
-        # Vector Search Splits
-        api_response = api_instance.corpora_routers_split_vector_search_splits(split_vector_search_schema)
-        print("The response of SplitsApi->corpora_routers_split_vector_search_splits:\n")
+        # Vector Search
+        api_response = api_instance.vector_search(split_vector_search_schema)
+        print("The response of SplitApi->vector_search:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling SplitsApi->corpora_routers_split_vector_search_splits: %s\n" % e)
+        print("Exception when calling SplitApi->vector_search: %s\n" % e)
 ```
 
 

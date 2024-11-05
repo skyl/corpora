@@ -26,15 +26,15 @@ class TestFilesApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_corpora_routers_corpustextfile_create_file(self) -> None:
-        """Test case for corpora_routers_corpustextfile_create_file
+    def test_create_file(self) -> None:
+        """Test case for create_file
 
         Create File
         """
         pass
 
-    def test_corpora_routers_corpustextfile_get_file(self) -> None:
-        """Test case for corpora_routers_corpustextfile_get_file
+    def test_get_file(self) -> None:
+        """Test case for get_file
 
         Get File
         """
