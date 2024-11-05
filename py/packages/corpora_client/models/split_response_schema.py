@@ -17,34 +17,22 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class FileResponseSchema(BaseModel):
+class SplitResponseSchema(BaseModel):
     """
-    FileResponseSchema
+    SplitResponseSchema
     """  # noqa: E501
 
     id: StrictStr
-    corpus_id: StrictStr
-    path: StrictStr
     content: StrictStr
-    checksum: StrictStr
-    created_at: datetime
-    updated_at: datetime
-    __properties: ClassVar[List[str]] = [
-        "id",
-        "corpus_id",
-        "path",
-        "content",
-        "checksum",
-        "created_at",
-        "updated_at",
-    ]
+    order: StrictInt
+    file_id: StrictStr
+    __properties: ClassVar[List[str]] = ["id", "content", "order", "file_id"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -63,7 +51,7 @@ class FileResponseSchema(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of FileResponseSchema from a JSON string"""
+        """Create an instance of SplitResponseSchema from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -87,7 +75,7 @@ class FileResponseSchema(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of FileResponseSchema from a dict"""
+        """Create an instance of SplitResponseSchema from a dict"""
         if obj is None:
             return None
 
@@ -97,12 +85,9 @@ class FileResponseSchema(BaseModel):
         _obj = cls.model_validate(
             {
                 "id": obj.get("id"),
-                "corpus_id": obj.get("corpus_id"),
-                "path": obj.get("path"),
                 "content": obj.get("content"),
-                "checksum": obj.get("checksum"),
-                "created_at": obj.get("created_at"),
-                "updated_at": obj.get("updated_at"),
+                "order": obj.get("order"),
+                "file_id": obj.get("file_id"),
             }
         )
         return _obj

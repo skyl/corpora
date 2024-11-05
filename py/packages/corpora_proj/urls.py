@@ -3,7 +3,7 @@ from django.urls import include, path
 from oauth2_provider import urls as oauth2_urls
 from ninja import NinjaAPI
 
-from corpora.api import api as corpora_router
+from corpora.router import api as corpora_router
 
 router = NinjaAPI(
     title="Corpora API",

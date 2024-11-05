@@ -17,7 +17,9 @@
 __version__ = "1.0.0"
 
 # import apis into sdk package
-from corpora_client.api.corpora_api import CorporaApi
+from corpora_client.api.corpus_api import CorpusApi
+from corpora_client.api.files_api import FilesApi
+from corpora_client.api.splits_api import SplitsApi
 
 # import ApiClient
 from corpora_client.api_response import ApiResponse
@@ -35,3 +37,5 @@ from corpora_client.models.corpus_response_schema import CorpusResponseSchema
 from corpora_client.models.corpus_schema import CorpusSchema
 from corpora_client.models.file_response_schema import FileResponseSchema
 from corpora_client.models.file_schema import FileSchema
+from corpora_client.models.split_response_schema import SplitResponseSchema
+from corpora_client.models.split_vector_search_schema import SplitVectorSearchSchema

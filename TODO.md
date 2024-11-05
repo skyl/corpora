@@ -3,9 +3,6 @@
 - nearest neighbor vector search endpoint(s)
   - compare vector of summary versus vector of splits, create search endpoint(s) test adhoc queries
 
-- catch up on unit testing
-- logging in celery - logging best practive everywhere.
-
 - [CORPUS] Sync versus init
   - CorpusRevision (?), models migration pass
     - Basic commands: init and sync with hashes, efficiently
@@ -30,6 +27,8 @@
 - pr-agent only on comments?
 - add full oauth 3 leg to CLI
   - https://django-oauth-toolkit.readthedocs.io/en/latest/getting_started.html#
+- pytest --cov=. --cov-report term
+  - more facilities for static analysis, test coverage, complexity checks
 
 # Done
 
@@ -68,5 +67,6 @@
   - Start building the real records for the `corpora` corpus
     - name should be unique per owner?
     - handle validation errors in the CLI
-
+- logging in celery - logging best practive everywhere.
+  - maybe with docker / eventual k8s we can just log to stdout and let the platform handle it
 
