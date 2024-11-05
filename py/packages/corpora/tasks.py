@@ -1,6 +1,6 @@
 import io
 import tarfile
-from celery import shared_task, chain
+from celery import shared_task
 
 from .lib.files import compute_checksum
 from .models import Corpus, CorpusTextFile, Split
@@ -24,11 +24,8 @@ def process_tarball(corpus_id: str, tarball: bytes) -> None:
                     content=file_content,
                     checksum=checksum,
                 )
-                # Chain tasks for summarization, splitting, and vectorization
-                chain(
-                    generate_summary_task.s(corpus_file.id),
-                    split_file_task.s(corpus_file.id),
-                ).apply_async()
+                generate_summary_task.delay(corpus_file.id)
+                split_file_task.delay(corpus_file.id)
 
 
 @shared_task
@@ -43,11 +40,9 @@ def split_file_task(corpus_file_id: str) -> None:
     corpus_file = CorpusTextFile.objects.get(id=corpus_file_id)
     splits = corpus_file.split_content()
     for split in splits:
-        # Chain vector tasks per split, potentially including ColBERT vectors
-        chain(
-            generate_vector_task.s(split.id),
-            # generate_colbert_vectors_task.s(split.id)
-        ).apply_async()
+        # no need to chain
+        generate_vector_task.delay(split.id)
+        # generate_colbert_vectors_task.delay(split.id)
 
 
 @shared_task

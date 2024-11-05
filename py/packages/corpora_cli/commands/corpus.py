@@ -44,8 +44,8 @@ def delete(ctx: typer.Context):
     corpus_name = c.config["name"]
     c.console.print(f"Deleting corpus: {corpus_name}")
     try:
-        c.api_client.corpora_api_delete_corpus(corpus_name)
-        c.console.print("Corpus deleted.", style="green")
+        r = c.api_client.corpora_api_delete_corpus(corpus_name)
+        c.console.print(f"{r}", style="green")
     except ApiException as e:
         if e.status == 404:
             c.console.print("Corpus not found.", style="red")
