@@ -1,9 +1,10 @@
 # TODO
 
-- langchain-text-splitters - split based on type, cohesive approach, python and md
 - compare vector of summary versus vector of splits, create search endpoint(s) test adhoc queries
+
 - test full init with chained tasks
 
+- Python split with AST - langchain one is kinda' lame.
 
 - for small corpora, we could get away with a mega-task but let's break into many single responsibilities
   - finish ingest for real
@@ -25,7 +26,7 @@
   - agents ... function calling ... maybe we have a menu of function `mkdir`, `create file`, `rewrite file`
     * Take input. Analyze problem. Choose sequence of agents. Let agents execute in order. Report back to user.
 
-- rm unused imports, for instance (on save, in CI..)
+- more CI checks, local tools - rm unused imports, for instance (on save, in CI..)
 
 # Next
 
@@ -66,5 +67,6 @@
 - introduce celery (?) or similar for async tasks
 - handle the file (sync/async) upload in the API
 - vector length in models versus oai implementation
+- langchain-text-splitters - split based on type, cohesive approach, python and md
 
 

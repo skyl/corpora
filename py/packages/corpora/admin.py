@@ -37,10 +37,9 @@ class SplitAdmin(admin.ModelAdmin):
     list_display = ("file", "order", "content_preview", "metadata")
     search_fields = ("file__path", "content")
     ordering = ("file", "order")
-    readonly_fields = ("vector",)
     fieldsets = (
         (None, {"fields": ("file", "order", "content")}),
-        ("Vector Data", {"fields": ("vector", "metadata")}),
+        ("Meta", {"fields": ("metadata",)}),
     )
 
     def content_preview(self, obj):

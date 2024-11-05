@@ -3,7 +3,8 @@ from typing import Union
 
 from langchain_text_splitters import (
     PythonCodeTextSplitter,
-    MarkdownHeaderTextSplitter,
+    # MarkdownHeaderTextSplitter,
+    MarkdownTextSplitter,
     CharacterTextSplitter,
 )
 
@@ -12,14 +13,14 @@ def get_text_splitter(
     file_name: str,
     chunk_size: int = 5000,  # number of characters
     chunk_overlap: int = 0,  # number of characters
-) -> Union[PythonCodeTextSplitter, MarkdownHeaderTextSplitter, CharacterTextSplitter]:
+) -> Union[PythonCodeTextSplitter, CharacterTextSplitter]:
     """
     Returns an appropriate text splitter based on the file extension or name.
     """
     # Mapping specific extensions to splitters
     extension_to_splitter = {
         ".py": PythonCodeTextSplitter,
-        ".md": MarkdownHeaderTextSplitter,
+        ".md": MarkdownTextSplitter,
         # Add more mappings as needed
     }
 
