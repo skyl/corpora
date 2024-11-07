@@ -37,32 +37,22 @@ class TestFileResponseSchema(unittest.TestCase):
         if include_optional:
             return FileResponseSchema(
                 id = '',
+                corpus_id = '',
                 path = '',
                 content = '',
                 checksum = '',
                 created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                corpus = corpora_client.models.corpus_response_schema.CorpusResponseSchema(
-                    id = '', 
-                    name = '', 
-                    url = '', 
-                    created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                    updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), )
+                updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f')
             )
         else:
             return FileResponseSchema(
                 id = '',
+                corpus_id = '',
                 path = '',
                 content = '',
                 checksum = '',
                 created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                corpus = corpora_client.models.corpus_response_schema.CorpusResponseSchema(
-                    id = '', 
-                    name = '', 
-                    url = '', 
-                    created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                    updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), ),
         )
         """
 

@@ -26,7 +26,7 @@ def init(ctx: typer.Context):
     c.console.print(f"Tarball created: {len(tarball)} bytes")
     c.console.print("Uploading corpus tarball to server...")
     try:
-        res = c.api_client.corpora_api_create_corpus(
+        res = c.corpus_api.create_corpus(
             name=c.config["name"],  # TODO: git repo name?
             url=c.config["url"],  # TODO: get url from git?
             tarball=tarball,
@@ -44,7 +44,7 @@ def delete(ctx: typer.Context):
     corpus_name = c.config["name"]
     c.console.print(f"Deleting corpus: {corpus_name}")
     try:
-        c.api_client.corpora_api_delete_corpus(corpus_name)
+        c.corpus_api.delete_corpus(corpus_name)
         c.console.print(f"{corpus_name} deleted", style="green")
     except ApiException as e:
         if e.status == 404:
@@ -58,7 +58,7 @@ def list(ctx: typer.Context):
     """List all corpora."""
     c: ContextObject = ctx.obj
 
-    corpora_list = c.api_client.corpora_api_list_corpora()
+    corpora_list = c.corpus_api.list_corpora()
     for corpus in corpora_list:
         c.console.print(f"{corpus.name}", style="green")
 

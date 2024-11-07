@@ -1,3 +1,4 @@
+from typing import Tuple
 import typer
 from rich.console import Console
 from rich.text import Text
@@ -12,7 +13,9 @@ from corpora_cli.context import ContextObject
 app = typer.Typer(help="Corpora CLI: Manage and process your corpora")
 
 
-def get_api_client(config) -> corpora_client.CorporaApi:
+def get_api_clients(
+    config,
+) -> Tuple[corpora_client.CorpusApi, corpora_client.FileApi, corpora_client.SplitApi]:
     """
     Initialize and authenticate API client with given config.
     Returns an authenticated CorporaApi instance.
@@ -31,16 +34,23 @@ def get_api_client(config) -> corpora_client.CorporaApi:
     client_config = corpora_client.Configuration()
     client_config.host = config["server"]["base_url"]
     client_config.access_token = auth_token
-    return corpora_client.CorporaApi(corpora_client.ApiClient(client_config))
+    return (
+        corpora_client.CorpusApi(corpora_client.ApiClient(client_config)),
+        corpora_client.FileApi(corpora_client.ApiClient(client_config)),
+        corpora_client.SplitApi(corpora_client.ApiClient(client_config)),
+    )
 
 
 @app.callback()
 def main(ctx: typer.Context):
     """Main entry point. Sets up configuration and API client."""
-    # Load config and pass it to the context
+    corpus_api, files_api, split_api = get_api_clients(load_config())
+
     config = load_config()
     ctx.obj = ContextObject(
-        api_client=get_api_client(config),
+        corpus_api=corpus_api,
+        file_api=files_api,
+        split_api=split_api,
         config=config,
         console=Console(),
     )

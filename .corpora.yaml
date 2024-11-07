@@ -1,6 +1,6 @@
 # .corpora.yaml
 
-name: "corpora2"
+name: "corpora"
 url: "https://github.com/skyl/corpora"
 
 server:

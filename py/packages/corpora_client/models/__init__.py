@@ -18,3 +18,5 @@ from corpora_client.models.corpus_response_schema import CorpusResponseSchema
 from corpora_client.models.corpus_schema import CorpusSchema
 from corpora_client.models.file_response_schema import FileResponseSchema
 from corpora_client.models.file_schema import FileSchema
+from corpora_client.models.split_response_schema import SplitResponseSchema
+from corpora_client.models.split_vector_search_schema import SplitVectorSearchSchema

@@ -75,18 +75,18 @@ configuration = corpora_client.Configuration(
 # Enter a context with an instance of the API client
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = corpora_client.CorporaApi(api_client)
+    api_instance = corpora_client.CorpusApi(api_client)
     name = 'name_example' # str | 
     tarball = None # bytearray | 
     url = 'url_example' # str |  (optional)
 
     try:
         # Create Corpus
-        api_response = api_instance.corpora_api_create_corpus(name, tarball, url=url)
-        print("The response of CorporaApi->corpora_api_create_corpus:\n")
+        api_response = api_instance.create_corpus(name, tarball, url=url)
+        print("The response of CorpusApi->create_corpus:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling CorporaApi->corpora_api_create_corpus: %s\n" % e)
+        print("Exception when calling CorpusApi->create_corpus: %s\n" % e)
 
 ```
 
@@ -96,12 +96,15 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*CorporaApi* | [**corpora_api_create_corpus**](docs/CorporaApi.md#corpora_api_create_corpus) | **POST** /api/corpora/corpus | Create Corpus
-*CorporaApi* | [**corpora_api_create_file**](docs/CorporaApi.md#corpora_api_create_file) | **POST** /api/corpora/file | Create File
-*CorporaApi* | [**corpora_api_delete_corpus**](docs/CorporaApi.md#corpora_api_delete_corpus) | **DELETE** /api/corpora/corpus | Delete Corpus
-*CorporaApi* | [**corpora_api_get_corpus**](docs/CorporaApi.md#corpora_api_get_corpus) | **GET** /api/corpora/corpus/{corpus_id} | Get Corpus
-*CorporaApi* | [**corpora_api_get_file**](docs/CorporaApi.md#corpora_api_get_file) | **GET** /api/corpora/file/{file_id} | Get File
-*CorporaApi* | [**corpora_api_list_corpora**](docs/CorporaApi.md#corpora_api_list_corpora) | **GET** /api/corpora/corpus | List Corpora
+*CorpusApi* | [**create_corpus**](docs/CorpusApi.md#create_corpus) | **POST** /api/corpora/corpus | Create Corpus
+*CorpusApi* | [**delete_corpus**](docs/CorpusApi.md#delete_corpus) | **DELETE** /api/corpora/corpus | Delete Corpus
+*CorpusApi* | [**get_corpus**](docs/CorpusApi.md#get_corpus) | **GET** /api/corpora/corpus/{corpus_id} | Get Corpus
+*CorpusApi* | [**list_corpora**](docs/CorpusApi.md#list_corpora) | **GET** /api/corpora/corpus | List Corpora
+*FileApi* | [**create_file**](docs/FileApi.md#create_file) | **POST** /api/corpora/file | Create File
+*FileApi* | [**get_file**](docs/FileApi.md#get_file) | **GET** /api/corpora/file/{file_id} | Get File
+*SplitApi* | [**get_split**](docs/SplitApi.md#get_split) | **GET** /api/corpora/split/{split_id} | Get Split
+*SplitApi* | [**list_splits_for_file**](docs/SplitApi.md#list_splits_for_file) | **GET** /api/corpora/split/file/{file_id} | List Splits For File
+*SplitApi* | [**vector_search**](docs/SplitApi.md#vector_search) | **POST** /api/corpora/split/search | Vector Search
 
 
 ## Documentation For Models
@@ -110,6 +113,8 @@ Class | Method | HTTP request | Description
  - [CorpusSchema](docs/CorpusSchema.md)
  - [FileResponseSchema](docs/FileResponseSchema.md)
  - [FileSchema](docs/FileSchema.md)
+ - [SplitResponseSchema](docs/SplitResponseSchema.md)
+ - [SplitVectorSearchSchema](docs/SplitVectorSearchSchema.md)
 
 
 <a id="documentation-for-authorization"></a>

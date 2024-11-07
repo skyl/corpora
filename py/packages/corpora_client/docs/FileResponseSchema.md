@@ -6,12 +6,12 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** |  | 
+**corpus_id** | **str** |  | 
 **path** | **str** |  | 
 **content** | **str** |  | 
 **checksum** | **str** |  | 
 **created_at** | **datetime** |  | 
 **updated_at** | **datetime** |  | 
-**corpus** | [**CorpusResponseSchema**](CorpusResponseSchema.md) |  | 
 
 ## Example
 
