@@ -1,5 +1,14 @@
 # TODO
 
+- Abstract PM (issues) interface
+  - GH implementation
+  - killer feature: "make issue" in CLI with RAG corpora context
+    - static prompt context + dynamic RAG context
+      - .corpora/GOALS.md
+      - .corpora/ISSUES.md
+      - .corpora/PREFERENCES.md
+      ?
+
 
 - namespace `tasks.py` into directory
   - test tasks
