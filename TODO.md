@@ -1,5 +1,9 @@
 # TODO
 
+
+- namespace `tasks.py` into directory
+  - test tasks
+
 - nearest neighbor vector search endpoint(s)
   - compare vector of summary versus vector of splits, create search endpoint(s) test adhoc queries
 
