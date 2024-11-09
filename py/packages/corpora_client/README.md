@@ -102,6 +102,7 @@ Class | Method | HTTP request | Description
 *CorpusApi* | [**list_corpora**](docs/CorpusApi.md#list_corpora) | **GET** /api/corpora/corpus | List Corpora
 *FileApi* | [**create_file**](docs/FileApi.md#create_file) | **POST** /api/corpora/file | Create File
 *FileApi* | [**get_file**](docs/FileApi.md#get_file) | **GET** /api/corpora/file/{file_id} | Get File
+*FileApi* | [**get_file_by_path**](docs/FileApi.md#get_file_by_path) | **GET** /api/corpora/file/corpus/{corpus_id} | Get File By Path
 *SplitApi* | [**get_split**](docs/SplitApi.md#get_split) | **GET** /api/corpora/split/{split_id} | Get Split
 *SplitApi* | [**list_splits_for_file**](docs/SplitApi.md#list_splits_for_file) | **GET** /api/corpora/split/file/{file_id} | List Splits For File
 *SplitApi* | [**vector_search**](docs/SplitApi.md#vector_search) | **POST** /api/corpora/split/search | Vector Search

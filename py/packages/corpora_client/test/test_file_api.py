@@ -40,6 +40,13 @@ class TestFileApi(unittest.TestCase):
         """
         pass
 
+    def test_get_file_by_path(self) -> None:
+        """Test case for get_file_by_path
+
+        Get File By Path
+        """
+        pass
+
 
 if __name__ == "__main__":
     unittest.main()
