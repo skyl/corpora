@@ -3,9 +3,6 @@ from unittest.mock import patch, MagicMock
 from typer.testing import CliRunner
 from rich.console import Console
 
-# from corpora_client.models.split_vector_search_schema import SplitVectorSearchSchema
-from corpora_client.api.split_api import SplitApi
-from corpora_cli.context import ContextObject
 from corpora_cli.commands.split import app  # Adjust if the path is different
 
 runner = CliRunner()
@@ -35,8 +32,6 @@ def test_search_command(mock_context):
     result = runner.invoke(
         app,
         ["search", "example search", "--limit", "2"],
-        # this frustratingly doesn't work
-        # ["search", "example search", "2"],
         obj=mock_context_instance,
     )
     output = console_output.getvalue()
@@ -55,56 +50,90 @@ def test_search_command(mock_context):
     assert "2 This is the second split..." in output
 
 
-# @patch("corpora_cli.commands.split.ContextObject")
-# def test_search_no_results(mock_context_class):
-#     """Test the search command with no results."""
-#     console_output = StringIO()
-#     real_console = Console(file=console_output)
-
-#     mock_context_instance = mock_context_class.return_value
-#     mock_context_instance.console = real_console
-#     mock_context_instance.config = {"id": "test_corpus_id"}
-#     mock_context_instance.split_api = MagicMock(spec=SplitApi)
-
-#     # Mock split_api response with no results
-#     mock_context_instance.split_api.vector_search.return_value = []
-
-#     result = runner.invoke(app, ["search 'example search'"], obj=mock_context_instance)
-#     output = console_output.getvalue()
-
-#     assert result.exit_code == 0
-#     assert "Searching for splits..." in output
-#     assert "No splits found." in output
-
-
 @patch("corpora_cli.commands.split.ContextObject")
-def test_search_invalid_input(mock_context_class):
-    """Test the search command with invalid inputs."""
+def test_list_command(mock_context):
+    """Test the `list` command for listing splits by file path."""
     console_output = StringIO()
     real_console = Console(file=console_output)
 
-    mock_context_instance = mock_context_class.return_value
+    mock_context_instance = mock_context.return_value
     mock_context_instance.console = real_console
+    mock_context_instance.config = {"id": "test_corpus_id"}
 
-    # # Missing text argument
-    # result = runner.invoke(app, ["search"], obj=mock_context_instance)
-    # output = console_output.getvalue()
-    # assert result.exit_code != 0
-    # print(f"CLI Output:\n{output}")
-    # print(f"Result Exit Code: {result.exit_code}")
-    # print(f"Result Output: {result.stdout}")
+    # Mock APIs
+    mock_context_instance.file_api.get_file_by_path.return_value = MagicMock(
+        id="file123"
+    )
+    mock_context_instance.split_api.list_splits_for_file.return_value = [
+        MagicMock(order=1, content="This is split one."),
+        MagicMock(order=2, content="This is split two."),
+    ]
 
-    # assert "Missing argument 'TEXT'" in result.stdout
-
-    # Invalid limit
+    # Run the command
     result = runner.invoke(
         app,
-        ["search", '"example search"', "--limit", "0"],
+        ["list", "some/path/to/file.txt"],
         obj=mock_context_instance,
     )
     output = console_output.getvalue()
-    assert result.exit_code != 0
+
+    # Debugging Output
     print(f"CLI Output:\n{output}")
     print(f"Result Exit Code: {result.exit_code}")
     print(f"Result Output: {result.stdout}")
+
+    # Assertions
+    assert result.exit_code == 0
+    assert "Asking for splits... some/path/to/file.txt" in output
+    assert "1 This is split one." in output
+    assert "2 This is split two." in output
+
+
+@patch("corpora_cli.commands.split.ContextObject")
+def test_search_invalid_limit(mock_context):
+    """Test the `search` command with an invalid limit."""
+    console_output = StringIO()
+    real_console = Console(file=console_output)
+
+    mock_context_instance = mock_context.return_value
+    mock_context_instance.console = real_console
+
+    # Run the command with invalid limit
+    result = runner.invoke(
+        app,
+        ["search", "example search", "--limit", "0"],
+        obj=mock_context_instance,
+    )
+    output = console_output.getvalue()
+
+    # Debugging Output
+    print(f"CLI Output:\n{output}")
+    print(f"Result Exit Code: {result.exit_code}")
+    print(f"Result Output: {result.stdout}")
+
+    # Assertions
+    assert result.exit_code != 0
     assert "Limit must be greater than 0" in result.stdout
+
+
+@patch("corpora_cli.commands.split.ContextObject")
+def test_search_missing_text(mock_context):
+    """Test the `search` command with missing text."""
+    console_output = StringIO()
+    real_console = Console(file=console_output)
+
+    mock_context_instance = mock_context.return_value
+    mock_context_instance.console = real_console
+
+    # Run the command without text argument
+    result = runner.invoke(app, ["search"], obj=mock_context_instance)
+    output = console_output.getvalue()
+
+    # Debugging Output
+    print(f"CLI Output:\n{output}")
+    print(f"Result Exit Code: {result.exit_code}")
+    print(f"Result Output: {result.stdout}")
+
+    # Assertions
+    assert result.exit_code != 0
+    assert "Missing argument 'TEXT'" in result.stdout
