@@ -59,7 +59,7 @@ class SplitAPITestCase(TestCase):
         }
 
         # Mock the load_llm_provider and its get_embedding function
-        with patch("corpora.routers.split.load_llm_provider") as mock_llm_provider:
+        with patch("corpora_ai.provider_loader.load_llm_provider") as mock_llm_provider:
             mock_llm_instance = mock_llm_provider.return_value
             mock_llm_instance.get_embedding.return_value = [
                 0.1
