@@ -35,12 +35,12 @@ class IssueSchema(Schema):
     body: str
 
 
-split_router = Router(tags=["split"], auth=BearerAuth())
+plan_router = Router(tags=["plan"], auth=BearerAuth())
 
 
 # Given a corpus_id and some text (rough description of issue),
 # return a prospective issue
-@split_router.post("/{corpus_id}/issue", response=IssueSchema, operation_id="get_issue")
+@plan_router.post("/{corpus_id}/issue", response=IssueSchema, operation_id="get_issue")
 async def get_issue(request, corpus_id: str, text: str):
     corpus = await Corpus.objects.aget(id=corpus_id)
     splits = corpus.get_relevant_splits(text)
