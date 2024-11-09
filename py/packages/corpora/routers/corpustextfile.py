@@ -1,7 +1,7 @@
 import uuid
 
 from django.db import IntegrityError
-from ninja import Router
+from ninja import Query, Router
 from ninja.errors import HttpError
 
 from ..lib.files import compute_checksum
@@ -33,6 +33,24 @@ async def create_file(request, payload: FileSchema):
         raise HttpError(409, "A file with this path already exists in the corpus.")
 
     return 201, file
+
+
+# Get file by path, given a corpus ID
+@file_router.get(
+    "/corpus/{corpus_id}", response=FileResponseSchema, operation_id="get_file_by_path"
+)
+@async_raise_not_found
+async def get_file_by_path(
+    request,
+    corpus_id: uuid.UUID,
+    path: str = Query(..., description="Path to the file"),
+):
+    """Retrieve a File by path within a Corpus."""
+
+    ctf = await CorpusTextFile.objects.select_related("corpus").aget(
+        corpus__id=corpus_id, path=path
+    )
+    return ctf
 
 
 @file_router.get("/{file_id}", response=FileResponseSchema, operation_id="get_file")

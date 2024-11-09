@@ -1,3 +1,4 @@
+from uuid import UUID
 import typer
 
 from corpora_cli.context import ContextObject
@@ -13,7 +14,6 @@ def search(ctx: typer.Context, text: str, limit: int = 10):
         raise typer.BadParameter("Missing argument 'TEXT'")
     if limit < 1:
         raise typer.BadParameter("Limit must be greater than 0")
-    print(f"FFFUCK {text}, {limit}")
     c: ContextObject = ctx.obj
     # c.corpus_api.get_corpus()
     c.console.print("Searching for splits...")
@@ -33,7 +33,11 @@ def search(ctx: typer.Context, text: str, limit: int = 10):
 
 
 @app.command()
-def ask(ctx: typer.Context, text: str):
+def list(ctx: typer.Context, file_path: str):
     """Ask for splits."""
     c: ContextObject = ctx.obj
-    c.console.print("Asking for splits...")
+    c.console.print(f"Asking for splits... {file_path}")
+    fil = c.file_api.get_file_by_path(corpus_id=c.config["id"], path=file_path)
+    splits = c.split_api.list_splits_for_file(fil.id)
+    for split in splits:
+        c.console.print(f"{split.order} {split.content[:100]}", style="dim")
