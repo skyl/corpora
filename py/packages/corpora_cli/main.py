@@ -4,7 +4,7 @@ from rich.console import Console
 from rich.text import Text
 
 import corpora_client
-from corpora_cli.commands import corpus, file
+from corpora_cli.commands import corpus, file, split
 from corpora_cli.config import load_config
 from corpora_cli.auth import AuthResolver, AuthError
 from corpora_cli.constants import NO_AUTHENTICATION_MESSAGE
@@ -59,6 +59,7 @@ def main(ctx: typer.Context):
 # Register commands with the app
 app.add_typer(corpus.app, name="corpus", help="Commands for managing corpora")
 app.add_typer(file.app, name="file", help="Commands for file operations")
+app.add_typer(split.app, name="split", help="Commands for split operations")
 
 if __name__ == "__main__":
     app()
