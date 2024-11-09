@@ -7,6 +7,7 @@ class Issue:
     """
     A class representing a generic issue in an issue tracking system.
     """
+
     def __init__(
         self,
         id: int,
@@ -17,7 +18,7 @@ class Issue:
         state: str,
         labels: Optional[List[str]] = None,
         assignees: Optional[List[str]] = None,
-        url: Optional[str] = None
+        url: Optional[str] = None,
     ):
         self.id = id
         self.title = title
@@ -70,7 +71,7 @@ class AbstractIssueTracker(ABC):
         title: str,
         body: str,
         labels: Optional[List[str]] = None,
-        assignees: Optional[List[str]] = None
+        assignees: Optional[List[str]] = None,
     ) -> Issue:
         """
         Create a new issue.
@@ -96,7 +97,7 @@ class AbstractIssueTracker(ABC):
         body: Optional[str] = None,
         state: Optional[str] = None,
         labels: Optional[List[str]] = None,
-        assignees: Optional[List[str]] = None
+        assignees: Optional[List[str]] = None,
     ) -> Issue:
         """
         Update an existing issue.
@@ -129,4 +130,3 @@ class AbstractIssueTracker(ABC):
             None
         """
         pass
-
