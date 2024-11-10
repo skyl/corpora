@@ -1,5 +1,37 @@
 import subprocess
 
+from httpx import get
+
+
+def run_command(command: list) -> str:
+    """
+    Run a command and return its output as a string.
+    """
+    result = subprocess.run(
+        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True
+    )
+    return result.stdout.strip()
+
+
+def get_git_files() -> str:
+    result = run_command(["git", "ls-files"])
+    return result.splitlines()
+
+
+def get_file_hash(full_path: str) -> str:
+    result = run_command(["git", "hash-object", full_path])
+    return result.strip()
+
+
+# get dict of path: hash for whole repo
+def get_local_files() -> dict:
+    local_files = {}
+    files = get_git_files()
+    for path in files:
+        if path.exists():
+            local_files[path] = get_file_hash(path)
+    return local_files
+
 
 def get_git_remote_url() -> str:
     """

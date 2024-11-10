@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 import uuid
 
 from django.db import IntegrityError
@@ -42,6 +42,16 @@ async def create_corpus(
 
     process_tarball.delay(str(corpus_instance.id), tarball_content)
     return 201, corpus_instance
+
+
+# get_file_hashes will return a map of file paths to their hashes from the database
+@corpus_router.get(
+    "/{corpus_id}/files", response=Dict[str, str], operation_id="get_file_hashes"
+)
+async def get_file_hashes(request, corpus_id: uuid.UUID):
+    """Retrieve a map of file paths to their hashes for a Corpus."""
+    corpus = await Corpus.objects.aget(id=corpus_id)
+    return await sync_to_async(corpus.get_file_hashes)()
 
 
 @corpus_router.delete("", response={204: str, 404: str}, operation_id="delete_corpus")

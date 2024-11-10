@@ -76,7 +76,7 @@ def test_init_command(
         {
             "name": "test_repo",
             "url": "https://github.com/test/repo",
-            "corpus_id": "12345",
+            "id": "12345",
         }
     )
 

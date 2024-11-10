@@ -78,6 +78,13 @@ class Corpus(models.Model):
             split_context += f"{split.file.path}\n```\n{split.content}\n```"
         return split_context
 
+    def get_file_hashes(self) -> dict:
+        """
+        Retrieve a map of file paths to their hashes for this Corpus.
+        """
+        # TODO: types?
+        return {file.path: file.checksum for file in self.files.all()}
+
 
 class CorpusTextFile(models.Model):
     """
