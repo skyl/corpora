@@ -1,13 +1,17 @@
 from typing import List
+from requests import session
 import typer
-import click
-from corpora_ai.llm_interface import ChatCompletionTextMessage
+from prompt_toolkit.shortcuts import PromptSession
+
 from corpora_client.models.issue_request_schema import IssueRequestSchema
 from corpora_client.models.message_schema import MessageSchema
 from corpora_pm.providers.provider_loader import Corpus, load_provider
 from corpora_cli.context import ContextObject
 
 app = typer.Typer(help="Interactive issue creation CLI")
+
+
+session = PromptSession()
 
 
 def extract_repo_path(url: str) -> str:
@@ -27,17 +31,16 @@ def issue(ctx: typer.Context):
 
     # REPL loop
     while True:
-        # Display the current state of messages
-        # # c.console.print("\nCurrent Messages:\n", style="dim")
-        # for i, msg in enumerate(messages, start=1):
-        #     c.console.print(f"[{msg.role}]\n\n{msg.text}")
-
-        # Allow the user to edit their next input in a text editor
-        # user_input = click.edit("")
-        # no, just use a typer input
-        user_input = typer.prompt(
-            "Issue summary" if not messages else "How should we change this issue?"
+        user_input = session.prompt(
+            (
+                "Issue summary:\n"
+                if not messages
+                else "How should we change this issue?\n"
+            ),
+            multiline=True,
+            vi_mode=True,
         )
+        c.console.print("Thinking...", style="bold blue")
 
         if not user_input:
             c.console.print("No input provided. Please try again.", style="yellow")
