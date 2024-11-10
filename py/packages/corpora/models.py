@@ -85,6 +85,12 @@ class Corpus(models.Model):
         # TODO: types?
         return {file.path: file.checksum for file in self.files.all()}
 
+    def delete_files(self, files: list):
+        """
+        Delete files from this Corpus by path.
+        """
+        self.files.filter(path__in=files).delete()
+
 
 class CorpusTextFile(models.Model):
     """

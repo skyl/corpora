@@ -44,6 +44,22 @@ async def create_corpus(
     return 201, corpus_instance
 
 
+# update_files takes a corpus_id and a tarball upload with the files to add or update
+@corpus_router.put(
+    "/{corpus_id}/files",
+    response={200: str, 404: str},
+    operation_id="update_files",
+)
+async def update_files(
+    request, corpus_id: uuid.UUID, tarball: UploadedFile = File(...)
+):
+    """Update a Corpus with an uploaded tarball."""
+    corpus = await Corpus.objects.aget(id=corpus_id)
+    tarball_content: bytes = await sync_to_async(tarball.read)()
+    process_tarball.delay(str(corpus.id), tarball_content)
+    return 200, "Tarball processing started."
+
+
 # get_file_hashes will return a map of file paths to their hashes from the database
 @corpus_router.get(
     "/{corpus_id}/files", response=Dict[str, str], operation_id="get_file_hashes"
@@ -52,6 +68,19 @@ async def get_file_hashes(request, corpus_id: uuid.UUID):
     """Retrieve a map of file paths to their hashes for a Corpus."""
     corpus = await Corpus.objects.aget(id=corpus_id)
     return await sync_to_async(corpus.get_file_hashes)()
+
+
+# delete_files takes a corpus_id and a list of file paths to delete
+@corpus_router.delete(
+    "/{corpus_id}/files",
+    response={204: str, 404: str},
+    operation_id="delete_files",
+)
+async def delete_files(request, corpus_id: uuid.UUID, files: List[str]):
+    """Delete files from a Corpus by path."""
+    corpus = await Corpus.objects.aget(id=corpus_id)
+    await sync_to_async(corpus.delete_files)(files)
+    return 204, "Files deleted."
 
 
 @corpus_router.delete("", response={204: str, 404: str}, operation_id="delete_corpus")

@@ -81,35 +81,34 @@ def sync(ctx: typer.Context):
 
     c.console.print(f"Found {len(remote_files_map)} remote files.")
 
-    # # Step 3: Determine files to update, add, or delete
-    # files_to_update = {
-    #     path: local_files[path]
-    #     for path in local_files
-    #     if path not in remote_file_map or local_files[path] != remote_file_map[path]
-    # }
-    # files_to_delete = [path for path in remote_file_map if path not in local_files]
+    # Step 3: Determine files to update, add, or delete
+    files_to_update = {
+        path: local_files[path]
+        for path in local_files
+        if path not in remote_files_map or local_files[path] != remote_files_map[path]
+    }
+    files_to_delete = [path for path in remote_files_map if path not in local_files]
+    c.console.print(f"{len(files_to_update)} files to update/add.")
+    c.console.print(f"{len(files_to_delete)} files to delete.")
 
-    # c.console.print(f"{len(files_to_update)} files to update/add.")
-    # c.console.print(f"{len(files_to_delete)} files to delete.")
+    # Step 4: Create a tarball of files to update/add
+    if files_to_update:
+        collector = get_best_collector(repo_root, c.config)
+        tarball = collector.create_tarball(files_to_update.keys(), repo_root).getvalue()
+        c.console.print(f"Tarball created: {len(tarball)} bytes")
 
-    # # Step 4: Create a tarball of files to update/add
-    # if files_to_update:
-    #     collector = get_best_collector(repo_root, c.config)
-    #     tarball = collector.create_tarball(files_to_update.keys(), repo_root).getvalue()
-    #     c.console.print(f"Tarball created: {len(tarball)} bytes")
+        # Step 5: Upload the tarball to the server
+        c.console.print("Uploading tarball...")
+        c.corpus_api.update_files(corpus_id, tarball)
+        c.console.print("Update completed!", style="green")
 
-    #     # Step 5: Upload the tarball to the server
-    #     c.console.print("Uploading tarball...")
-    #     c.corpus_api.update_files(corpus_id, tarball)
-    #     c.console.print("Update completed!", style="green")
+    # Step 6: Send delete instructions to the server
+    if files_to_delete:
+        c.console.print("Deleting files on server...")
+        c.corpus_api.delete_files(corpus_id, files_to_delete)
+        c.console.print("Delete completed!", style="green")
 
-    # # Step 6: Send delete instructions to the server
-    # if files_to_delete:
-    #     c.console.print("Deleting files on server...")
-    #     c.corpus_api.delete_files(corpus_id, files_to_delete)
-    #     c.console.print("Delete completed!", style="green")
-
-    # c.console.print("Sync completed successfully!", style="blue")
+    c.console.print("Sync completed successfully!", style="blue")
 
 
 @app.command()
