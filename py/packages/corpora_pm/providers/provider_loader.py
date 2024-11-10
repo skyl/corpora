@@ -1,6 +1,13 @@
-from corpora.models import Corpus
+# from corpora.models import Corpus
 
+import uuid
 from ..abstract import AbstractIssueTracker
+from pydantic import BaseModel
+
+
+class Corpus(BaseModel):
+    url: str
+    id: uuid.UUID
 
 
 def load_provider(corpus: Corpus) -> AbstractIssueTracker:

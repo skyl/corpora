@@ -1,32 +1,18 @@
-from re import I
-from ninja import Router
-
-# TODO
-# These can be used on the CLI side
-# from corpora_pm.abstract import Issue
-# from corpora_pm.providers.provider_loader import load_provider
-# provider is just for if we want to actually post it :thinking:
-# maybe this can be done on the CLI-side actually
-# provider = load_provider(corpus)
-# The purpose here is to return a prospective issue based on the text
-# we will search the corpus, look at general context and return
-# the issue to the caller. The caller can then decide to post it
-# or they can give further instructions.
+from ninja import Router, Schema
+from asgiref.sync import sync_to_async
 
 from corpora_ai.llm_interface import ChatCompletionTextMessage
 from corpora_ai.provider_loader import load_llm_provider
-
 from corpora.auth import BearerAuth
 from corpora.models import Corpus
 
-from ninja import Schema
-
 
 ISSUE_MAKER_SYSTEM_MESSAGE = (
-    "You are an expert at creating issues for this project. "
-    "You can take a large amount of context and distill it into a concise issue. "
-    "That will be clear for a contributor to understand and work on. "
-    "You provide insight into what parts of the corpus the user will be interested in. "
+    "You are a highly skilled assistant specializing in creating well-structured, actionable issues "
+    "for this project. Your goal is to process the provided context and user input to generate "
+    "a concise and clear issue. This issue should include an informative title and a detailed body, "
+    "providing contributors with the necessary insights to effectively address the task. "
+    "Highlight relevant sections of the corpus and ensure that the issue is easy to understand and work on. "
 )
 
 
@@ -43,22 +29,23 @@ plan_router = Router(tags=["plan"], auth=BearerAuth())
 @plan_router.post("/{corpus_id}/issue", response=IssueSchema, operation_id="get_issue")
 async def get_issue(request, corpus_id: str, text: str):
     corpus = await Corpus.objects.aget(id=corpus_id)
-    splits = corpus.get_relevant_splits(text)
-
-    # TODO: this should maybe be part of the provider?
-    # it could be like get_issue ... but maybe it could be abstract
-    # for any passed schema? That would be hot:
-    # get_data_completion(Messages, Schema) -> Schema
-    # oooo
-    split_context = ""
-    for split in splits:
-        split_context += f"{split.file.path}\n```\n{split.content}\n```"
+    # split_context = corpus.get_relevant_splits_context(text)
+    split_context = await sync_to_async(corpus.get_relevant_splits_context)(text)
+    print(split_context)
 
     llm = load_llm_provider()
     resp = llm.get_data_completion(
         [
             ChatCompletionTextMessage(role="system", text=ISSUE_MAKER_SYSTEM_MESSAGE),
-            ChatCompletionTextMessage(role="context", text=split_context),
+            # RuntimeError: Failed to generate data completion: Error code: 400 - {'error':
+            # {'message': "Invalid value: 'context'. Supported values are: 'system',
+            # 'assistant', 'user', 'function', and 'tool'.", 'type': 'invalid_request_error',
+            # 'param': 'messages[1].role', 'code': 'invalid_value'}}
+            # ChatCompletionTextMessage(role="context", text=split_context),
+            ChatCompletionTextMessage(
+                role="user",
+                text=f"---\nI searched and found the following in the existing context that may be helpful:\n\n```{split_context}\n```---\n",
+            ),
             ChatCompletionTextMessage(role="user", text=text),
         ],
         IssueSchema,

@@ -24,7 +24,7 @@ class OpenAIClient(LLMBaseInterface):
         if not messages:
             raise ValueError("Input messages must not be empty.")
         # Convert Message objects to dictionaries for the OpenAI API
-        message_dicts = [{"role": msg.role, "content": msg.content} for msg in messages]
+        message_dicts = [{"role": msg.role, "content": msg.text} for msg in messages]
         response = self.client.chat.completions.create(
             model=self.completion_model, messages=message_dicts
         )
@@ -50,7 +50,7 @@ class OpenAIClient(LLMBaseInterface):
             raise ValueError("Input messages must not be empty.")
 
         # Prepare messages for OpenAI API
-        message_dicts = [{"role": msg.role, "content": msg.content} for msg in messages]
+        message_dicts = [{"role": msg.role, "content": msg.text} for msg in messages]
 
         # Generate JSON Schema from the Pydantic model
         json_schema = model.model_json_schema()

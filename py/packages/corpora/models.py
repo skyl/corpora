@@ -67,6 +67,17 @@ class Corpus(models.Model):
             .order_by("similarity")[:limit]
         )
 
+    def get_relevant_splits_context(self, text: str, limit: int = 10):
+        """
+        Given a text query, return the most relevant splits from this corpus
+        along with the context of the split.
+        """
+        splits = self.get_relevant_splits(text, limit)
+        split_context = ""
+        for split in splits:
+            split_context += f"{split.file.path}\n```\n{split.content}\n```"
+        return split_context
+
 
 class CorpusTextFile(models.Model):
     """

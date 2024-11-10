@@ -11,11 +11,11 @@ T = TypeVar("T", bound=BaseModel)
 @dataclass
 class ChatCompletionTextMessage:
     """
-    Represents a message in a conversation, with a specific role and content.
+    Represents a message in a conversation, with a specific role and text.
     """
 
     role: str  # e.g., "user", "system", "assistant"
-    content: str  # The message content
+    text: str
 
 
 class LLMBaseInterface(ABC):
@@ -79,11 +79,11 @@ class LLMBaseInterface(ABC):
             [
                 ChatCompletionTextMessage(
                     role="system",
-                    content=SUMMARIZE_SYSTEM_MESSAGE,
+                    text=SUMMARIZE_SYSTEM_MESSAGE,
                 ),
                 ChatCompletionTextMessage(
                     role="user",
-                    content=f"Summarize the following:\n {text}",
+                    text=f"Summarize the following:\n {text}",
                 ),
             ]
         )
