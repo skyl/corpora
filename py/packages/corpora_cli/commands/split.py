@@ -1,4 +1,3 @@
-from uuid import UUID
 import typer
 
 from corpora_cli.context import ContextObject

@@ -2,11 +2,9 @@ from typing import List
 import uuid
 
 from ninja import Router
-from pgvector.django import CosineDistance
 from asgiref.sync import sync_to_async
 
-from corpora_ai.provider_loader import load_llm_provider
-from ..models import Split
+from ..models import Corpus, Split
 from ..schema import SplitResponseSchema, SplitVectorSearchSchema
 from ..auth import BearerAuth
 
@@ -20,20 +18,11 @@ async def vector_search(request, payload: SplitVectorSearchSchema):
     """Perform a vector similarity search for splits using a provided query vector."""
     query = payload.text
     corpus_id = payload.corpus_id
+    corpus = await Corpus.objects.aget(id=corpus_id)
 
-    llm = load_llm_provider()
-    query_vector = llm.get_embedding(query)
-
-    # Using cosine similarity for the search
     similar_splits = await sync_to_async(list)(
-        Split.objects.filter(
-            vector__isnull=False,
-            file__corpus_id=corpus_id,
-        )
-        .annotate(similarity=CosineDistance("vector", query_vector))
-        .order_by("similarity")[: payload.limit]
+        corpus.get_relevant_splits(query, limit=payload.limit)
     )
-
     return similar_splits
 
 

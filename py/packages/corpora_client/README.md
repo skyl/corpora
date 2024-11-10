@@ -103,6 +103,7 @@ Class | Method | HTTP request | Description
 *FileApi* | [**create_file**](docs/FileApi.md#create_file) | **POST** /api/corpora/file | Create File
 *FileApi* | [**get_file**](docs/FileApi.md#get_file) | **GET** /api/corpora/file/{file_id} | Get File
 *FileApi* | [**get_file_by_path**](docs/FileApi.md#get_file_by_path) | **GET** /api/corpora/file/corpus/{corpus_id} | Get File By Path
+*PlanApi* | [**get_issue**](docs/PlanApi.md#get_issue) | **POST** /api/corpora/plan/issue | Get Issue
 *SplitApi* | [**get_split**](docs/SplitApi.md#get_split) | **GET** /api/corpora/split/{split_id} | Get Split
 *SplitApi* | [**list_splits_for_file**](docs/SplitApi.md#list_splits_for_file) | **GET** /api/corpora/split/file/{file_id} | List Splits For File
 *SplitApi* | [**vector_search**](docs/SplitApi.md#vector_search) | **POST** /api/corpora/split/search | Vector Search
@@ -114,6 +115,9 @@ Class | Method | HTTP request | Description
  - [CorpusSchema](docs/CorpusSchema.md)
  - [FileResponseSchema](docs/FileResponseSchema.md)
  - [FileSchema](docs/FileSchema.md)
+ - [IssueRequestSchema](docs/IssueRequestSchema.md)
+ - [IssueSchema](docs/IssueSchema.md)
+ - [MessageSchema](docs/MessageSchema.md)
  - [SplitResponseSchema](docs/SplitResponseSchema.md)
  - [SplitVectorSearchSchema](docs/SplitVectorSearchSchema.md)
 

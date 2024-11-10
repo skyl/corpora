@@ -26,7 +26,7 @@ class TestOpenAIClient(unittest.TestCase):
         self.mock_openai_client.chat.completions.create.return_value = mock_response
 
         # Define test messages
-        messages = [ChatCompletionTextMessage(role="user", content="Tell me a joke.")]
+        messages = [ChatCompletionTextMessage(role="user", text="Tell me a joke.")]
 
         # Call get_text_completion and assert response
         response = self.client.get_text_completion(messages)

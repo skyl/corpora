@@ -6,7 +6,8 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 # from django.contrib.postgres.fields import ArrayField
-from pgvector.django import VectorField
+from pgvector.django import VectorField, CosineDistance
+
 
 from corpora_ai.split import get_text_splitter
 
@@ -48,6 +49,34 @@ class Corpus(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_relevant_splits(self, text: str, limit: int = 10):
+        """
+        Given a text query, return the most relevant splits from this corpus.
+        """
+        from corpora_ai.provider_loader import load_llm_provider
+
+        llm = load_llm_provider()
+        vector = llm.get_embedding(text)
+        return (
+            Split.objects.filter(
+                vector__isnull=False,
+                file__corpus_id=self.id,
+            )
+            .annotate(similarity=CosineDistance("vector", vector))
+            .order_by("similarity")[:limit]
+        )
+
+    def get_relevant_splits_context(self, text: str, limit: int = 10):
+        """
+        Given a text query, return the most relevant splits from this corpus
+        along with the context of the split.
+        """
+        splits = self.get_relevant_splits(text, limit)
+        split_context = ""
+        for split in splits:
+            split_context += f"{split.file.path}\n```\n{split.content}\n```"
+        return split_context
 
 
 class CorpusTextFile(models.Model):

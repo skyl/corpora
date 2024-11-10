@@ -1,18 +1,21 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List
+from typing import List, Type, TypeVar
+from pydantic import BaseModel
 
 from corpora_ai.prompts import SUMMARIZE_SYSTEM_MESSAGE
+
+T = TypeVar("T", bound=BaseModel)
 
 
 @dataclass
 class ChatCompletionTextMessage:
     """
-    Represents a message in a conversation, with a specific role and content.
+    Represents a message in a conversation, with a specific role and text.
     """
 
     role: str  # e.g., "user", "system", "assistant"
-    content: str  # The message content
+    text: str
 
 
 class LLMBaseInterface(ABC):
@@ -30,6 +33,22 @@ class LLMBaseInterface(ABC):
 
         Returns:
             str: The generated response text.
+        """
+        pass
+
+    @abstractmethod
+    def get_data_completion(
+        self, messages: List[ChatCompletionTextMessage], model: Type[T]
+    ) -> T:
+        """
+        Generates an instance of the provided schema based on a list of Message objects.
+
+        Args:
+            messages (List[Message]): A list of Message objects, each with a role and content.
+            schema (Type[T]): The type to populate with the generated data.
+
+        Returns:
+            T: The generated instance of the schema type.
         """
         pass
 
@@ -60,11 +79,11 @@ class LLMBaseInterface(ABC):
             [
                 ChatCompletionTextMessage(
                     role="system",
-                    content=SUMMARIZE_SYSTEM_MESSAGE,
+                    text=SUMMARIZE_SYSTEM_MESSAGE,
                 ),
                 ChatCompletionTextMessage(
                     role="user",
-                    content=f"Summarize the following:\n {text}",
+                    text=f"Summarize the following:\n {text}",
                 ),
             ]
         )
