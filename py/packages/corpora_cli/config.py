@@ -4,6 +4,8 @@ import yaml
 import typer
 from typing import Any, Dict
 
+from corpora_cli.utils.git import get_git_remote_url, get_git_repo_name
+
 CONFIG_FILE_PATH = ".corpora.yaml"
 ENV_VAR_PATTERN = re.compile(r"\$\{(\w+)\}")  # Matches ${VAR_NAME}
 
@@ -12,23 +14,43 @@ def load_config() -> Dict[str, Any]:
     """
     Load and parse the .corpora.yaml configuration file, substituting
     any ${VAR_NAME} placeholders with values from environment variables.
+    If the config file is missing, infer defaults from Git.
     """
     try:
         # Load YAML config
         with open(CONFIG_FILE_PATH, "r") as file:
             config = yaml.safe_load(file)
-
-        # Substitute environment variables
-        config = substitute_env_variables(config)
-
-        return config
-
     except FileNotFoundError:
-        typer.echo(f"Configuration file {CONFIG_FILE_PATH} not found.", err=True)
-        raise typer.Exit(code=1)
-    except yaml.YAMLError as e:
-        typer.echo(f"Error parsing YAML configuration: {e}", err=True)
-        raise typer.Exit(code=1)
+        # If config file doesn't exist, fall back to Git
+        typer.echo(
+            f"Configuration file {CONFIG_FILE_PATH} not found. Using defaults.",
+            err=True,
+        )
+        remote_url = get_git_remote_url()
+        repo_name = get_git_repo_name(remote_url)
+        if not remote_url or not repo_name:
+            typer.echo(
+                "Could not infer repository name or URL from Git. Please provide manually.",
+                err=True,
+            )
+            raise typer.Exit(1)
+        config = {
+            "name": repo_name,
+            "url": remote_url,
+        }
+
+    # Substitute environment variables
+    config = substitute_env_variables(config)
+
+    return config
+
+
+def save_config(config: Dict[str, Any]) -> None:
+    """
+    Save the given configuration dictionary to .corpora.yaml.
+    """
+    with open(CONFIG_FILE_PATH, "w") as file:
+        yaml.safe_dump(config, file)
 
 
 def substitute_env_variables(config: Any) -> Any:

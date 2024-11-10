@@ -1,6 +1,5 @@
 from unittest.mock import patch, Mock
 from io import StringIO
-
 from typer.testing import CliRunner
 from rich.console import Console
 
@@ -11,23 +10,42 @@ from corpora_cli.commands.corpus import app
 runner = CliRunner()
 
 
+@patch("corpora_cli.commands.corpus.save_config")
+@patch("corpora_cli.commands.corpus.Path")
 @patch("corpora_cli.commands.corpus.get_best_collector")
 @patch("corpora_cli.commands.corpus.ContextObject")
-def test_init_command(mock_context, mock_get_best_collector):
+def test_init_command(
+    mock_context, mock_get_best_collector, mock_path, mock_save_config
+):
     """Test the `init` command for basic behavior."""
     # Create a real console and capture output in a StringIO buffer
     console_output = StringIO()
     real_console = Console(file=console_output)
 
-    # Setup mock context with a real console
+    # Setup mock context with a real console and config
     mock_context_instance = mock_context.return_value
     mock_context_instance.console = real_console
+    mock_context_instance.config = {
+        "name": "test_repo",
+        "url": "https://github.com/test/repo",
+    }
+
+    # Mock Path.exists to simulate missing config file
+    mock_path.return_value.exists.return_value = False
 
     # Mock collector behavior
     mock_collector = mock_get_best_collector.return_value
     mock_collector.collect_files.return_value = ["file1", "file2"]
     mock_collector.create_tarball.return_value.getvalue.return_value = (
         b"tarball_content"
+    )
+
+    # Mock API response
+    mock_create_corpus_response = Mock()
+    mock_create_corpus_response.id = "12345"
+    mock_create_corpus_response.name = "test_repo"
+    mock_context_instance.corpus_api.create_corpus.return_value = (
+        mock_create_corpus_response
     )
 
     # Run the command
@@ -42,7 +60,25 @@ def test_init_command(mock_context, mock_get_best_collector):
     assert "Gathering files..." in output
     assert "Collected 2 files." in output
     assert "Uploading corpus tarball to server..." in output
-    mock_context_instance.corpus_api.create_corpus.assert_called_once()
+    assert "test_repo created!" in output
+    assert "Corpus ID saved to .corpora.yaml" in output
+
+    # Verify create_corpus was called with correct parameters
+    mock_context_instance.corpus_api.create_corpus.assert_called_once_with(
+        name="test_repo",
+        url="https://github.com/test/repo",
+        tarball=b"tarball_content",
+    )
+
+    # Verify config file was saved twice with the correct data
+    assert mock_save_config.call_count == 2
+    mock_save_config.assert_any_call(
+        {
+            "name": "test_repo",
+            "url": "https://github.com/test/repo",
+            "corpus_id": "12345",
+        }
+    )
 
 
 @patch("corpora_cli.commands.corpus.ContextObject")

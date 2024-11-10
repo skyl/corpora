@@ -39,7 +39,7 @@ def mocked_env():
 
 
 @patch("builtins.open", new_callable=mock_open)
-@patch("config.yaml.safe_load")
+@patch("yaml.safe_load")
 def test_load_config_success(mock_yaml_load, mock_file_open, yaml_content, mocked_env):
     """Test load_config with successful loading and env substitution."""
     # Set up mock for yaml.safe_load to return the parsed YAML structure
@@ -64,27 +64,36 @@ def test_load_config_success(mock_yaml_load, mock_file_open, yaml_content, mocke
 
 
 @patch("builtins.open", new_callable=mock_open)
-@patch("config.yaml.safe_load")
-def test_load_config_missing_file(mock_yaml_load, mock_file_open):
-    """Test load_config raises typer.Exit when file is missing."""
+def test_load_config_missing_file(mock_file_open):
+    """Test load_config falls back to defaults when file is missing."""
     mock_file_open.side_effect = FileNotFoundError
 
-    # Expect typer.Exit instead of SystemExit
-    with pytest.raises(typer.Exit):
-        load_config()
+    # Mock Git defaults
+    with patch(
+        "corpora_cli.config.get_git_remote_url",
+        return_value="https://example.com/test-repo",
+    ):
+        with patch("corpora_cli.config.get_git_repo_name", return_value="test-repo"):
+            config = load_config()
+
+    # Assert defaults are set
+    assert config["name"] == "test-repo"
+    assert config["url"] == "https://example.com/test-repo"
 
 
 @patch("builtins.open", new_callable=mock_open)
 def test_load_config_invalid_yaml(mock_file_open):
-    """Test load_config raises typer.Exit on YAML parsing error."""
-    # Set up a file-like object for invalid YAML content
+    """Test load_config raises a yaml.YAMLError on YAML parsing error."""
+    # Simulate invalid YAML content in the file
     mock_file_open.return_value.__enter__.return_value = "invalid: yaml: content"
 
-    with patch(
-        "config.yaml.safe_load", side_effect=yaml.YAMLError("YAML parsing error")
-    ):
-        with pytest.raises(typer.Exit):
+    # Mock yaml.safe_load to raise a YAMLError
+    with patch("yaml.safe_load", side_effect=yaml.YAMLError("YAML parsing error")):
+        with pytest.raises(yaml.YAMLError, match="YAML parsing error"):
             load_config()
+
+    # Ensure that the file was attempted to be opened
+    mock_file_open.assert_called_once_with(".corpora.yaml", "r")
 
 
 def test_substitute_env_variables(mocked_env):

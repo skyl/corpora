@@ -1,6 +1,7 @@
 from pathlib import Path
 import typer
 
+from corpora_cli.config import CONFIG_FILE_PATH, save_config
 from corpora_cli.constants import CORPUS_EXISTS_MESSAGE
 from corpora_cli.context import ContextObject
 from corpora_cli.utils.collectors import get_best_collector
@@ -14,28 +15,46 @@ def init(ctx: typer.Context):
     """Initialize a new corpus - Upload a tarball."""
     c: ContextObject = ctx.obj
     repo_root = Path.cwd()
+    config = c.config
+
+    # If config doesn't already exist, save it after successful initialization
+    if not Path(CONFIG_FILE_PATH).exists():
+        save_config(config)
+
     c.console.print("Initializing a new corpus...")
-    collector = get_best_collector(repo_root, c.config)
+    collector = get_best_collector(repo_root, config)
     c.console.print("Gathering files...")
-    c.console.print(collector, style="dim")
     files = collector.collect_files()
     c.console.print(f"Collected {len(files)} files.")
-    # TODO: debug/verbose mode
-    # c.console.print(files, style="dim")
     tarball = collector.create_tarball(files, repo_root).getvalue()
     c.console.print(f"Tarball created: {len(tarball)} bytes")
     c.console.print("Uploading corpus tarball to server...")
+
     try:
         res = c.corpus_api.create_corpus(
-            name=c.config["name"],  # TODO: git repo name?
-            url=c.config["url"],  # TODO: get url from git?
+            name=config["name"],
+            url=config["url"],
             tarball=tarball,
         )
         c.console.print(f"{res.name} created!", style="green")
+
+        # Save the returned corpus_id in the config
+        config["corpus_id"] = res.id
+        save_config(config)
+        c.console.print(f"Corpus ID saved to {CONFIG_FILE_PATH}", style="blue")
+
     except ApiException as e:
         if e.status == 409:
             c.console.print(CORPUS_EXISTS_MESSAGE, style="red")
             exit(1)
+
+
+@app.command()
+def sync(ctx: typer.Context):
+    """Sync an existing corpus."""
+    c: ContextObject = ctx.obj
+    c.console.print("Syncing corpus...")
+    c.console.print("Not implemented yet.")
 
 
 @app.command()
