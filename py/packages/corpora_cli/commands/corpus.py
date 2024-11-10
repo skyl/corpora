@@ -1,12 +1,11 @@
 from pathlib import Path
-from httpx import get
 import typer
 
 from corpora_cli.config import CONFIG_FILE_PATH, save_config
 from corpora_cli.constants import CORPUS_EXISTS_MESSAGE
 from corpora_cli.context import ContextObject
 from corpora_cli.utils.collectors import get_best_collector
-from corpora_cli.utils.git import get_local_files
+from corpora_cli.utils.git import get_file_hash
 from corpora_client.exceptions import ApiException
 
 app = typer.Typer(help="Corpus commands")
@@ -67,46 +66,62 @@ def sync(ctx: typer.Context):
         )
         raise typer.Exit(code=1)
 
-    corpus_id = c.config["id"]
+    corpus_id: str = c.config["id"]
+    c.console.print(f"[DEBUG] Corpus ID: {corpus_id}")
 
-    # Step 1: Get the list of local files with hashes using `git ls-files`
-    c.console.print("Collecting local files...")
-    local_files = get_local_files()
-    c.console.print(f"Found {len(local_files)} local files.")
-
-    # Step 2: Get the list of remote files and their hashes from the server
-    c.console.print("Fetching remote file metadata...")
-    remote_files_map = c.corpus_api.get_file_hashes(corpus_id)
-    # remote_file_map = {file["path"]: file["hash"] for file in remote_files}
-
-    c.console.print(f"Found {len(remote_files_map)} remote files.")
-
-    # Step 3: Determine files to update, add, or delete
-    files_to_update = {
-        path: local_files[path]
-        for path in local_files
-        if path not in remote_files_map or local_files[path] != remote_files_map[path]
+    # Collect local files and their hashes
+    collector = get_best_collector(repo_root, c.config)
+    local_files = collector.collect_files()
+    local_files_hash_map = {
+        file.relative_to(repo_root): get_file_hash(str(file)) for file in local_files
     }
-    files_to_delete = [path for path in remote_files_map if path not in local_files]
-    c.console.print(f"{len(files_to_update)} files to update/add.")
-    c.console.print(f"{len(files_to_delete)} files to delete.")
+    c.console.print(f"[DEBUG] Local files: {local_files}")
+    c.console.print(f"[DEBUG] Local file hash map (relative): {local_files_hash_map}")
 
-    # Step 4: Create a tarball of files to update/add
+    # Fetch remote files and their hashes
+    remote_files = c.corpus_api.get_file_hashes(corpus_id)
+    remote_files_map = {Path(path): hash for path, hash in remote_files.items()}
+    c.console.print(f"[DEBUG] Remote files: {remote_files_map}")
+
+    # Determine files to update/add and delete
+    files_to_update = {
+        path: local_hash
+        for path, local_hash in local_files_hash_map.items()
+        if path not in remote_files_map or local_hash != remote_files_map[path]
+    }
+    files_to_delete = [
+        path for path in remote_files_map if path not in local_files_hash_map
+    ]
+    c.console.print(f"[DEBUG] Files to update/add: {files_to_update}")
+    c.console.print(f"[DEBUG] Files to delete: {files_to_delete}")
+
+    if not files_to_update and not files_to_delete:
+        c.console.print("No changes detected. Everything is up-to-date!", style="green")
+        return
+
+    # Create tarball for files to update/add
     if files_to_update:
-        collector = get_best_collector(repo_root, c.config)
-        tarball = collector.create_tarball(files_to_update.keys(), repo_root).getvalue()
+        c.console.print("Creating tarball for updated/added files... ")
+        tarball = collector.create_tarball(
+            [repo_root / p for p in files_to_update.keys()], repo_root
+        ).getvalue()
         c.console.print(f"Tarball created: {len(tarball)} bytes")
 
-        # Step 5: Upload the tarball to the server
+        # Upload tarball
         c.console.print("Uploading tarball...")
-        c.corpus_api.update_files(corpus_id, tarball)
+        c.console.print(f"Files to delete: {[str(file) for file in files_to_delete]}")
+        c.corpus_api.update_files(
+            corpus_id=corpus_id,
+            tarball=tarball,
+            delete_files=[str(file) for file in files_to_delete] or None,
+        )
         c.console.print("Update completed!", style="green")
 
-    # Step 6: Send delete instructions to the server
-    if files_to_delete:
-        c.console.print("Deleting files on server...")
-        c.corpus_api.delete_files(corpus_id, files_to_delete)
-        c.console.print("Delete completed!", style="green")
+    # # Delete files on the server
+    # if files_to_delete:
+    #     c.console.print("Deleting files on server...")
+    #     c.corpus_api.delete_files(corpus_id, [str(file) for file in files_to_delete])
+    #     c.console.print("Delete completed!", style="green")
 
     c.console.print("Sync completed successfully!", style="blue")
 

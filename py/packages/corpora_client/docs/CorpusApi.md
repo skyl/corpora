@@ -6,11 +6,10 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_corpus**](CorpusApi.md#create_corpus) | **POST** /api/corpora/corpus | Create Corpus
 [**delete_corpus**](CorpusApi.md#delete_corpus) | **DELETE** /api/corpora/corpus | Delete Corpus
-[**delete_files**](CorpusApi.md#delete_files) | **DELETE** /api/corpora/corpus/{corpus_id}/files | Delete Files
 [**get_corpus**](CorpusApi.md#get_corpus) | **GET** /api/corpora/corpus/{corpus_id} | Get Corpus
 [**get_file_hashes**](CorpusApi.md#get_file_hashes) | **GET** /api/corpora/corpus/{corpus_id}/files | Get File Hashes
 [**list_corpora**](CorpusApi.md#list_corpora) | **GET** /api/corpora/corpus | List Corpora
-[**update_files**](CorpusApi.md#update_files) | **PUT** /api/corpora/corpus/{corpus_id}/files | Update Files
+[**update_files**](CorpusApi.md#update_files) | **POST** /api/corpora/corpus/{corpus_id}/files | Update Files
 
 
 # **create_corpus**
@@ -164,86 +163,6 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | No Content |  -  |
-**404** | Not Found |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **delete_files**
-> str delete_files(corpus_id, request_body)
-
-Delete Files
-
-Delete files from a Corpus by path.
-
-### Example
-
-* Bearer Authentication (BearerAuth):
-
-```python
-import corpora_client
-from corpora_client.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = corpora_client.Configuration(
-    host = "http://localhost"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-# Configure Bearer authorization: BearerAuth
-configuration = corpora_client.Configuration(
-    access_token = os.environ["BEARER_TOKEN"]
-)
-
-# Enter a context with an instance of the API client
-with corpora_client.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = corpora_client.CorpusApi(api_client)
-    corpus_id = 'corpus_id_example' # str | 
-    request_body = ['request_body_example'] # List[str] | 
-
-    try:
-        # Delete Files
-        api_response = api_instance.delete_files(corpus_id, request_body)
-        print("The response of CorpusApi->delete_files:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling CorpusApi->delete_files: %s\n" % e)
-```
-
-
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **corpus_id** | **str**|  | 
- **request_body** | [**List[str]**](str.md)|  | 
-
-### Return type
-
-**str**
-
-### Authorization
-
-[BearerAuth](../README.md#BearerAuth)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
  - **Accept**: application/json
 
 ### HTTP response details
@@ -485,7 +404,7 @@ This endpoint does not need any parameter.
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_files**
-> str update_files(corpus_id, tarball)
+> str update_files(corpus_id, tarball, delete_files=delete_files)
 
 Update Files
 
@@ -522,10 +441,11 @@ with corpora_client.ApiClient(configuration) as api_client:
     api_instance = corpora_client.CorpusApi(api_client)
     corpus_id = 'corpus_id_example' # str | 
     tarball = None # bytearray | 
+    delete_files = ['delete_files_example'] # List[str] |  (optional)
 
     try:
         # Update Files
-        api_response = api_instance.update_files(corpus_id, tarball)
+        api_response = api_instance.update_files(corpus_id, tarball, delete_files=delete_files)
         print("The response of CorpusApi->update_files:\n")
         pprint(api_response)
     except Exception as e:
@@ -541,6 +461,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **corpus_id** | **str**|  | 
  **tarball** | **bytearray**|  | 
+ **delete_files** | [**List[str]**](str.md)|  | [optional] 
 
 ### Return type
 

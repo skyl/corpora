@@ -23,3 +23,4 @@ from corpora_client.models.issue_schema import IssueSchema
 from corpora_client.models.message_schema import MessageSchema
 from corpora_client.models.split_response_schema import SplitResponseSchema
 from corpora_client.models.split_vector_search_schema import SplitVectorSearchSchema
+from corpora_client.models.update_corpus_schema import UpdateCorpusSchema

@@ -18,8 +18,8 @@ def get_git_files() -> str:
     return result.splitlines()
 
 
-def get_file_hash(full_path: str) -> str:
-    result = run_command(["git", "hash-object", full_path])
+def get_file_hash(path: str) -> str:
+    result = run_command(["git", "hash-object", path])
     return result.strip()
 
 
@@ -28,8 +28,7 @@ def get_local_files() -> dict:
     local_files = {}
     files = get_git_files()
     for path in files:
-        if path.exists():
-            local_files[path] = get_file_hash(path)
+        local_files[path] = get_file_hash(path)
     return local_files
 
 

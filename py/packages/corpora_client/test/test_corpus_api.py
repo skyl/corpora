@@ -40,13 +40,6 @@ class TestCorpusApi(unittest.TestCase):
         """
         pass
 
-    def test_delete_files(self) -> None:
-        """Test case for delete_files
-
-        Delete Files
-        """
-        pass
-
     def test_get_corpus(self) -> None:
         """Test case for get_corpus
 
