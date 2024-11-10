@@ -1,48 +1,82 @@
-from urllib.parse import urlparse
+from typing import List
 import typer
-
-from corpora_cli.context import ContextObject
+import click
+from corpora_ai.llm_interface import ChatCompletionTextMessage
+from corpora_client.models.issue_request_schema import IssueRequestSchema
+from corpora_client.models.message_schema import MessageSchema
 from corpora_pm.providers.provider_loader import Corpus, load_provider
+from corpora_cli.context import ContextObject
 
-# provider = load_provider(corpus)
-
-
-app = typer.Typer(help="Plan commands")
+app = typer.Typer(help="Interactive issue creation CLI")
 
 
 def extract_repo_path(url: str) -> str:
-    parsed_url = urlparse(url)
-    # Remove leading `/` from the path
-    return "/".join(parsed_url.path.strip("/").split("/")[:2])
+    return "/".join(url.rstrip("/").split("/")[-2:])
 
 
 @app.command()
-def issue(ctx: typer.Context, text: str):
-    """Get a prospective issue for a given corpus and text."""
+def issue(ctx: typer.Context):
+    """
+    Interactively create and refine a prospective issue for a given corpus.
+    """
     c: ContextObject = ctx.obj
-    c.console.print("Generating issue...")
-    plan = c.plan_api.get_issue(c.config["id"], text)
-    c.console.print(f"Title: {plan.title}")
-    c.console.print(f"Body: {plan.body}")
-    # c.config has URL and an id ... but a lot more too ... does this work?
-    issue_tracker = load_provider(Corpus(url=c.config["url"], id=c.config["id"]))
+    c.console.print("Entering interactive issue creation...", style="bold blue")
 
-    # Ask if the user wants to post the issue
-    if typer.confirm("Do you want to post this issue?"):
-        resp = issue_tracker.create_issue(
-            extract_repo_path(c.config["url"]),
-            plan.title,
-            plan.body,
+    # Start with an empty message list
+    messages: List[MessageSchema] = []
+
+    # REPL loop
+    while True:
+        # Display the current state of messages
+        # # c.console.print("\nCurrent Messages:\n", style="dim")
+        # for i, msg in enumerate(messages, start=1):
+        #     c.console.print(f"[{msg.role}]\n\n{msg.text}")
+
+        # Allow the user to edit their next input in a text editor
+        # user_input = click.edit("")
+        # no, just use a typer input
+        user_input = typer.prompt(
+            "Issue summary" if not messages else "How should we change this issue?"
         )
-        c.console.print("Issue posted!", style="green")
-        c.console.print(f"URL: {resp.url}", style="magenta")
-        c.console.print(f"State: {resp.state}", style="dim")
-        c.console.print(f"Assignees: {resp.assignees}", style="dim")
-        c.console.print(f"Labels: {resp.labels}", style="dim")
-        c.console.print(f"Title: {resp.title}")
-        c.console.print(f"Body: {resp.body}")
-    else:
-        c.console.print("Issue not posted.", style="yellow")
 
-    # console.print all of these
-    # resp.assignees, resp.labels, resp.state, resp.url, resp.title, resp.body
+        if not user_input:
+            c.console.print("No input provided. Please try again.", style="yellow")
+            continue
+
+        # Add the user's input as a new message
+        messages.append(MessageSchema(role="user", text=user_input.strip()))
+
+        # Send the current messages to generate a draft issue
+        c.console.print("\nGenerating issue draft...", style="bold blue")
+        draft_issue = c.plan_api.get_issue(
+            IssueRequestSchema(messages=messages, corpus_id=c.config["id"])
+        )
+        # Display the generated draft issue
+        c.console.print(f"\nDraft Issue:", style="bold green")
+        c.console.print(f"Title: {draft_issue.title}", style="magenta")
+        c.console.print(f"Body:\n{draft_issue.body}", style="dim")
+
+        # Confirm if the user wants to post
+        if typer.confirm("\nPost this issue?"):
+            issue_tracker = load_provider(
+                Corpus(url=c.config["url"], id=c.config["id"])
+            )
+            resp = issue_tracker.create_issue(
+                extract_repo_path(c.config["url"]),
+                draft_issue.title,
+                draft_issue.body,
+            )
+            c.console.print("\nIssue posted!", style="green")
+            c.console.print(f"URL: {resp.url}", style="magenta")
+            return
+        else:
+            c.console.print(
+                "\nYou chose not to post the issue. Refine your messages or add new ones.",
+                style="yellow",
+            )
+            messages.append(
+                MessageSchema(
+                    role="assistant",
+                    text=f"{draft_issue.title}\n{draft_issue.body}",
+                )
+            )

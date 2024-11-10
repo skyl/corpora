@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_issue**](PlanApi.md#get_issue) | **POST** /api/corpora/plan/{corpus_id}/issue | Get Issue
+[**get_issue**](PlanApi.md#get_issue) | **POST** /api/corpora/plan/issue | Get Issue
 
 
 # **get_issue**
-> IssueSchema get_issue(corpus_id, text)
+> IssueSchema get_issue(issue_request_schema)
 
 Get Issue
 
@@ -18,6 +18,7 @@ Get Issue
 
 ```python
 import corpora_client
+from corpora_client.models.issue_request_schema import IssueRequestSchema
 from corpora_client.models.issue_schema import IssueSchema
 from corpora_client.rest import ApiException
 from pprint import pprint
@@ -42,12 +43,11 @@ configuration = corpora_client.Configuration(
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.PlanApi(api_client)
-    corpus_id = 'corpus_id_example' # str | 
-    text = 'text_example' # str | 
+    issue_request_schema = corpora_client.IssueRequestSchema() # IssueRequestSchema | 
 
     try:
         # Get Issue
-        api_response = api_instance.get_issue(corpus_id, text)
+        api_response = api_instance.get_issue(issue_request_schema)
         print("The response of PlanApi->get_issue:\n")
         pprint(api_response)
     except Exception as e:
@@ -61,8 +61,7 @@ with corpora_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **corpus_id** | **str**|  | 
- **text** | **str**|  | 
+ **issue_request_schema** | [**IssueRequestSchema**](IssueRequestSchema.md)|  | 
 
 ### Return type
 
@@ -74,7 +73,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 ### HTTP response details

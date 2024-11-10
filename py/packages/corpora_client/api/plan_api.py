@@ -16,7 +16,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import StrictStr
+from corpora_client.models.issue_request_schema import IssueRequestSchema
 from corpora_client.models.issue_schema import IssueSchema
 
 from corpora_client.api_client import ApiClient, RequestSerialized
@@ -39,8 +39,7 @@ class PlanApi:
     @validate_call
     def get_issue(
         self,
-        corpus_id: StrictStr,
-        text: StrictStr,
+        issue_request_schema: IssueRequestSchema,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -56,10 +55,8 @@ class PlanApi:
         """Get Issue
 
 
-        :param corpus_id: (required)
-        :type corpus_id: str
-        :param text: (required)
-        :type text: str
+        :param issue_request_schema: (required)
+        :type issue_request_schema: IssueRequestSchema
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -83,8 +80,7 @@ class PlanApi:
         """  # noqa: E501
 
         _param = self._get_issue_serialize(
-            corpus_id=corpus_id,
-            text=text,
+            issue_request_schema=issue_request_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -106,8 +102,7 @@ class PlanApi:
     @validate_call
     def get_issue_with_http_info(
         self,
-        corpus_id: StrictStr,
-        text: StrictStr,
+        issue_request_schema: IssueRequestSchema,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -123,10 +118,8 @@ class PlanApi:
         """Get Issue
 
 
-        :param corpus_id: (required)
-        :type corpus_id: str
-        :param text: (required)
-        :type text: str
+        :param issue_request_schema: (required)
+        :type issue_request_schema: IssueRequestSchema
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -150,8 +143,7 @@ class PlanApi:
         """  # noqa: E501
 
         _param = self._get_issue_serialize(
-            corpus_id=corpus_id,
-            text=text,
+            issue_request_schema=issue_request_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -173,8 +165,7 @@ class PlanApi:
     @validate_call
     def get_issue_without_preload_content(
         self,
-        corpus_id: StrictStr,
-        text: StrictStr,
+        issue_request_schema: IssueRequestSchema,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -190,10 +181,8 @@ class PlanApi:
         """Get Issue
 
 
-        :param corpus_id: (required)
-        :type corpus_id: str
-        :param text: (required)
-        :type text: str
+        :param issue_request_schema: (required)
+        :type issue_request_schema: IssueRequestSchema
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -217,8 +206,7 @@ class PlanApi:
         """  # noqa: E501
 
         _param = self._get_issue_serialize(
-            corpus_id=corpus_id,
-            text=text,
+            issue_request_schema=issue_request_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -235,8 +223,7 @@ class PlanApi:
 
     def _get_issue_serialize(
         self,
-        corpus_id,
-        text,
+        issue_request_schema,
         _request_auth,
         _content_type,
         _headers,
@@ -257,16 +244,12 @@ class PlanApi:
         _body_params: Optional[bytes] = None
 
         # process the path parameters
-        if corpus_id is not None:
-            _path_params["corpus_id"] = corpus_id
         # process the query parameters
-        if text is not None:
-
-            _query_params.append(("text", text))
-
         # process the header parameters
         # process the form parameters
         # process the body parameter
+        if issue_request_schema is not None:
+            _body_params = issue_request_schema
 
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:
@@ -274,12 +257,22 @@ class PlanApi:
                 ["application/json"]
             )
 
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params["Content-Type"] = _content_type
+        else:
+            _default_content_type = self.api_client.select_header_content_type(
+                ["application/json"]
+            )
+            if _default_content_type is not None:
+                _header_params["Content-Type"] = _default_content_type
+
         # authentication setting
         _auth_settings: List[str] = ["BearerAuth"]
 
         return self.api_client.param_serialize(
             method="POST",
-            resource_path="/api/corpora/plan/{corpus_id}/issue",
+            resource_path="/api/corpora/plan/issue",
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
