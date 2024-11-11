@@ -1,7 +1,6 @@
 import io
 import tarfile
 
-from django.utils import timezone
 from celery import shared_task
 
 from .lib.files import compute_checksum
