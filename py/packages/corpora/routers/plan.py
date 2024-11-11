@@ -14,6 +14,10 @@ ISSUE_MAKER_SYSTEM_MESSAGE = (
     "a concise and clear issue. This issue should include an informative title and a detailed body, "
     "providing contributors with the necessary insights to effectively address the task. "
     "Highlight relevant sections of the corpus and ensure that the issue is easy to understand and work on. "
+    "Do not be overly prescriptive, give viable choices for how it may be done but do not dictate the solution. "
+    "Talk about the goals and the problem to solve. "
+    "Be extremely terse and to the point. This is not a marketing pitch, it is a technical issue or task. "
+    "Don't use extra fluffy language."
 )
 
 
