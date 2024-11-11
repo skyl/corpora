@@ -1,14 +1,9 @@
 # TODO
 
-- `corpora workon README.md`
+- `corpora plan update_issue 17`
 
 # Next
 
-- static prompt context + dynamic RAG context
-  - .corpora/GOALS.md
-  - .corpora/ISSUES.md
-  - .corpora/PREFERENCES.md
-  ?
 - nearest neighbor vector search endpoint(s)
   - compare vector of summary versus vector of splits, create search endpoint(s) test adhoc queries
 - more CI checks, local tools - rm unused imports, for instance (on save, in CI..)
@@ -24,3 +19,13 @@
 - **Start interactive?** Could be cool to just say things to do "rewrite foo/bar/baz.py with BazPlex"
   - agents ... function calling ... maybe we have a menu of function `mkdir`, `create file`, `rewrite file`
     * Take input. Analyze problem. Choose sequence of agents. Let agents execute in order. Report back to user.
+
+
+# Done
+
+- `corpora workon README.md`
+- static prompt context + dynamic RAG context
+  - .corpora/GOALS.md
+  - .corpora/ISSUES.md
+  - .corpora/PREFERENCES.md
+  ?
