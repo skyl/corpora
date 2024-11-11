@@ -1,0 +1,1 @@
+Focus on clarity and precision. Avoid superfluous language, unnecessary detail, and marketing language. Assume a technically proficient audience. Present information directly and efficiently. Eliminate fluff.
