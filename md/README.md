@@ -1,5 +1,5 @@
 # Project Documentation
 
-Documentation and setup instructions for working with the project.
+The `md/` directory serves as a flexible space for notes, guides, and tutorials. Content in this directory may evolve or be removed as ideas develop and mature.
 
-- [**SETUP.md**](SETUP.md): Initial setup and configuration guide.
+- [**DevContainer Setup**](../.devcontainer/README.md): For up-to-date setup instructions.
