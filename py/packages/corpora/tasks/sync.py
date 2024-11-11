@@ -1,14 +1,16 @@
 import io
 import tarfile
+
 from celery import shared_task
 
-from .lib.files import compute_checksum
-from .models import Corpus, CorpusTextFile, Split
+from ..lib.files import compute_checksum
+from ..models import Corpus, CorpusTextFile, Split
 
 
 @shared_task
 def process_tarball(corpus_id: str, tarball: bytes) -> None:
     corpus = Corpus.objects.get(id=corpus_id)
+    corpus.save(update_fields=["updated_at"])
     with tarfile.open(fileobj=io.BytesIO(tarball), mode="r:gz") as tar:
         for member in tar.getmembers():
             if member.isfile():
@@ -51,14 +53,3 @@ def split_file_task(corpus_file_id: str) -> None:
 def generate_vector_task(split_id: str) -> None:
     split = Split.objects.get(id=split_id)
     split.get_and_save_vector()
-
-
-# @shared_task
-# def generate_colbert_vectors_task(split_id: str) -> None:
-#     split = Split.objects.get(id=split_id)
-#     split.get_and_save_colbert_vectors()
-
-
-@shared_task
-def simple_task():
-    return "Simple task completed!"

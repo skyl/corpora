@@ -24,7 +24,7 @@ class CorpusAPITestCase(TestCase):
             "test.tar.gz", file_content, content_type="application/gzip"
         )
 
-        with patch("corpora.tasks.process_tarball.delay") as mock_delay:
+        with patch("corpora.tasks.sync.process_tarball.delay") as mock_delay:
             response = await client.post(
                 "", data=data, FILES={"tarball": file}, headers=headers
             )
@@ -50,7 +50,7 @@ class CorpusAPITestCase(TestCase):
         )
 
         # Mock process_tarball to prevent actual processing
-        with patch("corpora.tasks.process_tarball.delay") as mock_delay:
+        with patch("corpora.tasks.sync.process_tarball.delay") as mock_delay:
             # Not too sure about this stringified list ;/
             data = {"delete_files": '["old_file.txt"]'}
             response = await client.post(
