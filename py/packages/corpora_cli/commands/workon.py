@@ -3,10 +3,8 @@ from requests import session
 import typer
 from prompt_toolkit.shortcuts import PromptSession
 
-from corpora.routers.workon import CorpusFileChatSchema
-from corpora_client.models.issue_request_schema import IssueRequestSchema
+from corpora_client.models.corpus_file_chat_schema import CorpusFileChatSchema
 from corpora_client.models.message_schema import MessageSchema
-from corpora_pm.providers.provider_loader import Corpus, load_provider
 from corpora_cli.context import ContextObject
 
 app = typer.Typer(help="Interactive issue creation CLI")
