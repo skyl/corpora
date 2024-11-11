@@ -86,7 +86,5 @@ class TestCorpusModelMethods:
     def test_delete_files(self, corpus, file):
         # Test deleting files by path
         corpus.delete_files(["test.txt"])
-
         remaining_files = corpus.files.all()
-
         assert remaining_files.count() == 0
