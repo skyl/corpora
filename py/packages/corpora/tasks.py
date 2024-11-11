@@ -1,5 +1,7 @@
 import io
 import tarfile
+
+from django.utils import timezone
 from celery import shared_task
 
 from .lib.files import compute_checksum
@@ -9,7 +11,7 @@ from .models import Corpus, CorpusTextFile, Split
 @shared_task
 def process_tarball(corpus_id: str, tarball: bytes) -> None:
     corpus = Corpus.objects.get(id=corpus_id)
-    corpus.save()  # update updated_at timestamp
+    corpus.save(update_fields=["updated_at"])
     with tarfile.open(fileobj=io.BytesIO(tarball), mode="r:gz") as tar:
         for member in tar.getmembers():
             if member.isfile():
