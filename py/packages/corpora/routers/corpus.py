@@ -72,8 +72,11 @@ async def update_files(
     tarball_content: bytes = await sync_to_async(tarball.read)()
     process_tarball.delay(str(corpus.id), tarball_content)
     if update.delete_files:
-        print(f"Deleting files: {update.delete_files}")
-        await sync_to_async(corpus.delete_files)(update.delete_files)
+        # print(f"Deleting files: {update.delete_files}")
+        # print(type(update.delete_files))
+        # TODO there is a bug or inconsistency here
+        delete_files = update.delete_files[0].split(",")
+        await sync_to_async(corpus.delete_files)(delete_files)
     return 200, "Tarball processing started."
 
 

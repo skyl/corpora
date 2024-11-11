@@ -408,7 +408,7 @@ This endpoint does not need any parameter.
 
 Update Files
 
-Update a Corpus with an uploaded tarball.
+Update a Corpus with an uploaded tarball for additions/updates and a list of files to delete
 
 ### Example
 

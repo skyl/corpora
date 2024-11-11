@@ -113,12 +113,18 @@ def sync(ctx: typer.Context):
         ).getvalue()
         c.console.print(f"Tarball created: {len(tarball)} bytes")
 
+        # TODO: there is a bug in ninja here, I think
+        # c.console.print("Files to delete:")
+        # c.console.print(pformat(files_to_delete, width=80))
+        delete_files = [str(file) for file in files_to_delete] or None
+        # c.console.print(f"delete_files: {delete_files}")
+
         # Upload tarball
         c.console.print("Uploading tarball...")
         c.corpus_api.update_files(
             corpus_id=corpus_id,
             tarball=tarball,
-            delete_files=[str(file) for file in files_to_delete] or None,
+            delete_files=delete_files,
         )
         c.console.print("Update completed!", style="green")
 

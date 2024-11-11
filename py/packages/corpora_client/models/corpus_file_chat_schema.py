@@ -19,17 +19,32 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from corpora_client.models.message_schema import MessageSchema
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class UpdateCorpusSchema(BaseModel):
+class CorpusFileChatSchema(BaseModel):
     """
-    UpdateCorpusSchema
+    CorpusFileChatSchema
     """  # noqa: E501
 
-    delete_files: Optional[List[StrictStr]] = None
-    __properties: ClassVar[List[str]] = ["delete_files"]
+    corpus_id: StrictStr
+    messages: List[MessageSchema]
+    path: StrictStr
+    voice: Optional[StrictStr] = ""
+    purpose: Optional[StrictStr] = ""
+    structure: Optional[StrictStr] = ""
+    directions: Optional[StrictStr] = ""
+    __properties: ClassVar[List[str]] = [
+        "corpus_id",
+        "messages",
+        "path",
+        "voice",
+        "purpose",
+        "structure",
+        "directions",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +63,7 @@ class UpdateCorpusSchema(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of UpdateCorpusSchema from a JSON string"""
+        """Create an instance of CorpusFileChatSchema from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -68,21 +83,41 @@ class UpdateCorpusSchema(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if delete_files (nullable) is None
-        # and model_fields_set contains the field
-        if self.delete_files is None and "delete_files" in self.model_fields_set:
-            _dict["delete_files"] = None
-
+        # override the default output from pydantic by calling `to_dict()` of each item in messages (list)
+        _items = []
+        if self.messages:
+            for _item_messages in self.messages:
+                if _item_messages:
+                    _items.append(_item_messages.to_dict())
+            _dict["messages"] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of UpdateCorpusSchema from a dict"""
+        """Create an instance of CorpusFileChatSchema from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"delete_files": obj.get("delete_files")})
+        _obj = cls.model_validate(
+            {
+                "corpus_id": obj.get("corpus_id"),
+                "messages": (
+                    [MessageSchema.from_dict(_item) for _item in obj["messages"]]
+                    if obj.get("messages") is not None
+                    else None
+                ),
+                "path": obj.get("path"),
+                "voice": obj.get("voice") if obj.get("voice") is not None else "",
+                "purpose": obj.get("purpose") if obj.get("purpose") is not None else "",
+                "structure": (
+                    obj.get("structure") if obj.get("structure") is not None else ""
+                ),
+                "directions": (
+                    obj.get("directions") if obj.get("directions") is not None else ""
+                ),
+            }
+        )
         return _obj

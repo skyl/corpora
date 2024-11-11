@@ -14,11 +14,11 @@
 
 import unittest
 
-from corpora_client.models.update_corpus_schema import UpdateCorpusSchema
+from corpora_client.models.corpus_update_files_schema import CorpusUpdateFilesSchema
 
 
-class TestUpdateCorpusSchema(unittest.TestCase):
-    """UpdateCorpusSchema unit test stubs"""
+class TestCorpusUpdateFilesSchema(unittest.TestCase):
+    """CorpusUpdateFilesSchema unit test stubs"""
 
     def setUp(self):
         pass
@@ -26,27 +26,27 @@ class TestUpdateCorpusSchema(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> UpdateCorpusSchema:
-        """Test UpdateCorpusSchema
+    def make_instance(self, include_optional) -> CorpusUpdateFilesSchema:
+        """Test CorpusUpdateFilesSchema
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `UpdateCorpusSchema`
+        # uncomment below to create an instance of `CorpusUpdateFilesSchema`
         """
-        model = UpdateCorpusSchema()
+        model = CorpusUpdateFilesSchema()
         if include_optional:
-            return UpdateCorpusSchema(
+            return CorpusUpdateFilesSchema(
                 delete_files = [
                     ''
                     ]
             )
         else:
-            return UpdateCorpusSchema(
+            return CorpusUpdateFilesSchema(
         )
         """
 
-    def testUpdateCorpusSchema(self):
-        """Test UpdateCorpusSchema"""
+    def testCorpusUpdateFilesSchema(self):
+        """Test CorpusUpdateFilesSchema"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

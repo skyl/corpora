@@ -4,7 +4,6 @@ from unittest.mock import patch, Mock
 from typer.testing import CliRunner
 from rich.text import Text
 
-import corpora_client
 from corpora_cli.main import get_api_clients, main
 from corpora_cli.constants import NO_AUTHENTICATION_MESSAGE
 from corpora_cli.auth import AuthError
@@ -36,13 +35,14 @@ def test_get_api_clients_successful_authentication(
     mock_resolve_auth.return_value = mock_token
 
     # Call get_api_clients function with mock configuration
-    corpus_api, file_api, split_api, plan_api = get_api_clients(mock_config)
+    corpus_api, file_api, split_api, plan_api, workon_api = get_api_clients(mock_config)
 
     # Verify configurations and API client creation
     assert corpus_api.api_client.configuration.access_token == mock_token
     assert file_api.api_client.configuration.access_token == mock_token
     assert split_api.api_client.configuration.access_token == mock_token
     assert plan_api.api_client.configuration.access_token == mock_token
+    assert workon_api.api_client.configuration.access_token == mock_token
     mock_resolve_auth.assert_called_once()
 
 
@@ -79,11 +79,13 @@ def test_main_callback(mock_load_config, mock_get_api_clients, mock_config, mock
     mock_file_api = Mock()
     mock_split_api = Mock()
     mock_plan_api = Mock()
+    mock_workon_api = Mock()
     mock_get_api_clients.return_value = (
         mock_corpus_api,
         mock_file_api,
         mock_split_api,
         mock_plan_api,
+        mock_workon_api,
     )
     main(typer.Context)
     mock_get_api_clients.assert_called_once_with(mock_config)

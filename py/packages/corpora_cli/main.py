@@ -6,12 +6,11 @@ from rich.console import Console
 from rich.text import Text
 
 import corpora_client
-from corpora_cli.commands import corpus, file, split, plan
+from corpora_cli.commands import corpus, file, split, plan, workon
 from corpora_cli.config import load_config
 from corpora_cli.auth import AuthResolver, AuthError
 from corpora_cli.constants import NO_AUTHENTICATION_MESSAGE
 from corpora_cli.context import ContextObject
-from corpora_client.api import plan_api
 
 app = typer.Typer(help="Corpora CLI: Manage and process your corpora")
 
@@ -23,6 +22,7 @@ def get_api_clients(
     corpora_client.FileApi,
     corpora_client.SplitApi,
     corpora_client.PlanApi,
+    corpora_client.WorkonApi,
 ]:
     """
     Initialize and authenticate API client with given config.
@@ -50,13 +50,16 @@ def get_api_clients(
         corpora_client.FileApi(corpora_client.ApiClient(client_config)),
         corpora_client.SplitApi(corpora_client.ApiClient(client_config)),
         corpora_client.PlanApi(corpora_client.ApiClient(client_config)),
+        corpora_client.WorkonApi(corpora_client.ApiClient(client_config)),
     )
 
 
 @app.callback()
 def main(ctx: typer.Context):
     """Main entry point. Sets up configuration and API client."""
-    corpus_api, files_api, split_api, plan_api = get_api_clients(load_config())
+    corpus_api, files_api, split_api, plan_api, workon_api = get_api_clients(
+        load_config()
+    )
 
     config = load_config()
     ctx.obj = ContextObject(
@@ -64,6 +67,7 @@ def main(ctx: typer.Context):
         file_api=files_api,
         split_api=split_api,
         plan_api=plan_api,
+        workon_api=workon_api,
         config=config,
         console=Console(),
     )
@@ -74,6 +78,9 @@ app.add_typer(corpus.app, name="corpus", help="Commands for managing corpora")
 app.add_typer(file.app, name="file", help="Commands for file operations")
 app.add_typer(split.app, name="split", help="Commands for split operations")
 app.add_typer(plan.app, name="plan", help="Commands for plan operations")
+app.add_typer(
+    workon.app, name="workon", help="Commands for working on files in the corpus"
+)
 
 if __name__ == "__main__":
     app()

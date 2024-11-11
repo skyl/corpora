@@ -21,6 +21,7 @@ from corpora_client.api.corpus_api import CorpusApi
 from corpora_client.api.file_api import FileApi
 from corpora_client.api.plan_api import PlanApi
 from corpora_client.api.split_api import SplitApi
+from corpora_client.api.workon_api import WorkonApi
 
 # import ApiClient
 from corpora_client.api_response import ApiResponse
@@ -34,8 +35,10 @@ from corpora_client.exceptions import ApiAttributeError
 from corpora_client.exceptions import ApiException
 
 # import models into sdk package
+from corpora_client.models.corpus_file_chat_schema import CorpusFileChatSchema
 from corpora_client.models.corpus_response_schema import CorpusResponseSchema
 from corpora_client.models.corpus_schema import CorpusSchema
+from corpora_client.models.corpus_update_files_schema import CorpusUpdateFilesSchema
 from corpora_client.models.file_response_schema import FileResponseSchema
 from corpora_client.models.file_schema import FileSchema
 from corpora_client.models.issue_request_schema import IssueRequestSchema
@@ -43,4 +46,3 @@ from corpora_client.models.issue_schema import IssueSchema
 from corpora_client.models.message_schema import MessageSchema
 from corpora_client.models.split_response_schema import SplitResponseSchema
 from corpora_client.models.split_vector_search_schema import SplitVectorSearchSchema
-from corpora_client.models.update_corpus_schema import UpdateCorpusSchema

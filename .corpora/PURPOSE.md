@@ -1,0 +1,1 @@
+Corpora is an experimental polyglot monorepo focused on AI tool development for self-evolution. It aims to create tools that accelerate its own development, writing, and software enhancement. The project aspires to embody best practices and design patterns, offering a high-quality, self-evolving suite applicable to any codebase or text corpus.
