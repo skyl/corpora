@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_revision**](WorkonApi.md#get_revision) | **POST** /api/corpora/workon/file | File
+[**file**](WorkonApi.md#file) | **POST** /api/corpora/workon/file | File
 
 
-# **get_revision**
-> str get_revision(corpus_file_chat_schema)
+# **file**
+> str file(corpus_file_chat_schema)
 
 File
 
@@ -46,11 +46,11 @@ with corpora_client.ApiClient(configuration) as api_client:
 
     try:
         # File
-        api_response = api_instance.get_revision(corpus_file_chat_schema)
-        print("The response of WorkonApi->get_revision:\n")
+        api_response = api_instance.file(corpus_file_chat_schema)
+        print("The response of WorkonApi->file:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling WorkonApi->get_revision: %s\n" % e)
+        print("Exception when calling WorkonApi->file: %s\n" % e)
 ```
 
 

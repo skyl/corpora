@@ -109,7 +109,7 @@ Class | Method | HTTP request | Description
 *SplitApi* | [**get_split**](docs/SplitApi.md#get_split) | **GET** /api/corpora/split/{split_id} | Get Split
 *SplitApi* | [**list_splits_for_file**](docs/SplitApi.md#list_splits_for_file) | **GET** /api/corpora/split/file/{file_id} | List Splits For File
 *SplitApi* | [**vector_search**](docs/SplitApi.md#vector_search) | **POST** /api/corpora/split/search | Vector Search
-*WorkonApi* | [**get_revision**](docs/WorkonApi.md#get_revision) | **POST** /api/corpora/workon/file | File
+*WorkonApi* | [**file**](docs/WorkonApi.md#file) | **POST** /api/corpora/workon/file | File
 
 
 ## Documentation For Models

@@ -3,6 +3,7 @@ from requests import session
 import typer
 from prompt_toolkit.shortcuts import PromptSession
 
+from corpora.routers.workon import CorpusFileChatSchema
 from corpora_client.models.issue_request_schema import IssueRequestSchema
 from corpora_client.models.message_schema import MessageSchema
 from corpora_pm.providers.provider_loader import Corpus, load_provider
@@ -20,15 +21,25 @@ def file(ctx: typer.Context, path: str):
     """
     c: ContextObject = ctx.obj
     c.console.print(f"Working on file: {path}", style="bold blue")
+    ext = path.split(".")[-1]
 
     # show current file content on disk, load the content from the
     # CWD and print it with dim
-    c.console.print("Current file content:", style="bold green")
     with open(path, "r") as f:
-        c.console.print(f.read(), style="dim")
+        current_file_content = f.read() if f else ""
+    c.console.print("Current file content:", style="bold green")
+    c.console.print(current_file_content, style="dim")
 
     # Start with an empty message list
     messages: List[MessageSchema] = []
+
+    if current_file_content:
+        messages.append(
+            MessageSchema(
+                role="user",
+                text=f"The original file content was:\n```{ext}\n{current_file_content}```",
+            )
+        )
 
     # REPL loop
     while True:
@@ -47,35 +58,37 @@ def file(ctx: typer.Context, path: str):
 
         # Send the current messages to generate a draft issue
         c.console.print("Generating revision", style="bold blue")
-        # revision = c.workon_api.file(
-        #     IssueRequestSchema(messages=messages, corpus_id=c.config["id"])
-        # )
-        # # Display the generated draft issue
-        # c.console.print(f"\nDraft Issue:", style="bold green")
-        # c.console.print(f"Title: {draft_issue.title}", style="magenta")
-        # c.console.print(f"Body:\n{draft_issue.body}", style="dim")
 
-    #     # Confirm if the user wants to post
-    #     if typer.confirm("\nPost this issue?"):
-    #         issue_tracker = load_provider(
-    #             Corpus(url=c.config["url"], id=c.config["id"])
-    #         )
-    #         resp = issue_tracker.create_issue(
-    #             extract_repo_path(c.config["url"]),
-    #             draft_issue.title,
-    #             draft_issue.body,
-    #         )
-    #         c.console.print("\nIssue posted!", style="green")
-    #         c.console.print(f"URL: {resp.url}", style="magenta")
-    #         return
-    #     else:
-    #         c.console.print(
-    #             "\nYou chose not to post the issue. Refine your messages or add new ones.",
-    #             style="yellow",
-    #         )
-    #         messages.append(
-    #             MessageSchema(
-    #                 role="assistant",
-    #                 text=f"{draft_issue.title}\n{draft_issue.body}",
-    #             )
-    #         )
+        # if file doesn't exist, use empty string
+        with open(".corpora/VOICE.md", "r") as f:
+            voice = f.read() if f else ""
+        with open(".corpora/PURPOSE.md", "r") as f:
+            purpose = f.read() if f else ""
+        with open(".corpora/STRUCTURE.md", "r") as f:
+            structure = f.read() if f else ""
+        with open(f".corpora/{ext}/DIRECTIONS.md", "r") as f:
+            directions = f.read() if f else ""
+
+        revision = c.workon_api.file(
+            CorpusFileChatSchema(
+                messages=messages,
+                corpus_id=c.config["id"],
+                path=path,
+                voice=voice,
+                purpose=purpose,
+                structure=structure,
+                directions=directions,
+            )
+        )
+        c.console.print(f"{revision}", style="dim")
+
+        if typer.confirm("Write file?"):
+            with open(path, "w") as f:
+                f.write(revision)
+            c.console.print("File written!", style="green")
+            break
+        else:
+            c.console.print(
+                "You chose not to write the file. Refine your messages.",
+                style="magenta",
+            )

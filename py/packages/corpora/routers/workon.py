@@ -40,7 +40,7 @@ class CorpusFileChatSchema(Schema):
 FILE_EDITOR_SYSTEM_MESSAGE = "You return the new revision of the file."
 
 
-@workon_router.post("/file", response=str, operation_id="get_revision")
+@workon_router.post("/file", response=str, operation_id="file")
 async def file(request, payload: CorpusFileChatSchema):
     corpus = await Corpus.objects.aget(id=payload.corpus_id)
 

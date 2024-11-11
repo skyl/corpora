@@ -26,8 +26,8 @@ class TestWorkonApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_get_revision(self) -> None:
-        """Test case for get_revision
+    def test_file(self) -> None:
+        """Test case for file
 
         File
         """

@@ -37,7 +37,7 @@ class WorkonApi:
         self.api_client = api_client
 
     @validate_call
-    def get_revision(
+    def file(
         self,
         corpus_file_chat_schema: CorpusFileChatSchema,
         _request_timeout: Union[
@@ -79,7 +79,7 @@ class WorkonApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._get_revision_serialize(
+        _param = self._file_serialize(
             corpus_file_chat_schema=corpus_file_chat_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -100,7 +100,7 @@ class WorkonApi:
         ).data
 
     @validate_call
-    def get_revision_with_http_info(
+    def file_with_http_info(
         self,
         corpus_file_chat_schema: CorpusFileChatSchema,
         _request_timeout: Union[
@@ -142,7 +142,7 @@ class WorkonApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._get_revision_serialize(
+        _param = self._file_serialize(
             corpus_file_chat_schema=corpus_file_chat_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -163,7 +163,7 @@ class WorkonApi:
         )
 
     @validate_call
-    def get_revision_without_preload_content(
+    def file_without_preload_content(
         self,
         corpus_file_chat_schema: CorpusFileChatSchema,
         _request_timeout: Union[
@@ -205,7 +205,7 @@ class WorkonApi:
         :return: Returns the result object.
         """  # noqa: E501
 
-        _param = self._get_revision_serialize(
+        _param = self._file_serialize(
             corpus_file_chat_schema=corpus_file_chat_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -221,7 +221,7 @@ class WorkonApi:
         )
         return response_data.response
 
-    def _get_revision_serialize(
+    def _file_serialize(
         self,
         corpus_file_chat_schema,
         _request_auth,

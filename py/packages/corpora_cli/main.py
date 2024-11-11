@@ -22,7 +22,7 @@ def get_api_clients(
     corpora_client.FileApi,
     corpora_client.SplitApi,
     corpora_client.PlanApi,
-    # corpora_client.WorkOnApi,
+    corpora_client.WorkonApi,
 ]:
     """
     Initialize and authenticate API client with given config.
@@ -50,14 +50,16 @@ def get_api_clients(
         corpora_client.FileApi(corpora_client.ApiClient(client_config)),
         corpora_client.SplitApi(corpora_client.ApiClient(client_config)),
         corpora_client.PlanApi(corpora_client.ApiClient(client_config)),
-        # corpora_client.WorkOnApi(corpora_client.ApiClient(client_config)),
+        corpora_client.WorkonApi(corpora_client.ApiClient(client_config)),
     )
 
 
 @app.callback()
 def main(ctx: typer.Context):
     """Main entry point. Sets up configuration and API client."""
-    corpus_api, files_api, split_api, plan_api = get_api_clients(load_config())
+    corpus_api, files_api, split_api, plan_api, workon_api = get_api_clients(
+        load_config()
+    )
 
     config = load_config()
     ctx.obj = ContextObject(
@@ -65,6 +67,7 @@ def main(ctx: typer.Context):
         file_api=files_api,
         split_api=split_api,
         plan_api=plan_api,
+        workon_api=workon_api,
         config=config,
         console=Console(),
     )
