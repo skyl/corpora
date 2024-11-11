@@ -109,12 +109,15 @@ Class | Method | HTTP request | Description
 *SplitApi* | [**get_split**](docs/SplitApi.md#get_split) | **GET** /api/corpora/split/{split_id} | Get Split
 *SplitApi* | [**list_splits_for_file**](docs/SplitApi.md#list_splits_for_file) | **GET** /api/corpora/split/file/{file_id} | List Splits For File
 *SplitApi* | [**vector_search**](docs/SplitApi.md#vector_search) | **POST** /api/corpora/split/search | Vector Search
+*WorkonApi* | [**get_revision**](docs/WorkonApi.md#get_revision) | **POST** /api/corpora/workon/file | File
 
 
 ## Documentation For Models
 
+ - [CorpusFileChatSchema](docs/CorpusFileChatSchema.md)
  - [CorpusResponseSchema](docs/CorpusResponseSchema.md)
  - [CorpusSchema](docs/CorpusSchema.md)
+ - [CorpusUpdateFilesSchema](docs/CorpusUpdateFilesSchema.md)
  - [FileResponseSchema](docs/FileResponseSchema.md)
  - [FileSchema](docs/FileSchema.md)
  - [IssueRequestSchema](docs/IssueRequestSchema.md)
@@ -122,7 +125,6 @@ Class | Method | HTTP request | Description
  - [MessageSchema](docs/MessageSchema.md)
  - [SplitResponseSchema](docs/SplitResponseSchema.md)
  - [SplitVectorSearchSchema](docs/SplitVectorSearchSchema.md)
- - [UpdateCorpusSchema](docs/UpdateCorpusSchema.md)
 
 
 <a id="documentation-for-authorization"></a>

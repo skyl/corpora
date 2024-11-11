@@ -45,7 +45,7 @@ async def get_issue(request, payload: IssueRequestSchema):
 
     # TODO: split context could be ... ?
     split_context = await sync_to_async(corpus.get_relevant_splits_context)(
-        payload.messages[-1].text
+        "\n".join(message for message in payload.messages[-2:])
     )
 
     print(split_context)

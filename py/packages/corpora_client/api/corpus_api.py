@@ -1303,7 +1303,7 @@ class CorpusApi:
     ) -> str:
         """Update Files
 
-        Update a Corpus with an uploaded tarball.
+        Update a Corpus with an uploaded tarball for additions/updates and a list of files to delete
 
         :param corpus_id: (required)
         :type corpus_id: str
@@ -1376,7 +1376,7 @@ class CorpusApi:
     ) -> ApiResponse[str]:
         """Update Files
 
-        Update a Corpus with an uploaded tarball.
+        Update a Corpus with an uploaded tarball for additions/updates and a list of files to delete
 
         :param corpus_id: (required)
         :type corpus_id: str
@@ -1449,7 +1449,7 @@ class CorpusApi:
     ) -> RESTResponseType:
         """Update Files
 
-        Update a Corpus with an uploaded tarball.
+        Update a Corpus with an uploaded tarball for additions/updates and a list of files to delete
 
         :param corpus_id: (required)
         :type corpus_id: str
