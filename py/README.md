@@ -1,36 +1,37 @@
-# py/
-
-Python codebase for **Corpora** — a collection of tools to enhance and evolve arbitrary corpora.
-
 # Python Codebase
 
-Contains the primary Python code and configurations for the project.
+Python code for **Corpora** — a tool suite for advancing arbitrary corpora.
 
-- [**packages/**](packages/README.md): Core packages and apps.
-- [**requirements.txt**](../requirements.txt): Main dependencies.
-- [**requirements-dev.txt**](../requirements-dev.txt): Development dependencies.
+## Overview
 
-## Quickstart
+The `py/` directory contains the main Python codebase, comprising core packages and configurations:
 
-The whole repo can be used on any host machine with any editor but you will be responsible for installing the necessary dependencies. If you have Docker installed, you can use the provided `devcontainer` to get started quickly.
+- [**packages/**](packages/README.md): Modular Python packages.
+- [**requirements.txt**](../requirements.txt): Aggregated global dependencies.
+- [**requirements-dev.txt**](../requirements-dev.txt): Development-specific dependencies.
 
-The below assumes you want to use the devcontainer with VSCode.
+For modularity, each package has its own `requirements.txt`. The global `requirements.txt` can install all dependencies, yet the devcontainer pre-configures everything for you [Dockerfile](../.devcontainer/Dockerfile). Everything is ready out of the box within the devcontainer. Check the [DevContainer Setup](../.devcontainer/README.md) for an understanding of the pre-defined environment.
 
-### Prerequisites
+For trying new dependencies, you can simply use `pip` without further setup and add them to the respective `requirements.txt`. The devcontainer will automatically install them on the next build.
 
-- [**Docker**](https://docs.docker.com/get-docker/)
-- [**git**](https://git-scm.com/downloads)
-- [**Visual Studio Code**](https://code.visualstudio.com/download)
+## Packages
 
+- **corpora**: Core library for corpus management.
+- **corpora_ai**: AI utilities, server-side integration.
+- **corpora_ai_openai**: Extensions using OpenAI.
+- **corpora_cli**: Command-line tools.
+- **corpora_client**: API client, auto-generated.
+- **corpora_pm**: Project management tools.
+- **corpora_proj**: Django project setup, runs `corpora` app.
 
-### Steps
+Each package serves a distinct purpose:
 
-1. Clone the repository:
+- **corpora** integrates with `pgvector` models and corpus data, acting as the RAG source for `corpora_ai`.
+- **corpora_client** is generated from the server APIs, with `corpora_cli` utilizing the client for operations.
+- **corpora_ai** facilitates server-side AI functionalities, allowing configurable server deployments.
+- **corpora_pm** is CLI-focused, leveraging local `GITHUB_TOKEN` for Github operations, managed by `corpora_cli`.
 
-```bash
-git clone https://github.com/skyl/corpora.git
-```
+## Development Workflow
 
-2. Open the repository in Visual Studio Code.
-
-3. CMD+Shift+P (Ctrl+Shift+P on Windows) to open the command palette and select `Remote-Containers: Reopen in Container`.
+- **API Development**: Add endpoints in `corpora`. Use `./genall.sh` to update `corpora_client` and `corpora_cli`.
+- **Testing and Formatting**: Use `black` for code formatting and `pytest` for tests.
