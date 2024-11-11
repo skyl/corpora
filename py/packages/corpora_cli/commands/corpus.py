@@ -76,14 +76,15 @@ def sync(ctx: typer.Context):
     local_files_hash_map = {
         file.relative_to(repo_root): get_file_hash(str(file)) for file in local_files
     }
-    c.console.print("Local file hash map:")
-    c.console.print(pformat(local_files_hash_map, width=80))
+    # TODO: debug flag!
+    # c.console.print("Local file hash map:")
+    # c.console.print(pformat(local_files_hash_map, width=80))
 
     # Fetch remote files and their hashes
     remote_files = c.corpus_api.get_file_hashes(corpus_id)
     remote_files_map = {Path(path): hash for path, hash in remote_files.items()}
-    c.console.print("Remote files:")
-    c.console.print(pformat(remote_files_map, width=80))
+    # c.console.print("Remote files:")
+    # c.console.print(pformat(remote_files_map, width=80))
 
     # Determine files to update/add and delete
     files_to_update = {
@@ -114,8 +115,6 @@ def sync(ctx: typer.Context):
 
         # Upload tarball
         c.console.print("Uploading tarball...")
-        c.console.print("Files to delete:")
-        c.console.print(pformat([str(file) for file in files_to_delete], width=80))
         c.corpus_api.update_files(
             corpus_id=corpus_id,
             tarball=tarball,
