@@ -1,5 +1,6 @@
 from pathlib import Path
 import typer
+from pprint import pformat
 
 from corpora_cli.config import CONFIG_FILE_PATH, save_config
 from corpora_cli.constants import CORPUS_EXISTS_MESSAGE
@@ -67,7 +68,7 @@ def sync(ctx: typer.Context):
         raise typer.Exit(code=1)
 
     corpus_id: str = c.config["id"]
-    c.console.print(f"[DEBUG] Corpus ID: {corpus_id}")
+    c.console.print(f"Corpus ID: {corpus_id}")
 
     # Collect local files and their hashes
     collector = get_best_collector(repo_root, c.config)
@@ -75,13 +76,14 @@ def sync(ctx: typer.Context):
     local_files_hash_map = {
         file.relative_to(repo_root): get_file_hash(str(file)) for file in local_files
     }
-    c.console.print(f"[DEBUG] Local files: {local_files}")
-    c.console.print(f"[DEBUG] Local file hash map (relative): {local_files_hash_map}")
+    c.console.print("Local file hash map:")
+    c.console.print(pformat(local_files_hash_map, width=80))
 
     # Fetch remote files and their hashes
     remote_files = c.corpus_api.get_file_hashes(corpus_id)
     remote_files_map = {Path(path): hash for path, hash in remote_files.items()}
-    c.console.print(f"[DEBUG] Remote files: {remote_files_map}")
+    c.console.print("Remote files:")
+    c.console.print(pformat(remote_files_map, width=80))
 
     # Determine files to update/add and delete
     files_to_update = {
@@ -92,8 +94,11 @@ def sync(ctx: typer.Context):
     files_to_delete = [
         path for path in remote_files_map if path not in local_files_hash_map
     ]
-    c.console.print(f"[DEBUG] Files to update/add: {files_to_update}")
-    c.console.print(f"[DEBUG] Files to delete: {files_to_delete}")
+    c.console.print("Files to update/add:")
+    c.console.print(pformat(files_to_update, width=80))
+
+    c.console.print("Files to delete:")
+    c.console.print(pformat(files_to_delete, width=80))
 
     if not files_to_update and not files_to_delete:
         c.console.print("No changes detected. Everything is up-to-date!", style="green")
@@ -109,21 +114,14 @@ def sync(ctx: typer.Context):
 
         # Upload tarball
         c.console.print("Uploading tarball...")
-        c.console.print(f"Files to delete: {[str(file) for file in files_to_delete]}")
+        c.console.print("Files to delete:")
+        c.console.print(pformat([str(file) for file in files_to_delete], width=80))
         c.corpus_api.update_files(
             corpus_id=corpus_id,
             tarball=tarball,
             delete_files=[str(file) for file in files_to_delete] or None,
         )
         c.console.print("Update completed!", style="green")
-
-    # # Delete files on the server
-    # if files_to_delete:
-    #     c.console.print("Deleting files on server...")
-    #     c.corpus_api.delete_files(corpus_id, [str(file) for file in files_to_delete])
-    #     c.console.print("Delete completed!", style="green")
-
-    c.console.print("Sync completed successfully!", style="blue")
 
 
 @app.command()
