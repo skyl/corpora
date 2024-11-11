@@ -81,6 +81,8 @@ async def file(request, payload: CorpusFileChatSchema):
         "\n".join(message.text for message in payload.messages[-2:])
     )
 
+    print(payload.messages[-1].text)
+
     all_messages = [
         ChatCompletionTextMessage(
             role="system",

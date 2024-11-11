@@ -55,7 +55,7 @@ def file(ctx: typer.Context, path: str):
         messages.append(MessageSchema(role="user", text=user_input.strip()))
 
         # Send the current messages to generate a draft issue
-        c.console.print("Generating revision", style="bold blue")
+        c.console.print("Generating revision...", style="bold blue")
 
         # if file doesn't exist, use empty string
         with open(".corpora/VOICE.md", "r") as f:
