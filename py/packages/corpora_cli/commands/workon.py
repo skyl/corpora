@@ -67,6 +67,11 @@ def file(ctx: typer.Context, path: str):
         with open(f".corpora/{ext}/DIRECTIONS.md", "r") as f:
             directions = f.read() if f else ""
 
+        # c.console.print(voice, style="dim")
+        # c.console.print(purpose, style="dim")
+        # c.console.print(structure, style="dim")
+        # c.console.print(directions, style="dim")
+
         revision = c.workon_api.file(
             CorpusFileChatSchema(
                 messages=messages,
@@ -79,6 +84,7 @@ def file(ctx: typer.Context, path: str):
             )
         )
         c.console.print(f"{revision}", style="dim")
+        c.console.print(f"{path}", style="dim magenta")
 
         if typer.confirm("Write file?"):
             with open(path, "w") as f:
