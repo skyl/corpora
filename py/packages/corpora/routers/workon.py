@@ -1,7 +1,6 @@
 from typing import List
 from ninja import Router, Schema
 from asgiref.sync import sync_to_async
-from regex import F
 
 from corpora_ai.llm_interface import ChatCompletionTextMessage
 from corpora_ai.provider_loader import load_llm_provider
@@ -10,15 +9,6 @@ from corpora.models import Corpus
 from ..auth import BearerAuth
 
 workon_router = Router(tags=["workon"], auth=BearerAuth())
-
-
-# # TODO: get this from configuration
-# VOICE_TEXT = """
-# You are concise. You use minimal language. Less is more. This isn't a marketing pitch.
-# """
-
-
-# TODO: DRY!!!
 
 
 class MessageSchema(Schema):
@@ -37,25 +27,69 @@ class CorpusFileChatSchema(Schema):
     directions: str = ""
 
 
-FILE_EDITOR_SYSTEM_MESSAGE = "You return the new revision of the file."
+FILE_EDITOR_SYSTEM_MESSAGE = (
+    "You are editing the file and must return only the new revision of the file. "
+    "Do not include any additional context, explanations, or surrounding text. "
+    "The output should only contain the file content."
+)
+
+
+class FileRevisionResponse(Schema):
+    new_file_revision: str
+
+
+def get_additional_context(payload: CorpusFileChatSchema) -> str:
+    # TODO: more automatically expandable implementation
+    # without the ifs
+    context = ""
+    if any(
+        [
+            payload.voice,
+            payload.purpose,
+            payload.structure,
+            payload.directions,
+        ]
+    ):
+        context += "\n\nADDITIONAL CONTEXT:\n\n"
+
+    if payload.voice:
+        context += f"VOICE:\n\n{payload.voice}\n\n"
+
+    if payload.purpose:
+        context += f"PURPOSE of corpus:\n\n{payload.purpose}\n\n"
+
+    if payload.structure:
+        context += f"STRUCTURE of corpus:\n\n{payload.structure}\n\n"
+
+    if payload.directions:
+        ext = payload.path.split(".")[-1]
+        context += f"DIRECTIONS for {ext} filetype:\n\n{payload.directions}\n\n"
+
+    return context
 
 
 @workon_router.post("/file", response=str, operation_id="file")
 async def file(request, payload: CorpusFileChatSchema):
     corpus = await Corpus.objects.aget(id=payload.corpus_id)
 
+    # TODO: last 2 messages? Eventually we need to worry about
+    # token count limits.
+    # Ideally we might roll-up a summary of the entire conversation.
+    # But, in the current design, we let the client decide the messages.
+    # A separate endpoint could be used by the client to "compress conversation"
     split_context = await sync_to_async(corpus.get_relevant_splits_context)(
-        "\n".join(message for message in payload.messages[-2:])
+        "\n".join(message.text for message in payload.messages[-2:])
     )
 
     all_messages = [
         ChatCompletionTextMessage(
             role="system",
             text=f"You are focused on the file: {payload.path} "
-            "in the {corpus.name} corpus. "
-            "{FILE_EDITOR_SYSTEM_MESSAGE}"
-            f"{payload.voice}\n{payload.purpose}\n{payload.structure}\n{payload.directions}",
+            f"in the {corpus.name} corpus. "
+            f"{FILE_EDITOR_SYSTEM_MESSAGE}"
+            f"{get_additional_context(payload)}",
         ),
+        # Alternatively we use multiple system messages?
         # ChatCompletionTextMessage(role="system", text=VOICE_TEXT),
         # .corpora/VOICE.md
         # .corpora/PURPOSE.md
@@ -63,8 +97,10 @@ async def file(request, payload: CorpusFileChatSchema):
         # .corpora/{ext}/DIRECTIONS.md
         ChatCompletionTextMessage(
             role="user",
-            text=f"I searched the broader corpus and found the following context:\n"
-            f"---\n{split_context}\n---",
+            text=(
+                f"I searched the broader corpus and found the following context:\n"
+                f"---\n{split_context}\n---"
+            ),
         ),
         *[
             ChatCompletionTextMessage(role=msg.role, text=msg.text)
@@ -73,5 +109,5 @@ async def file(request, payload: CorpusFileChatSchema):
     ]
 
     llm = load_llm_provider()
-    resp = llm.get_text_completion(all_messages)
-    return resp
+    resp = llm.get_data_completion(all_messages, FileRevisionResponse)
+    return resp.new_file_revision
