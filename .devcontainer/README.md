@@ -19,19 +19,25 @@ This DevContainer setup provides a ready-to-use development environment with Doc
    cd corpora
    ```
 
-2. **Open in VS Code:**
+2. **Create `.env` from Example:**
+   - Copy `.env.example` to `.env`:
+     
+     ```bash
+     cp .env.example .env
+     ```
+
+3. **Open in VS Code:**
    - Open the `corpora` folder in VS Code.
    - Ensure Docker is running.
 
-3. **Build & Connect in DevContainer:**
+4. **Build & Connect in DevContainer:**
    - Trigger the build process by reopening the folder in a container:
      - Open the Command Palette (Cmd+Shift+P or Ctrl+Shift+P).
      - Run `Remote-Containers: Reopen in Container`.
 
-4. **Environment Configuration:**
-   - **Set up `.env` file:**
-     - Add your API keys and credentials:
-
+5. **Environment Configuration:**
+   - **Set up API keys and credentials in `.env`:**
+     
      ```
      OPENAI_API_KEY=""
      CORPORA_CLIENT_ID=""
@@ -39,7 +45,7 @@ This DevContainer setup provides a ready-to-use development environment with Doc
      GITHUB_TOKEN=""
      ```
 
-5. **Post-Setup Commands:**
+6. **Post-Setup Commands:**
    - Run server initialization commands:
 
      ```bash
@@ -53,7 +59,7 @@ This DevContainer setup provides a ready-to-use development environment with Doc
        - Choose `Confidential` and `Client credentials`.
        - Update `.env` file with `CORPORA_CLIENT_ID` and `CORPORA_CLIENT_SECRET`.
 
-6. **Rebuild DevContainer:**
+7. **Rebuild DevContainer:**
    - Reload the container to apply `.env` updates.
 
 ## Usage Example
