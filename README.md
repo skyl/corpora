@@ -1,6 +1,8 @@
 # Corpora
 
-Corpora is an experimental polyglot monorepo focused on creating tools to enhance and evolve textual corpora through AI integration, efficient data management, and automation processes.
+> Corpora is a corpus of tools to enhance and evolve arbitrary corpora including itself.
+
+Corpora is an experimental polyglot monorepo focused on creating tools to enhance and evolve textual corpora with AI. Our aim is to create a flexible systems for managing text corpora to increase contributor productivity.
 
 ## Key Components
 
@@ -10,10 +12,6 @@ Corpora is an experimental polyglot monorepo focused on creating tools to enhanc
   - [**corpora/**](py/packages/corpora/README.md): Core library for managing textual data.
 
 - [**.devcontainer/**](.devcontainer/README.md): Provides a development environment with Docker, allowing easy setup for contributors and users.
-
-## Philosophy and Goals
-
-Our aim is to create a flexible system for managing text corpora that provides comprehensive AI-driven insights and metadata generation. By integrating interfaces to AI models and project management tools, we enhance developer workflows and decision-making. The repository is structured to facilitate easy expansion and integration with various AI and project management platforms such as OpenAI and GitHub, with plans for future adaptability to other services like GitLab.
 
 ## Contributing
 
