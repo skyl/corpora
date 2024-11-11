@@ -78,6 +78,19 @@ class Corpus(models.Model):
             split_context += f"{split.file.path}\n```\n{split.content}\n```"
         return split_context
 
+    def get_file_hashes(self) -> dict:
+        """
+        Retrieve a map of file paths to their hashes for this Corpus.
+        """
+        # TODO: types?
+        return {file.path: file.checksum for file in self.files.all()}
+
+    def delete_files(self, files: list):
+        """
+        Delete files from this Corpus by path.
+        """
+        self.files.filter(path__in=files).delete()
+
 
 class CorpusTextFile(models.Model):
     """

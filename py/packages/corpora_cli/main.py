@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from typing import Tuple
 import typer
 from rich.console import Console
@@ -38,7 +40,10 @@ def get_api_clients(
 
     # Configure and return the authenticated API client
     client_config = corpora_client.Configuration()
-    client_config.host = config["server"]["base_url"]
+    # TODO: deploy and default to the main production server?
+    client_config.host = config.get("server", {}).get(
+        "base_url", "http://localhost:8000"
+    )
     client_config.access_token = auth_token
     return (
         corpora_client.CorpusApi(corpora_client.ApiClient(client_config)),

@@ -47,10 +47,24 @@ class TestCorpusApi(unittest.TestCase):
         """
         pass
 
+    def test_get_file_hashes(self) -> None:
+        """Test case for get_file_hashes
+
+        Get File Hashes
+        """
+        pass
+
     def test_list_corpora(self) -> None:
         """Test case for list_corpora
 
         List Corpora
+        """
+        pass
+
+    def test_update_files(self) -> None:
+        """Test case for update_files
+
+        Update Files
         """
         pass
 

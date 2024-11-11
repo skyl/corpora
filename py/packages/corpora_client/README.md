@@ -99,7 +99,9 @@ Class | Method | HTTP request | Description
 *CorpusApi* | [**create_corpus**](docs/CorpusApi.md#create_corpus) | **POST** /api/corpora/corpus | Create Corpus
 *CorpusApi* | [**delete_corpus**](docs/CorpusApi.md#delete_corpus) | **DELETE** /api/corpora/corpus | Delete Corpus
 *CorpusApi* | [**get_corpus**](docs/CorpusApi.md#get_corpus) | **GET** /api/corpora/corpus/{corpus_id} | Get Corpus
+*CorpusApi* | [**get_file_hashes**](docs/CorpusApi.md#get_file_hashes) | **GET** /api/corpora/corpus/{corpus_id}/files | Get File Hashes
 *CorpusApi* | [**list_corpora**](docs/CorpusApi.md#list_corpora) | **GET** /api/corpora/corpus | List Corpora
+*CorpusApi* | [**update_files**](docs/CorpusApi.md#update_files) | **POST** /api/corpora/corpus/{corpus_id}/files | Update Files
 *FileApi* | [**create_file**](docs/FileApi.md#create_file) | **POST** /api/corpora/file | Create File
 *FileApi* | [**get_file**](docs/FileApi.md#get_file) | **GET** /api/corpora/file/{file_id} | Get File
 *FileApi* | [**get_file_by_path**](docs/FileApi.md#get_file_by_path) | **GET** /api/corpora/file/corpus/{corpus_id} | Get File By Path
@@ -120,6 +122,7 @@ Class | Method | HTTP request | Description
  - [MessageSchema](docs/MessageSchema.md)
  - [SplitResponseSchema](docs/SplitResponseSchema.md)
  - [SplitVectorSearchSchema](docs/SplitVectorSearchSchema.md)
+ - [UpdateCorpusSchema](docs/UpdateCorpusSchema.md)
 
 
 <a id="documentation-for-authorization"></a>

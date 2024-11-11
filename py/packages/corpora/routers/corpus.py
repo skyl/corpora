@@ -1,12 +1,15 @@
-from typing import List
+from typing import Dict, List, Optional
 import uuid
 
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
+from django.http import HttpRequest
+
 from ninja import Router, Form, File
 from ninja.files import UploadedFile
 from ninja.errors import HttpError
 from asgiref.sync import sync_to_async
+from pydantic import BaseModel
 
 from ..auth import BearerAuth
 from ..lib.dj.decorators import async_raise_not_found
@@ -15,6 +18,10 @@ from ..schema import CorpusSchema, CorpusResponseSchema
 from ..tasks import process_tarball
 
 corpus_router = Router(tags=["corpus"], auth=BearerAuth())
+
+
+class CorpusUpdateFilesSchema(BaseModel):
+    delete_files: Optional[List[str]] = None
 
 
 @corpus_router.post(
@@ -42,6 +49,42 @@ async def create_corpus(
 
     process_tarball.delay(str(corpus_instance.id), tarball_content)
     return 201, corpus_instance
+
+
+# update_files takes a corpus_id and a tarball upload with the files to add or update
+@corpus_router.post(
+    "/{corpus_id}/files",
+    response={200: str, 404: str},
+    operation_id="update_files",
+)
+@async_raise_not_found
+async def update_files(
+    request: HttpRequest,
+    corpus_id: uuid.UUID,
+    update: CorpusUpdateFilesSchema = Form(...),
+    tarball: UploadedFile = File(...),
+):
+    """
+    Update a Corpus with an uploaded tarball for additions/updates
+    and a list of files to delete
+    """
+    corpus = await Corpus.objects.aget(id=corpus_id)
+    tarball_content: bytes = await sync_to_async(tarball.read)()
+    process_tarball.delay(str(corpus.id), tarball_content)
+    if update.delete_files:
+        print(f"Deleting files: {update.delete_files}")
+        await sync_to_async(corpus.delete_files)(update.delete_files)
+    return 200, "Tarball processing started."
+
+
+# get_file_hashes will return a map of file paths to their hashes from the database
+@corpus_router.get(
+    "/{corpus_id}/files", response=Dict[str, str], operation_id="get_file_hashes"
+)
+async def get_file_hashes(request, corpus_id: uuid.UUID):
+    """Retrieve a map of file paths to their hashes for a Corpus."""
+    corpus = await Corpus.objects.aget(id=corpus_id)
+    return await sync_to_async(corpus.get_file_hashes)()
 
 
 @corpus_router.delete("", response={204: str, 404: str}, operation_id="delete_corpus")

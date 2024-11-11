@@ -17,13 +17,15 @@ def process_tarball(corpus_id: str, tarball: bytes) -> None:
                 )
                 checksum = compute_checksum(file_content)
 
-                # Create a CorpusTextFile and kick off further tasks
-                corpus_file = CorpusTextFile.objects.create(
+                corpus_file, _ = CorpusTextFile.objects.get_or_create(
                     corpus=corpus,
                     path=member.name,
-                    content=file_content,
-                    checksum=checksum,
                 )
+                corpus_file.content = file_content
+                corpus_file.checksum = checksum
+                corpus_file.save()
+                corpus_file.splits.all().delete()
+
                 generate_summary_task.delay(corpus_file.id)
                 split_file_task.delay(corpus_file.id)
 

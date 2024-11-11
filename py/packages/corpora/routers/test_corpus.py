@@ -1,12 +1,9 @@
 from unittest.mock import patch
-from datetime import timedelta
 import pytest
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 from ninja.testing import TestAsyncClient
-from oauth2_provider.models import AccessToken, Application
 from asgiref.sync import sync_to_async
 
 from .corpus import corpus_router
@@ -36,6 +33,40 @@ class CorpusAPITestCase(TestCase):
             assert response.status_code == 201
             assert response_data["name"] == "Test Corpus"
             assert response_data["url"] == "https://example.com/repo"
+
+    @pytest.mark.django_db
+    async def test_update_files(self):
+        """Test updating files in a corpus with an uploaded tarball."""
+        # Create a user and token
+        user, headers = await create_user_and_token()
+
+        # Create a corpus
+        corpus = await create_corpus("Update Corpus", "https://example.com", user)
+
+        # Prepare the tarball file
+        file_content = b"Updated tarball content"
+        file = SimpleUploadedFile(
+            "update.tar.gz", file_content, content_type="application/gzip"
+        )
+
+        # Mock process_tarball to prevent actual processing
+        with patch("corpora.tasks.process_tarball.delay") as mock_delay:
+            # Not too sure about this stringified list ;/
+            data = {"delete_files": '["old_file.txt"]'}
+            response = await client.post(
+                f"/{corpus.id}/files",
+                data=data,
+                FILES={"tarball": file},
+                headers=headers,
+            )
+            print(response.content)
+            # raise Exception
+            # Check the response
+            assert response.status_code == 200
+            assert response.json() == "Tarball processing started."
+
+            # Ensure the task was called with the correct arguments
+            mock_delay.assert_called_once_with(str(corpus.id), file_content)
 
     @pytest.mark.django_db
     async def test_create_corpus_conflict(self):
