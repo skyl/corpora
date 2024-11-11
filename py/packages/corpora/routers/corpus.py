@@ -15,7 +15,7 @@ from ..auth import BearerAuth
 from ..lib.dj.decorators import async_raise_not_found
 from ..models import Corpus
 from ..schema import CorpusSchema, CorpusResponseSchema
-from ..tasks import process_tarball
+from ..tasks.sync import process_tarball
 
 corpus_router = Router(tags=["corpus"], auth=BearerAuth())
 
