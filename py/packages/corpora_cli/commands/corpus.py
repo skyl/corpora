@@ -100,7 +100,7 @@ def sync(ctx: typer.Context):
         return
 
     # Create tarball for files to update/add
-    if files_to_update:
+    if files_to_update or files_to_delete:
         c.console.print("Creating tarball for updated/added files... ")
         tarball = collector.create_tarball(
             [repo_root / p for p in files_to_update.keys()], repo_root

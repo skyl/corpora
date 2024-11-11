@@ -3,6 +3,8 @@ import uuid
 
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
+from django.http import HttpRequest
+
 from ninja import Router, Form, File
 from ninja.files import UploadedFile
 from ninja.errors import HttpError
@@ -18,7 +20,7 @@ from ..tasks import process_tarball
 corpus_router = Router(tags=["corpus"], auth=BearerAuth())
 
 
-class UpdateCorpusSchema(BaseModel):
+class CorpusUpdateFilesSchema(BaseModel):
     delete_files: Optional[List[str]] = None
 
 
@@ -57,18 +59,20 @@ async def create_corpus(
 )
 @async_raise_not_found
 async def update_files(
-    request,
+    request: HttpRequest,
     corpus_id: uuid.UUID,
-    update: UpdateCorpusSchema = Form(...),
+    update: CorpusUpdateFilesSchema = Form(...),
     tarball: UploadedFile = File(...),
 ):
-    """Update a Corpus with an uploaded tarball."""
-    # print(f"Request files: {request.FILES}")
-    # print(f"Request body: {request.body}")
+    """
+    Update a Corpus with an uploaded tarball for additions/updates
+    and a list of files to delete
+    """
     corpus = await Corpus.objects.aget(id=corpus_id)
     tarball_content: bytes = await sync_to_async(tarball.read)()
     process_tarball.delay(str(corpus.id), tarball_content)
     if update.delete_files:
+        print(f"Deleting files: {update.delete_files}")
         await sync_to_async(corpus.delete_files)(update.delete_files)
     return 200, "Tarball processing started."
 
@@ -81,19 +85,6 @@ async def get_file_hashes(request, corpus_id: uuid.UUID):
     """Retrieve a map of file paths to their hashes for a Corpus."""
     corpus = await Corpus.objects.aget(id=corpus_id)
     return await sync_to_async(corpus.get_file_hashes)()
-
-
-# # delete_files takes a corpus_id and a list of file paths to delete
-# @corpus_router.delete(
-#     "/{corpus_id}/files",
-#     response={204: str, 404: str},
-#     operation_id="delete_files",
-# )
-# async def delete_files(request, corpus_id: uuid.UUID, files: List[str]):
-#     """Delete files from a Corpus by path."""
-#     corpus = await Corpus.objects.aget(id=corpus_id)
-#     await sync_to_async(corpus.delete_files)(files)
-#     return 204, "Files deleted."
 
 
 @corpus_router.delete("", response={204: str, 404: str}, operation_id="delete_corpus")
