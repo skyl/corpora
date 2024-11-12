@@ -75,7 +75,7 @@ class Corpus(models.Model):
         splits = self.get_relevant_splits(text, limit)
         split_context = ""
         for split in splits:
-            split_context += f"{split.file.path}\n```\n{split.content}\n```"
+            split_context += f"\n\n{split.file.path}:\n```\n{split.content}\n```\n\n"
         return split_context
 
     def get_file_hashes(self) -> dict:
