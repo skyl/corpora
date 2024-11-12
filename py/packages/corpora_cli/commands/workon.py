@@ -23,8 +23,13 @@ def file(ctx: typer.Context, path: str):
 
     # show current file content on disk, load the content from the
     # CWD and print it with dim
-    with open(path, "r") as f:
-        current_file_content = f.read() if f else ""
+    try:
+        with open(path, "r") as f:
+            current_file_content = f.read() if f else ""
+    except FileNotFoundError:
+        current_file_content = ""
+        open(path, "w").close()  # create the file if it doesn't exist
+
     c.console.print("Current file content:", style="bold green")
     c.console.print(current_file_content, style="dim")
 

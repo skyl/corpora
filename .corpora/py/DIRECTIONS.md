@@ -8,8 +8,9 @@ DO:
 - Maintain a DRY codebase by reusing code effectively.
 
 DO NOT:
-- Use broad try/except blocks without specific exception handling.
-- Include unnecessary ifs or create complex structures.
-- Write comments for trivial code; aim for self-explanatory code.
-- Let functions become large and difficult to manage or test.
-- Allow repetition of code across the codebase.
+- DO NOT use broad try/except blocks without specific exception handling.
+  - use try/except as little as possible
+- DO NOT include unnecessary ifs or create complex structures.
+- DO NOT write comments for trivial code; aim for self-explanatory code.
+- DO NOT let functions become large and difficult to manage or test.
+- DO NOT allow repetition of code across the codebase.
