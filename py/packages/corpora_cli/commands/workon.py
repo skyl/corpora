@@ -23,8 +23,13 @@ def file(ctx: typer.Context, path: str):
 
     # show current file content on disk, load the content from the
     # CWD and print it with dim
-    with open(path, "r") as f:
-        current_file_content = f.read() if f else ""
+    try:
+        with open(path, "r") as f:
+            current_file_content = f.read() if f else ""
+    except FileNotFoundError:
+        current_file_content = ""
+        open(path, "w").close()  # create the file if it doesn't exist
+
     c.console.print("Current file content:", style="bold green")
     c.console.print(current_file_content, style="dim")
 
@@ -67,11 +72,6 @@ def file(ctx: typer.Context, path: str):
         with open(f".corpora/{ext}/DIRECTIONS.md", "r") as f:
             directions = f.read() if f else ""
 
-        # c.console.print(voice, style="dim")
-        # c.console.print(purpose, style="dim")
-        # c.console.print(structure, style="dim")
-        # c.console.print(directions, style="dim")
-
         revision = c.workon_api.file(
             CorpusFileChatSchema(
                 messages=messages,
@@ -85,14 +85,16 @@ def file(ctx: typer.Context, path: str):
         )
         c.console.print(f"{revision}", style="dim")
         c.console.print(f"{path}", style="dim magenta")
+        messages.append(MessageSchema(role="assistant", text=revision))
 
         if typer.confirm("Write file?"):
             with open(path, "w") as f:
                 f.write(revision)
             c.console.print("File written!", style="green")
-            break
+            continue
         else:
             c.console.print(
-                "You chose not to write the file. Refine your messages.",
+                "You chose not to write the file. Give more input to revise.",
                 style="magenta",
             )
+            continue

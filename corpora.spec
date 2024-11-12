@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['py/packages/corpora_cli/main.py'],
+    ['/workspace/py/packages/corpora_cli/main.py'],
     pathex=[],
     binaries=[],
     datas=[],
