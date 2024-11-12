@@ -1,5 +1,4 @@
 from typing import List
-from requests import session
 import typer
 from prompt_toolkit.shortcuts import PromptSession
 
@@ -16,6 +15,15 @@ session = PromptSession()
 
 def extract_repo_path(url: str) -> str:
     return "/".join(url.rstrip("/").split("/")[-2:])
+
+
+def get_file_content_or_create(path: str) -> str:
+    try:
+        with open(path, "r") as f:
+            return f.read()
+    except FileNotFoundError:
+        with open(path, "w") as f:
+            return ""
 
 
 @app.command()
@@ -52,14 +60,10 @@ def issue(ctx: typer.Context):
         # Send the current messages to generate a draft issue
         c.console.print("Generating issue draft...", style="bold blue")
 
-        with open(".corpora/VOICE.md", "r") as f:
-            voice = f.read() if f else ""
-        with open(".corpora/PURPOSE.md", "r") as f:
-            purpose = f.read() if f else ""
-        with open(".corpora/STRUCTURE.md", "r") as f:
-            structure = f.read() if f else ""
-        with open(f".corpora/md/DIRECTIONS.md", "r") as f:
-            directions = f.read() if f else ""
+        voice = get_file_content_or_create(".corpora/VOICE.md")
+        purpose = get_file_content_or_create(".corpora/PURPOSE.md")
+        structure = get_file_content_or_create(".corpora/STRUCTURE.md")
+        directions = get_file_content_or_create(".corpora/md/DIRECTIONS.md")
 
         draft_issue = c.plan_api.get_issue(
             IssueRequestSchema(
@@ -148,14 +152,10 @@ def update_issue(ctx: typer.Context, issue_number: int):
         # Send the current messages to generate an updated issue draft
         c.console.print("Generating updated issue draft...", style="bold blue")
 
-        with open(".corpora/VOICE.md", "r") as f:
-            voice = f.read() if f else ""
-        with open(".corpora/PURPOSE.md", "r") as f:
-            purpose = f.read() if f else ""
-        with open(".corpora/STRUCTURE.md", "r") as f:
-            structure = f.read() if f else ""
-        with open(f".corpora/md/DIRECTIONS.md", "r") as f:
-            directions = f.read() if f else ""
+        voice = get_file_content_or_create(".corpora/VOICE.md")
+        purpose = get_file_content_or_create(".corpora/PURPOSE.md")
+        structure = get_file_content_or_create(".corpora/STRUCTURE.md")
+        directions = get_file_content_or_create(".corpora/md/DIRECTIONS.md")
 
         updated_issue = c.plan_api.get_issue(
             IssueRequestSchema(
