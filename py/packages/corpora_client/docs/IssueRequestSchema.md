@@ -7,6 +7,10 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **corpus_id** | **str** |  | 
 **messages** | [**List[MessageSchema]**](MessageSchema.md) |  | 
+**voice** | **str** |  | [optional] [default to '']
+**purpose** | **str** |  | [optional] [default to '']
+**structure** | **str** |  | [optional] [default to '']
+**directions** | **str** |  | [optional] [default to '']
 
 ## Example
 

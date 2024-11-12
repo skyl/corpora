@@ -41,7 +41,11 @@ class TestIssueRequestSchema(unittest.TestCase):
                     corpora_client.models.message_schema.MessageSchema(
                         role = '', 
                         text = '', )
-                    ]
+                    ],
+                voice = '',
+                purpose = '',
+                structure = '',
+                directions = ''
             )
         else:
             return IssueRequestSchema(

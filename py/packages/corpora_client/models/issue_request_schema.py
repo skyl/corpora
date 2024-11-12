@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, StrictStr
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from corpora_client.models.message_schema import MessageSchema
 from typing import Optional, Set
 from typing_extensions import Self
@@ -31,7 +31,18 @@ class IssueRequestSchema(BaseModel):
 
     corpus_id: StrictStr
     messages: List[MessageSchema]
-    __properties: ClassVar[List[str]] = ["corpus_id", "messages"]
+    voice: Optional[StrictStr] = ""
+    purpose: Optional[StrictStr] = ""
+    structure: Optional[StrictStr] = ""
+    directions: Optional[StrictStr] = ""
+    __properties: ClassVar[List[str]] = [
+        "corpus_id",
+        "messages",
+        "voice",
+        "purpose",
+        "structure",
+        "directions",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -95,6 +106,14 @@ class IssueRequestSchema(BaseModel):
                     [MessageSchema.from_dict(_item) for _item in obj["messages"]]
                     if obj.get("messages") is not None
                     else None
+                ),
+                "voice": obj.get("voice") if obj.get("voice") is not None else "",
+                "purpose": obj.get("purpose") if obj.get("purpose") is not None else "",
+                "structure": (
+                    obj.get("structure") if obj.get("structure") is not None else ""
+                ),
+                "directions": (
+                    obj.get("directions") if obj.get("directions") is not None else ""
                 ),
             }
         )

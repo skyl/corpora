@@ -50,12 +50,29 @@ def issue(ctx: typer.Context):
         messages.append(MessageSchema(role="user", text=user_input.strip()))
 
         # Send the current messages to generate a draft issue
-        c.console.print("\nGenerating issue draft...", style="bold blue")
+        c.console.print("Generating issue draft...", style="bold blue")
+
+        with open(".corpora/VOICE.md", "r") as f:
+            voice = f.read() if f else ""
+        with open(".corpora/PURPOSE.md", "r") as f:
+            purpose = f.read() if f else ""
+        with open(".corpora/STRUCTURE.md", "r") as f:
+            structure = f.read() if f else ""
+        with open(f".corpora/md/DIRECTIONS.md", "r") as f:
+            directions = f.read() if f else ""
+
         draft_issue = c.plan_api.get_issue(
-            IssueRequestSchema(messages=messages, corpus_id=c.config["id"])
+            IssueRequestSchema(
+                messages=messages,
+                corpus_id=c.config["id"],
+                voice=voice,
+                purpose=purpose,
+                structure=structure,
+                directions=directions,
+            )
         )
         # Display the generated draft issue
-        c.console.print(f"\nDraft Issue:", style="bold green")
+        c.console.print(f"Draft Issue:", style="bold green")
         c.console.print(f"Title: {draft_issue.title}", style="magenta")
         c.console.print(f"Body:\n{draft_issue.body}", style="dim")
 
@@ -69,12 +86,12 @@ def issue(ctx: typer.Context):
                 draft_issue.title,
                 draft_issue.body,
             )
-            c.console.print("\nIssue posted!", style="green")
+            c.console.print("Issue posted!", style="green")
             c.console.print(f"URL: {resp.url}", style="magenta")
             return
         else:
             c.console.print(
-                "\nYou chose not to post the issue. Refine your messages or add new ones.",
+                "You chose not to post the issue. Refine your messages or add new ones.",
                 style="yellow",
             )
             messages.append(
