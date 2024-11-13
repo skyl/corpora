@@ -49,6 +49,10 @@ services:
   celery:
     build:
       context: .
+      # TODO: Use the built version since it's the same Dockerfile?
+      # But it does need all of the stuff. Maybe we can make docker
+      # cache the previous build for the devcontainer?
+      # Right now it does the expensive apt and pip stuff twice.
       dockerfile: .devcontainer/Dockerfile
     command: celery -A corpora_proj.celery_app.app worker --loglevel=info
     volumes:
