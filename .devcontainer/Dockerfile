@@ -18,6 +18,7 @@ RUN pip install --no-cache-dir -r /workspace/requirements.txt
 
 RUN npm install -g @openapitools/openapi-generator-cli && sudo openapi-generator-cli version
 
+RUN chsh -s /bin/zsh vscode
 USER vscode
 RUN sudo chown -R vscode:vscode /workspace
 
