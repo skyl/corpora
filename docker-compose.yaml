@@ -5,7 +5,9 @@ services:
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - .:/workspace
-      - ${HOME}/.gitconfig:/home/vscode/.gitconfig
+      # Let people set up their own git in the devcontainer?
+      # This make the same helpers and so forth
+      # - ${HOME}/.gitconfig:/home/vscode/.gitconfig
     environment:
       PYTHONPATH: "/workspace/py/packages"
       REDIS_URL: "redis://redis:6379/0"

@@ -26,7 +26,6 @@ services:
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - .:/workspace
-      - ${HOME}/.gitconfig:/home/vscode/.gitconfig
     environment:
       PYTHONPATH: "/workspace/py/packages"
       REDIS_URL: "redis://redis:6379/0"
