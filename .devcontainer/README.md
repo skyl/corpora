@@ -52,10 +52,10 @@ This DevContainer setup provides a ready-to-use development environment with Doc
      cd py/packages/corpora_proj
      ./manage.py createsuperuser
      ```
-   - Open your browser and go to `localhost:8000/admin/`.
+   - Open your browser and go to `localhost:8877/admin/`.
      - Log in with your superuser account.
      - Create an OAuth application:
-       - URL: `http://127.0.0.1:8000/admin/oauth2_provider/application/add/`
+       - URL: `http://127.0.0.1:8877/admin/oauth2_provider/application/add/`
        - Choose `Confidential` and `Client credentials`.
        - Update `.env` file with `CORPORA_CLIENT_ID` and `CORPORA_CLIENT_SECRET`.
 
@@ -74,7 +74,7 @@ corpora plan issue
 ```
 
 ## Ports
-- **App:** 8000
+- **App:** 8877
 - **Database:** 5432
 
 ## Notes

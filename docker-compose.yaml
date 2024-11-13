@@ -16,14 +16,14 @@ services:
       CORPORA_CLIENT_ID: "${CORPORA_CLIENT_ID}"
       CORPORA_CLIENT_SECRET: "${CORPORA_CLIENT_SECRET}"
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8877
     working_dir: /workspace/py/packages/corpora_proj
     depends_on:
       - db
       - redis
       - celery
     ports:
-      - "8000:8000"
+      - "8877:8877"
 
   db:
     build:

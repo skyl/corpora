@@ -3,7 +3,7 @@ name: "skyl/corpora"
 url: "https://github.com/skyl/corpora"
 
 server:
-  base_url: "http://localhost:8000"
+  base_url: "http://localhost:8877"
 
 auth:
   # TODO: support 3-legged OAuth for user authentication wit browser

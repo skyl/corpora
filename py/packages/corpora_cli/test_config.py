@@ -12,7 +12,7 @@ def yaml_content():
     """Sample YAML content for testing."""
     return """
     server:
-      base_url: "http://localhost:8000"
+      base_url: "http://localhost:8877"
     auth:
       client_id: "${CORPORA_CLIENT_ID}"
       client_secret: "${CORPORA_CLIENT_SECRET}"
@@ -44,7 +44,7 @@ def test_load_config_success(mock_yaml_load, mock_file_open, yaml_content, mocke
     """Test load_config with successful loading and env substitution."""
     # Set up mock for yaml.safe_load to return the parsed YAML structure
     mock_yaml_load.return_value = {
-        "server": {"base_url": "http://localhost:8000"},
+        "server": {"base_url": "http://localhost:8877"},
         "auth": {
             "client_id": "${CORPORA_CLIENT_ID}",
             "client_secret": "${CORPORA_CLIENT_SECRET}",
@@ -60,7 +60,7 @@ def test_load_config_success(mock_yaml_load, mock_file_open, yaml_content, mocke
     assert config["auth"]["client_id"] == "test_client_id"
     assert config["auth"]["client_secret"] == "test_client_secret"
     assert config["auth"]["optional_auth"] == "optional_auth_value"
-    assert config["server"]["base_url"] == "http://localhost:8000"
+    assert config["server"]["base_url"] == "http://localhost:8877"
 
 
 @patch("builtins.open", new_callable=mock_open)
@@ -104,7 +104,7 @@ def test_substitute_env_variables(mocked_env):
             "client_secret": "${CORPORA_CLIENT_SECRET}",
             "nonexistent_var": "${NON_EXISTENT_VAR}",
         },
-        "server": {"base_url": "http://localhost:8000"},
+        "server": {"base_url": "http://localhost:8877"},
     }
     substituted_config = substitute_env_variables(config)
 
@@ -113,4 +113,4 @@ def test_substitute_env_variables(mocked_env):
     assert (
         substituted_config["auth"]["nonexistent_var"] == ""
     )  # Non-existent vars default to ""
-    assert substituted_config["server"]["base_url"] == "http://localhost:8000"
+    assert substituted_config["server"]["base_url"] == "http://localhost:8877"
