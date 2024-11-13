@@ -7,15 +7,15 @@ from django.views import View
 class BuildBinaryView(View):
     def get(self, request, *args, **kwargs):
         try:
-            root_dir = "/workspace"
-            cli_main = "/workspace/py/packages/corpora_cli/main.py"
-            output_path = "/workspace/dist/corpora"
+            # root_dir = "/workspace"
+            # cli_main = "/workspace/py/packages/corpora_cli/main.py"
+            output_path = "/workspace/dist/corpora_static"
 
-            subprocess.run(
-                ["pyinstaller", "--onefile", cli_main, "--name", "corpora"],
-                check=True,
-                cwd=root_dir,
-            )
+            # subprocess.run(
+            #     ["pyinstaller", "--onefile", cli_main, "--name", "corpora"],
+            #     check=True,
+            #     cwd=root_dir,
+            # )
 
             with open(output_path, "rb") as binary_file:
                 response = HttpResponse(

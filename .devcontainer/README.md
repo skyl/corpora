@@ -50,6 +50,7 @@ This DevContainer setup provides a ready-to-use development environment with Doc
 
      ```bash
      cd py/packages/corpora_proj
+     ./manage.py migrate
      ./manage.py createsuperuser
      ```
    - Open your browser and go to `localhost:8877/admin/`.
