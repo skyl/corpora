@@ -16,11 +16,11 @@ COPY py/packages/corpora_client/test-requirements.txt /workspace/packages/corpor
 COPY py/packages/corpora_ai_openai/requirements.txt /workspace/packages/corpora_ai_openai/requirements.txt
 RUN pip install --no-cache-dir -r /workspace/requirements.txt
 
-# Set zsh as the default shell for the vscode user
-RUN chsh -s /bin/zsh vscode
+RUN npm install -g @openapitools/openapi-generator-cli && sudo openapi-generator-cli version
 
+RUN chsh -s /bin/zsh vscode
 USER vscode
-RUN sudo npm install -g @openapitools/openapi-generator-cli && sudo openapi-generator-cli version
+RUN sudo chown -R vscode:vscode /workspace
 
 # Keep container running with sleep
 CMD ["sleep", "infinity"]

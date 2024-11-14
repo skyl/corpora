@@ -23,7 +23,10 @@ SECRET_KEY = os.environ.get(
 )
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "host.docker.internal",
+    "127.0.0.1",
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",

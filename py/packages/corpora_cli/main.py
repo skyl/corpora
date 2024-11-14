@@ -42,7 +42,7 @@ def get_api_clients(
     client_config = corpora_client.Configuration()
     # TODO: deploy and default to the main production server?
     client_config.host = config.get("server", {}).get(
-        "base_url", "http://localhost:8000"
+        "base_url", "http://localhost:8877"
     )
     client_config.access_token = auth_token
     return (

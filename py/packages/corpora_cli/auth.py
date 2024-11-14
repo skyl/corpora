@@ -15,7 +15,7 @@ class AuthResolver:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.token_url = config.get("auth", {}).get(
-            "token_url", "http://localhost:8000/o/token/"
+            "token_url", "http://localhost:8877/o/token/"
         )
 
     def resolve_auth(self) -> str:

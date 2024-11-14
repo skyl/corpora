@@ -26,7 +26,6 @@ services:
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - .:/workspace
-      - ${HOME}/.gitconfig:/home/vscode/.gitconfig
     environment:
       PYTHONPATH: "/workspace/py/packages"
       REDIS_URL: "redis://redis:6379/0"
@@ -35,7 +34,7 @@ services:
       - redis
       - celery
     ports:
-      - "8000:8000"
+      - "8877:8877"
 
   db:
     build:
@@ -83,7 +82,7 @@ volumes:
 1. **app (Django Application Service)**
    The `app` service builds the Django application defined in `corpora_proj`. It has dependencies on `db`, `redis`, and `celery`, ensuring that all supporting services are available before startup.
    - **Environment**: Sets the `PYTHONPATH` to recognize packages and defines `REDIS_URL` to connect with Redis.
-   - **Ports**: Exposes port `8000` for accessing the Django app locally.
+   - **Ports**: Exposes port `8877` for accessing the Django app locally.
 
 2. **db (PostgreSQL with pgvector)**
    The database service uses a Dockerfile specifically set up for pgvector (`docker/Dockerfile.pgvector`). PostgreSQL settings are defined to create a persistent `postgres-data` volume.

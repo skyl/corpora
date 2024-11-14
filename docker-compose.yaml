@@ -5,7 +5,9 @@ services:
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - .:/workspace
-      - ${HOME}/.gitconfig:/home/vscode/.gitconfig
+      # Let people set up their own git in the devcontainer?
+      # This make the same helpers and so forth
+      # - ${HOME}/.gitconfig:/home/vscode/.gitconfig
     environment:
       PYTHONPATH: "/workspace/py/packages"
       REDIS_URL: "redis://redis:6379/0"
@@ -14,14 +16,14 @@ services:
       CORPORA_CLIENT_ID: "${CORPORA_CLIENT_ID}"
       CORPORA_CLIENT_SECRET: "${CORPORA_CLIENT_SECRET}"
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8877
     working_dir: /workspace/py/packages/corpora_proj
     depends_on:
       - db
       - redis
       - celery
     ports:
-      - "8000:8000"
+      - "8877:8877"
 
   db:
     build:
@@ -49,6 +51,10 @@ services:
   celery:
     build:
       context: .
+      # TODO: Use the built version since it's the same Dockerfile?
+      # But it does need all of the stuff. Maybe we can make docker
+      # cache the previous build for the devcontainer?
+      # Right now it does the expensive apt and pip stuff twice.
       dockerfile: .devcontainer/Dockerfile
     command: celery -A corpora_proj.celery_app.app worker --loglevel=info
     volumes:
