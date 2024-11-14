@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import typer
 from pprint import pformat
@@ -40,9 +41,13 @@ def init(ctx: typer.Context):
         )
         c.console.print(f"{res.name} created!", style="green")
 
-        # Save the returned corpus_id in the config
-        config["id"] = res.id
-        save_config(config)
+        # Ensure the directory exists
+        os.makedirs(".corpora", exist_ok=True)
+
+        # Save the returned corpus_id in .corpora/id
+        with open(".corpora/.id", "w") as f:
+            f.write(res.id)
+
         c.console.print(f"Corpus ID saved to {CONFIG_FILE_PATH}", style="blue")
 
     except ApiException as e:

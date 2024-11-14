@@ -1,3 +1,4 @@
+from genericpath import exists
 import os
 import re
 import yaml
@@ -7,9 +8,11 @@ from typing import Any, Dict
 from corpora_cli.utils.git import get_git_remote_url, get_git_repo_name
 
 CONFIG_FILE_PATH = ".corpora.yaml"
+ID_FILE_PATH = ".corpora/.id"
 ENV_VAR_PATTERN = re.compile(r"\$\{(\w+)\}")  # Matches ${VAR_NAME}
 
 
+# TODO: type the config
 def load_config() -> Dict[str, Any]:
     """
     Load and parse the .corpora.yaml configuration file, substituting
@@ -20,6 +23,9 @@ def load_config() -> Dict[str, Any]:
         # Load YAML config
         with open(CONFIG_FILE_PATH, "r") as file:
             config = yaml.safe_load(file)
+        if exists(ID_FILE_PATH):
+            with open(ID_FILE_PATH, "r") as file:
+                config["id"] = file.read().strip()
     except FileNotFoundError:
         # If config file doesn't exist, fall back to Git
         typer.echo(
@@ -39,8 +45,9 @@ def load_config() -> Dict[str, Any]:
             "url": remote_url,
         }
 
-    # Substitute environment variables
-    config = substitute_env_variables(config)
+    # don't need?
+    # # Substitute environment variables
+    # config = substitute_env_variables(config)
 
     return config
 
