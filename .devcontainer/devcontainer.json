@@ -14,7 +14,8 @@
                     "--config",
                     "/workspace/py/pyproject.toml"
                 ],
-                // meh, you might need to uninstall autopep8 manually
+                // TODO: you have to uninstall autopep8 in devcontainer
+                // because of Microsoft defaults.
                 // ... if the editor is formatting wrongly
                 // then uninstall autopep8 extension.
                 // some day Microsoft will fix this?

@@ -1,8 +1,9 @@
+import os
 from pathlib import Path
 import typer
 from pprint import pformat
 
-from corpora_cli.config import CONFIG_FILE_PATH, save_config
+from corpora_cli.config import CONFIG_FILE_PATH, ID_FILE_PATH, save_config
 from corpora_cli.constants import CORPUS_EXISTS_MESSAGE
 from corpora_cli.context import ContextObject
 from corpora_cli.utils.collectors import get_best_collector
@@ -40,12 +41,17 @@ def init(ctx: typer.Context):
         )
         c.console.print(f"{res.name} created!", style="green")
 
-        # Save the returned corpus_id in the config
-        config["id"] = res.id
-        save_config(config)
-        c.console.print(f"Corpus ID saved to {CONFIG_FILE_PATH}", style="blue")
+        # Ensure the directory exists
+        os.makedirs(".corpora", exist_ok=True)
+
+        # Save the returned corpus_id in .corpora/id
+        with open(ID_FILE_PATH, "w") as f:
+            f.write(res.id)
+
+        c.console.print(f"Corpus ID saved to {ID_FILE_PATH}", style="blue")
 
     except ApiException as e:
+        c.console.print(f"{e}", style="red")
         if e.status == 409:
             c.console.print(CORPUS_EXISTS_MESSAGE, style="red")
             exit(1)
