@@ -46,8 +46,8 @@ def load_config() -> Dict[str, Any]:
         }
 
     # don't need?
-    # # Substitute environment variables
-    # config = substitute_env_variables(config)
+    # Substitute environment variables
+    config = substitute_env_variables(config)
 
     return config
 

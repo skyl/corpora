@@ -61,7 +61,7 @@ def test_init_command(
     assert "Collected 2 files." in output
     assert "Uploading corpus tarball to server..." in output
     assert "test_repo created!" in output
-    assert "Corpus ID saved to .corpora.yaml" in output
+    assert "Corpus ID saved to .corpora/.id" in output
 
     # Verify create_corpus was called with correct parameters
     mock_context_instance.corpus_api.create_corpus.assert_called_once_with(
@@ -71,12 +71,11 @@ def test_init_command(
     )
 
     # Verify config file was saved twice with the correct data
-    assert mock_save_config.call_count == 2
+    assert mock_save_config.call_count == 1
     mock_save_config.assert_any_call(
         {
             "name": "test_repo",
             "url": "https://github.com/test/repo",
-            "id": "12345",
         }
     )
 
