@@ -46,6 +46,7 @@ def init(ctx: typer.Context):
         c.console.print(f"Corpus ID saved to {CONFIG_FILE_PATH}", style="blue")
 
     except ApiException as e:
+        c.console.print(f"{e}", style="red")
         if e.status == 409:
             c.console.print(CORPUS_EXISTS_MESSAGE, style="red")
             exit(1)
