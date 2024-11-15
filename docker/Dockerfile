@@ -4,18 +4,18 @@ FROM mcr.microsoft.com/devcontainers/python:3.12
 # Install necessary system tools and dependencies
 RUN apt-get update && \
     apt-get install -y \
-        postgresql-client \
-        zsh \
-        wget \
-        npm \
-        openjdk-17-jre \
-        redis-tools \
-        docker-compose \
-        build-essential \
-        git \
-        libffi-dev \
-        python3-dev \
-        && rm -rf /var/lib/apt/lists/*
+    postgresql-client \
+    zsh \
+    wget \
+    npm \
+    openjdk-17-jre \
+    redis-tools \
+    docker-compose \
+    build-essential \
+    git \
+    libffi-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # TODO: for dev this could probably be in setup.sh
 # For production, we can probably simplify to one freezed requirements.txt?
