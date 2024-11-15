@@ -4,18 +4,18 @@ FROM mcr.microsoft.com/devcontainers/python:3.12
 # Install necessary system tools and dependencies
 RUN apt-get update && \
     apt-get install -y \
-        postgresql-client \
-        zsh \
-        wget \
-        npm \
-        openjdk-17-jre \
-        redis-tools \
-        docker-compose \
-        build-essential \
-        git \
-        libffi-dev \
-        python3-dev \
-        && rm -rf /var/lib/apt/lists/*
+    postgresql-client \
+    zsh \
+    wget \
+    npm \
+    openjdk-17-jre \
+    redis-tools \
+    docker-compose \
+    build-essential \
+    git \
+    libffi-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set up the workspace and install Python dependencies
 WORKDIR /workspace
@@ -29,4 +29,6 @@ COPY py/packages/corpora_client/test-requirements.txt /workspace/packages/corpor
 COPY py/packages/corpora_ai_openai/requirements.txt /workspace/packages/corpora_ai_openai/requirements.txt
 RUN pip install --no-cache-dir -r /workspace/requirements.txt
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8877"]
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8877"]
+# CMD ["celery", "-A", "corpora_proj.celery_app.app", "worker", "--loglevel=info"]
+CMD ["sleep", "infinity"]

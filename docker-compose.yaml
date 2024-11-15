@@ -24,7 +24,7 @@ services:
   celery:
     build:
       context: .
-      dockerfile: docker/Dockerfile.celery  # A lightweight Dockerfile for celery
+      dockerfile: docker/Dockerfile.app
     command: celery -A corpora_proj.celery_app.app worker --loglevel=info
     volumes:
       - .:/workspace
@@ -62,7 +62,7 @@ services:
   interactive:
     build:
       context: .
-      dockerfile: docker/Dockerfile  # Full musl/nuitka-enhanced Dockerfile
+      dockerfile: docker/Dockerfile
     volumes:
       - .:/workspace
     environment:
