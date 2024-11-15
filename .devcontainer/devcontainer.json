@@ -30,7 +30,9 @@
                 "ms-python.python",
                 "ms-python.black-formatter",
                 "ms-azuretools.vscode-docker",
-                "tamasfe.even-better-toml"
+                "tamasfe.even-better-toml",
+                "GitHub.copilot",
+                "GitHub.copilot-chat"
             ]
         }
     },
