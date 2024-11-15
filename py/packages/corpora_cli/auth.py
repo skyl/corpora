@@ -1,5 +1,6 @@
 import os
 import base64
+from openai import base_url
 import requests
 import typer
 from typing import Optional, Dict, Any
@@ -14,9 +15,8 @@ class AuthError(Exception):
 class AuthResolver:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.token_url = config.get("auth", {}).get(
-            "token_url", "http://localhost:8877/o/token/"
-        )
+        base_url = config.get("base_url", "http://app:8877")
+        self.token_url = f"{base_url}/o/token/"
 
     def resolve_auth(self) -> str:
         """
@@ -101,6 +101,7 @@ class AuthResolver:
         }
         data = {"grant_type": "client_credentials"}
 
-        response = requests.post(self.token_url, headers=headers, data=data, timeout=10)
+        response = requests.post(
+            self.token_url, headers=headers, data=data, timeout=10)
         response.raise_for_status()
         return response.json().get("access_token")
