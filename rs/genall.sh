@@ -37,3 +37,4 @@ cargo build
 cargo test
 
 echo "Rust client generation complete!"
+cargo run
