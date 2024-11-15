@@ -36,7 +36,7 @@ pub enum GetFileByPathError {
 }
 
 /// Create a new File within a Corpus.
-pub async fn create_file(
+pub fn create_file(
     configuration: &configuration::Configuration,
     file_schema: models::FileSchema,
 ) -> Result<models::FileResponseSchema, Error<CreateFileError>> {
@@ -58,10 +58,10 @@ pub async fn create_file(
     local_var_req_builder = local_var_req_builder.json(&file_schema);
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -78,7 +78,7 @@ pub async fn create_file(
 }
 
 /// Retrieve a File by ID.
-pub async fn get_file(
+pub fn get_file(
     configuration: &configuration::Configuration,
     file_id: &str,
 ) -> Result<models::FileResponseSchema, Error<GetFileError>> {
@@ -103,10 +103,10 @@ pub async fn get_file(
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -122,7 +122,7 @@ pub async fn get_file(
 }
 
 /// Retrieve a File by path within a Corpus.
-pub async fn get_file_by_path(
+pub fn get_file_by_path(
     configuration: &configuration::Configuration,
     corpus_id: &str,
     path: &str,
@@ -149,10 +149,10 @@ pub async fn get_file_by_path(
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)

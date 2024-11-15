@@ -35,7 +35,7 @@ pub enum VectorSearchError {
 }
 
 /// Retrieve a Split by ID.
-pub async fn get_split(
+pub fn get_split(
     configuration: &configuration::Configuration,
     split_id: &str,
 ) -> Result<models::SplitResponseSchema, Error<GetSplitError>> {
@@ -60,10 +60,10 @@ pub async fn get_split(
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -79,7 +79,7 @@ pub async fn get_split(
 }
 
 /// List all Splits for a specific CorpusTextFile.
-pub async fn list_splits_for_file(
+pub fn list_splits_for_file(
     configuration: &configuration::Configuration,
     file_id: &str,
 ) -> Result<Vec<models::SplitResponseSchema>, Error<ListSplitsForFileError>> {
@@ -104,10 +104,10 @@ pub async fn list_splits_for_file(
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -124,7 +124,7 @@ pub async fn list_splits_for_file(
 }
 
 /// Perform a vector similarity search for splits using a provided query vector.
-pub async fn vector_search(
+pub fn vector_search(
     configuration: &configuration::Configuration,
     split_vector_search_schema: models::SplitVectorSearchSchema,
 ) -> Result<Vec<models::SplitResponseSchema>, Error<VectorSearchError>> {
@@ -149,10 +149,10 @@ pub async fn vector_search(
     local_var_req_builder = local_var_req_builder.json(&split_vector_search_schema);
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)

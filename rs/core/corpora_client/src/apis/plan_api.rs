@@ -20,7 +20,7 @@ pub enum GetIssueError {
     UnknownValue(serde_json::Value),
 }
 
-pub async fn get_issue(
+pub fn get_issue(
     configuration: &configuration::Configuration,
     issue_request_schema: models::IssueRequestSchema,
 ) -> Result<models::IssueSchema, Error<GetIssueError>> {
@@ -45,10 +45,10 @@ pub async fn get_issue(
     local_var_req_builder = local_var_req_builder.json(&issue_request_schema);
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)

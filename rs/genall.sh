@@ -11,13 +11,13 @@ rm -rf "$TEMP_DIR"
 mkdir -p "$TEMP_DIR"
 curl -o "$TEMP_DIR/openapi.json" "$SPEC_URL"
 
+# supportAsync=false is a workaround for file upload issues
 echo "Step 2: Generating Rust client library..."
 npx @openapitools/openapi-generator-cli generate \
     -i "$TEMP_DIR/openapi.json" \
     -g rust \
     -o "$TEMP_DIR/corpora_client" \
     --template-dir "templates" \
-    # supportAsync=false is a workaround for file upload issues
     --additional-properties=packageName=corpora_client,library=reqwest,supportAsync=false
 
 echo "Step 3: Moving generated code to $OUTPUT_DIR..."

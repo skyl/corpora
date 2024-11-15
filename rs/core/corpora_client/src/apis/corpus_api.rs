@@ -60,7 +60,7 @@ pub enum UpdateFilesError {
 }
 
 /// Create a new Corpus with an uploaded tarball.
-pub async fn create_corpus(
+pub fn create_corpus(
     configuration: &configuration::Configuration,
     name: &str,
     tarball: std::path::PathBuf,
@@ -81,19 +81,19 @@ pub async fn create_corpus(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    let mut local_var_form = reqwest::multipart::Form::new();
+    let mut local_var_form = reqwest::blocking::multipart::Form::new();
     local_var_form = local_var_form.text("name", name.to_string());
     if let Some(local_var_param_value) = url {
         local_var_form = local_var_form.text("url", local_var_param_value.to_string());
     }
-    // TODO: support file upload for 'tarball' parameter
+    local_var_form = local_var_form.file("tarball", tarball)?;
     local_var_req_builder = local_var_req_builder.multipart(local_var_form);
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -110,7 +110,7 @@ pub async fn create_corpus(
 }
 
 /// Delete a Corpus by name.
-pub async fn delete_corpus(
+pub fn delete_corpus(
     configuration: &configuration::Configuration,
     corpus_name: &str,
 ) -> Result<String, Error<DeleteCorpusError>> {
@@ -133,10 +133,10 @@ pub async fn delete_corpus(
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -153,7 +153,7 @@ pub async fn delete_corpus(
 }
 
 /// Retrieve a Corpus by ID.
-pub async fn get_corpus(
+pub fn get_corpus(
     configuration: &configuration::Configuration,
     corpus_id: &str,
 ) -> Result<models::CorpusResponseSchema, Error<GetCorpusError>> {
@@ -178,10 +178,10 @@ pub async fn get_corpus(
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -198,7 +198,7 @@ pub async fn get_corpus(
 }
 
 /// Retrieve a map of file paths to their hashes for a Corpus.
-pub async fn get_file_hashes(
+pub fn get_file_hashes(
     configuration: &configuration::Configuration,
     corpus_id: &str,
 ) -> Result<std::collections::HashMap<String, String>, Error<GetFileHashesError>> {
@@ -223,10 +223,10 @@ pub async fn get_file_hashes(
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -243,7 +243,7 @@ pub async fn get_file_hashes(
 }
 
 /// List all Corpora.
-pub async fn list_corpora(
+pub fn list_corpora(
     configuration: &configuration::Configuration,
 ) -> Result<Vec<models::CorpusResponseSchema>, Error<ListCorporaError>> {
     let local_var_configuration = configuration;
@@ -263,10 +263,10 @@ pub async fn list_corpora(
     };
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
@@ -283,7 +283,7 @@ pub async fn list_corpora(
 }
 
 /// Update a Corpus with an uploaded tarball for additions/updates and a list of files to delete
-pub async fn update_files(
+pub fn update_files(
     configuration: &configuration::Configuration,
     corpus_id: &str,
     tarball: std::path::PathBuf,
@@ -308,7 +308,7 @@ pub async fn update_files(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    let mut local_var_form = reqwest::multipart::Form::new();
+    let mut local_var_form = reqwest::blocking::multipart::Form::new();
     if let Some(local_var_param_value) = delete_files {
         local_var_form = local_var_form.text(
             "delete_files",
@@ -320,14 +320,14 @@ pub async fn update_files(
                 .to_string(),
         );
     }
-    // TODO: support file upload for 'tarball' parameter
+    local_var_form = local_var_form.file("tarball", tarball)?;
     local_var_req_builder = local_var_req_builder.multipart(local_var_form);
 
     let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
+    let local_var_resp = local_var_client.execute(local_var_req)?;
 
     let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
+    let local_var_content = local_var_resp.text()?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
