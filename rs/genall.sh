@@ -16,7 +16,8 @@ npx @openapitools/openapi-generator-cli generate \
     -i "$TEMP_DIR/openapi.json" \
     -g rust \
     -o "$TEMP_DIR" \
-    --additional-properties=packageName=corpora_client,library=hyper
+    --template-dir "templates" \
+    --additional-properties=packageName=corpora_client,library=reqwest
 
 echo "Step 3: Moving generated code to $OUTPUT_DIR..."
 rm -rf "$OUTPUT_DIR/src" "$OUTPUT_DIR/Cargo.toml"
