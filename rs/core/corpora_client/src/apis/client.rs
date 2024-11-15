@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
+use super::configuration::Configuration;
 use hyper;
 use hyper_util::client::legacy::connect::Connect;
-use super::configuration::Configuration;
 
 pub struct APIClient {
     corpus_api: Box<dyn crate::apis::CorpusApi>,
@@ -14,7 +14,9 @@ pub struct APIClient {
 
 impl APIClient {
     pub fn new<C: Connect>(configuration: Configuration<C>) -> APIClient
-        where C: Clone + std::marker::Send + Sync + 'static {
+    where
+        C: Clone + std::marker::Send + Sync + 'static,
+    {
         let rc = Arc::new(configuration);
 
         APIClient {
@@ -26,24 +28,23 @@ impl APIClient {
         }
     }
 
-    pub fn corpus_api(&self) -> &dyn crate::apis::CorpusApi{
+    pub fn corpus_api(&self) -> &dyn crate::apis::CorpusApi {
         self.corpus_api.as_ref()
     }
 
-    pub fn file_api(&self) -> &dyn crate::apis::FileApi{
+    pub fn file_api(&self) -> &dyn crate::apis::FileApi {
         self.file_api.as_ref()
     }
 
-    pub fn plan_api(&self) -> &dyn crate::apis::PlanApi{
+    pub fn plan_api(&self) -> &dyn crate::apis::PlanApi {
         self.plan_api.as_ref()
     }
 
-    pub fn split_api(&self) -> &dyn crate::apis::SplitApi{
+    pub fn split_api(&self) -> &dyn crate::apis::SplitApi {
         self.split_api.as_ref()
     }
 
-    pub fn workon_api(&self) -> &dyn crate::apis::WorkonApi{
+    pub fn workon_api(&self) -> &dyn crate::apis::WorkonApi {
         self.workon_api.as_ref()
     }
-
 }

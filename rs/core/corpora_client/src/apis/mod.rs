@@ -25,9 +25,9 @@ pub struct ApiError {
 impl Debug for ApiError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("ApiError")
-         .field("code", &self.code)
-         .field("body", &"hyper::body::Incoming")
-         .finish()
+            .field("code", &self.code)
+            .field("body", &"hyper::body::Incoming")
+            .finish()
     }
 }
 
@@ -67,15 +67,15 @@ impl From<serde_json::Error> for Error {
 mod request;
 
 mod corpus_api;
-pub use self::corpus_api::{ CorpusApi, CorpusApiClient };
+pub use self::corpus_api::{CorpusApi, CorpusApiClient};
 mod file_api;
-pub use self::file_api::{ FileApi, FileApiClient };
+pub use self::file_api::{FileApi, FileApiClient};
 mod plan_api;
-pub use self::plan_api::{ PlanApi, PlanApiClient };
+pub use self::plan_api::{PlanApi, PlanApiClient};
 mod split_api;
-pub use self::split_api::{ SplitApi, SplitApiClient };
+pub use self::split_api::{SplitApi, SplitApiClient};
 mod workon_api;
-pub use self::workon_api::{ WorkonApi, WorkonApiClient };
+pub use self::workon_api::{WorkonApi, WorkonApiClient};
 
-pub mod configuration;
 pub mod client;
+pub mod configuration;
