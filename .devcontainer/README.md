@@ -57,7 +57,8 @@ This DevContainer setup provides a ready-to-use development environment with Doc
      - Log in with your superuser account.
      - Create an OAuth application:
        - URL: `http://127.0.0.1:8877/admin/oauth2_provider/application/add/`
-       - Choose `Confidential` and `Client credentials`.
+       - Choose `Confidential` and `Client credentials`
+       - Add your superuser as the owner of the application
        - Update `.env` file with `CORPORA_CLIENT_ID` and `CORPORA_CLIENT_SECRET`.
 
 7. **Rebuild DevContainer:**

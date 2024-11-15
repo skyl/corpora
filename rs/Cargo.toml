@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "core/corpora_cli",
+    # "core/corpora_client",
+]
+resolver = "2"
