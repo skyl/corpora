@@ -88,8 +88,7 @@ def sync(ctx: typer.Context):
 
     # Fetch remote files and their hashes
     remote_files = c.corpus_api.get_file_hashes(corpus_id)
-    remote_files_map = {Path(path): hash for path,
-                        hash in remote_files.items()}
+    remote_files_map = {Path(path): hash for path, hash in remote_files.items()}
     # c.console.print("Remote files:")
     # c.console.print(pformat(remote_files_map, width=80))
 
@@ -109,8 +108,7 @@ def sync(ctx: typer.Context):
     c.console.print(pformat(files_to_delete, width=80))
 
     if not files_to_update and not files_to_delete:
-        c.console.print(
-            "No changes detected. Everything is up-to-date!", style="green")
+        c.console.print("No changes detected. Everything is up-to-date!", style="green")
         return
 
     # Create tarball for files to update/add
@@ -214,8 +212,7 @@ def print(ctx: typer.Context):
     # Panel
     from rich.panel import Panel
 
-    panel = Panel("This is inside a panel.",
-                  title="Panel Title", border_style="blue")
+    panel = Panel("This is inside a panel.", title="Panel Title", border_style="blue")
     c.console.print(panel)
 
     # Exceptions
