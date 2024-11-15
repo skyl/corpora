@@ -23,15 +23,20 @@ jobs:
           cache: true
 
       - name: Build the workspace
+        working-directory: rs
+
         run: cargo build --workspace --all-targets
 
       - name: Format check
+        working-directory: rs
         run: cargo fmt -- --check
 
       - name: Lint the code
+        working-directory: rs
         run: cargo clippy --workspace --all-targets -- -D warnings
 
       - name: Run tests
+        working-directory: rs
         run: cargo test --workspace
 
       # - name: Cache Cargo
