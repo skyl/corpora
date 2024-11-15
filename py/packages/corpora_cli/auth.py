@@ -101,7 +101,6 @@ class AuthResolver:
         }
         data = {"grant_type": "client_credentials"}
 
-        response = requests.post(
-            self.token_url, headers=headers, data=data, timeout=10)
+        response = requests.post(self.token_url, headers=headers, data=data, timeout=10)
         response.raise_for_status()
         return response.json().get("access_token")
