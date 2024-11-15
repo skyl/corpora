@@ -9,8 +9,6 @@ services:
       PYTHONPATH: "/workspace/py/packages"
       REDIS_URL: "redis://redis:6379/0"
       OPENAI_API_KEY: "${OPENAI_API_KEY}"
-      CORPORA_CLIENT_ID: "${CORPORA_CLIENT_ID}"
-      CORPORA_CLIENT_SECRET: "${CORPORA_CLIENT_SECRET}"
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
     command: python manage.py runserver 0.0.0.0:8877
     working_dir: /workspace/py/packages/corpora_proj
@@ -67,6 +65,8 @@ services:
       - .:/workspace
     environment:
       PYTHONPATH: "/workspace/py/packages"
+      CORPORA_CLIENT_ID: "${CORPORA_CLIENT_ID}"
+      CORPORA_CLIENT_SECRET: "${CORPORA_CLIENT_SECRET}"
     command: sleep infinity
     working_dir: /workspace
 
