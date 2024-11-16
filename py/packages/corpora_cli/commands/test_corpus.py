@@ -1,4 +1,4 @@
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, mock_open
 from io import StringIO
 from typer.testing import CliRunner
 from rich.console import Console
@@ -14,8 +14,9 @@ runner = CliRunner()
 @patch("corpora_cli.commands.corpus.Path")
 @patch("corpora_cli.commands.corpus.get_best_collector")
 @patch("corpora_cli.commands.corpus.ContextObject")
+@patch("builtins.open", new_callable=mock_open)
 def test_init_command(
-    mock_context, mock_get_best_collector, mock_path, mock_save_config
+    mock_open_file, mock_context, mock_get_best_collector, mock_path, mock_save_config
 ):
     """Test the `init` command for basic behavior."""
     # Create a real console and capture output in a StringIO buffer
@@ -70,7 +71,7 @@ def test_init_command(
         tarball=b"tarball_content",
     )
 
-    # Verify config file was saved twice with the correct data
+    # Verify config file was saved once with the correct data
     assert mock_save_config.call_count == 1
     mock_save_config.assert_any_call(
         {
@@ -78,6 +79,10 @@ def test_init_command(
             "url": "https://github.com/test/repo",
         }
     )
+
+    # Ensure `open` was called to write the corpus ID
+    mock_open_file.assert_called_once_with(".corpora/.id", "w")
+    mock_open_file.return_value.write.assert_called_once_with("12345")
 
 
 @patch("corpora_cli.commands.corpus.ContextObject")

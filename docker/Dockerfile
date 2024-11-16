@@ -1,9 +1,24 @@
+# Base Image
 FROM mcr.microsoft.com/devcontainers/python:3.12
 
+# Install necessary system tools and dependencies
 RUN apt-get update && \
-    apt-get install -y postgresql-client zsh wget npm openjdk-17-jre redis-tools docker-compose && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y \
+    postgresql-client \
+    zsh \
+    wget \
+    npm \
+    openjdk-17-jre \
+    redis-tools \
+    docker-compose \
+    build-essential \
+    git \
+    libffi-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
+# TODO: for dev this could probably be in setup.sh
+# For production, we can probably simplify to one freezed requirements.txt?
 # Set up the workspace and install Python dependencies
 WORKDIR /workspace
 COPY py/requirements.txt /workspace/requirements.txt
@@ -16,11 +31,15 @@ COPY py/packages/corpora_client/test-requirements.txt /workspace/packages/corpor
 COPY py/packages/corpora_ai_openai/requirements.txt /workspace/packages/corpora_ai_openai/requirements.txt
 RUN pip install --no-cache-dir -r /workspace/requirements.txt
 
-RUN npm install -g @openapitools/openapi-generator-cli && sudo openapi-generator-cli version
+RUN npm install -g @openapitools/openapi-generator-cli && \
+    sudo openapi-generator-cli version
 
 RUN chsh -s /bin/zsh vscode
-USER vscode
-RUN sudo chown -R vscode:vscode /workspace
+RUN chown -R vscode:vscode /workspace
 
-# Keep container running with sleep
+USER vscode
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# ENV PATH="/home/vscode/.cargo/bin:${PATH}" (in .zshrc via setup.sh)
+
+# Default CMD for devcontainer
 CMD ["sleep", "infinity"]

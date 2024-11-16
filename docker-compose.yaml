@@ -2,19 +2,13 @@ services:
   app:
     build:
       context: .
-      dockerfile: .devcontainer/Dockerfile
+      dockerfile: docker/Dockerfile.app
     volumes:
       - .:/workspace
-      # Let people set up their own git in the devcontainer?
-      # This make the same helpers and so forth
-      # - ${HOME}/.gitconfig:/home/vscode/.gitconfig
     environment:
       PYTHONPATH: "/workspace/py/packages"
       REDIS_URL: "redis://redis:6379/0"
       OPENAI_API_KEY: "${OPENAI_API_KEY}"
-      # Used in CLI:
-      CORPORA_CLIENT_ID: "${CORPORA_CLIENT_ID}"
-      CORPORA_CLIENT_SECRET: "${CORPORA_CLIENT_SECRET}"
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
     command: python manage.py runserver 0.0.0.0:8877
     working_dir: /workspace/py/packages/corpora_proj
@@ -24,6 +18,21 @@ services:
       - celery
     ports:
       - "8877:8877"
+
+  celery:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+    command: celery -A corpora_proj.celery_app.app worker --loglevel=info
+    volumes:
+      - .:/workspace
+    environment:
+      PYTHONPATH: "/workspace/py/packages"
+      REDIS_URL: "redis://redis:6379/0"
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
+    depends_on:
+      redis:
+        condition: service_healthy
 
   db:
     build:
@@ -48,24 +57,18 @@ services:
       timeout: 5s
       retries: 5
 
-  celery:
+  interactive:
     build:
       context: .
-      # TODO: Use the built version since it's the same Dockerfile?
-      # But it does need all of the stuff. Maybe we can make docker
-      # cache the previous build for the devcontainer?
-      # Right now it does the expensive apt and pip stuff twice.
-      dockerfile: .devcontainer/Dockerfile
-    command: celery -A corpora_proj.celery_app.app worker --loglevel=info
+      dockerfile: docker/Dockerfile
     volumes:
       - .:/workspace
     environment:
       PYTHONPATH: "/workspace/py/packages"
-      REDIS_URL: "redis://redis:6379/0"
-      OPENAI_API_KEY: "${OPENAI_API_KEY}"
-    depends_on:
-      redis:
-        condition: service_healthy
+      CORPORA_CLIENT_ID: "${CORPORA_CLIENT_ID}"
+      CORPORA_CLIENT_SECRET: "${CORPORA_CLIENT_SECRET}"
+    command: sleep infinity
+    working_dir: /workspace
 
 volumes:
   postgres-data:
