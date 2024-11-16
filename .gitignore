@@ -1,3 +1,4 @@
+tmp/
 .corpora/.id
 test-corpora/
 /.env

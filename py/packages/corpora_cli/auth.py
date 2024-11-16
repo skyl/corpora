@@ -1,6 +1,5 @@
 import os
 import base64
-from openai import base_url
 import requests
 import typer
 from typing import Optional, Dict, Any

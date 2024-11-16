@@ -1,0 +1,26 @@
+# Start with Alpine for its Musl-based minimal footprint
+FROM alpine:latest
+
+# Install necessary tools and libraries for Rust and Musl
+RUN apk add --no-cache \
+    musl-dev \
+    build-base \
+    linux-headers \
+    openssl-dev \
+    curl \
+    perl \
+    git
+
+# Install Rust and add the Musl target
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
+    && source $HOME/.cargo/env \
+    && rustup target add x86_64-unknown-linux-musl
+
+# Set up environment variables for Musl builds
+ENV PATH="/root/.cargo/bin:$PATH"
+
+# Set the working directory inside the container
+WORKDIR /workspace
+
+# Default command to prevent the container from exiting immediately
+CMD ["/bin/sh"]
