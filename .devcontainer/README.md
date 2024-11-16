@@ -1,10 +1,11 @@
 # Corpora DevContainer
 
-This DevContainer setup provides a ready-to-use development environment with Docker Compose, Python 3.12, PostgreSQL, and zsh.
+This DevContainer setup provides a development environment with Docker Compose, Python 3.12, PostgreSQL, Rust, and zsh.
 
 ## Features
-- **Python 3.12** with dependencies installed from `requirements.txt`
-- **PostgreSQL** service with environment variables for connection configuration
+- **Python 3.12** with dependencies from `requirements.txt`
+- **PostgreSQL** service with configurable environment variables
+- **Rust/Cargo** integrated for additional development
 - **VS Code Customizations** for Python linting, formatting, and Docker integration
 
 ## Prerequisites
@@ -13,7 +14,7 @@ This DevContainer setup provides a ready-to-use development environment with Doc
 
 ## Quick Setup
 1. **Clone the Repository:**
-
+   
    ```bash
    git clone https://github.com/skyl/corpora.git
    cd corpora
@@ -31,12 +32,12 @@ This DevContainer setup provides a ready-to-use development environment with Doc
    - Ensure Docker is running.
 
 4. **Build & Connect in DevContainer:**
-   - Trigger the build process by reopening the folder in a container:
-     - Open the Command Palette (Cmd+Shift+P or Ctrl+Shift+P).
+   - Reopen the folder in a container:
+     - Open Command Palette (Cmd+Shift+P or Ctrl+Shift+P).
      - Run `Remote-Containers: Reopen in Container`.
 
 5. **Environment Configuration:**
-   - **Set up API keys and credentials in `.env`:**
+   - **Set API keys and credentials in `.env`:**
      
      ```
      OPENAI_API_KEY=""
@@ -46,27 +47,21 @@ This DevContainer setup provides a ready-to-use development environment with Doc
      ```
 
 6. **Post-Setup Commands:**
-   - Run server initialization commands:
+   - Run server initialization:
 
      ```bash
      cd py/packages/corpora_proj
      ./manage.py migrate
      ./manage.py createsuperuser
      ```
-   - Open your host browser and go to `localhost:8877/admin/`.
-     - Log in with your superuser account.
-     - Create an OAuth application:
-       - URL: `http://localhost:8877/admin/oauth2_provider/application/add/`
-       - Choose `Confidential` and `Client credentials`
-       - Add your superuser as the owner of the application
-       - Update `.env` file with `CORPORA_CLIENT_ID` and `CORPORA_CLIENT_SECRET`.
+   - Access at `localhost:8877/admin/` to set up OAuth.
 
 7. **Rebuild DevContainer:**
-   - Reload the container to apply `.env` updates.
+   - Reload to apply `.env` changes.
 
 ## Usage Example
 
-With `.env` configured and the devcontainer running, use CLI commands from the project root:
+With `.env` configured and the devcontainer running, use CLI commands:
 
 ```bash
 corpora corpus init
@@ -80,4 +75,8 @@ corpora plan issue
 - **Database:** 5432
 
 ## Notes
-- Zsh customizations and Git configurations persist across sessions. All dependencies are managed within the container, ensuring a consistent development setup.
+- Variations in Docker setup can be found in `../docker-compose.yaml` and `../docker/README.md`.
+- To run without VS Code, use Docker Compose directly.
+- The directory sets up Docker and Compose for VS Code integration.
+- Contains `README.md`, `devcontainer.json`, `setup.sh`.
+- Interactive container includes Rust/Cargo, full Python/Django/Postgres setup, with zsh.
