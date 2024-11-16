@@ -1,10 +1,11 @@
 # Corpora DevContainer
 
-This DevContainer setup provides a ready-to-use development environment with Docker Compose, Python 3.12, PostgreSQL, and zsh.
+This DevContainer setup provides a development environment with Docker Compose, Python 3.12, PostgreSQL, Rust, and zsh.
 
 ## Features
-- **Python 3.12** with dependencies installed from `requirements.txt`
-- **PostgreSQL** service with environment variables for connection configuration
+- **Python 3.12** with dependencies from `requirements.txt`
+- **PostgreSQL** service with configurable environment variables
+- **Rust/Cargo** integrated for additional development
 - **VS Code Customizations** for Python linting, formatting, and Docker integration
 
 ## Prerequisites
@@ -21,7 +22,7 @@ This DevContainer setup provides a ready-to-use development environment with Doc
 
 2. **Create `.env` from Example:**
    - Copy `.env.example` to `.env`:
-     
+
      ```bash
      cp .env.example .env
      ```
@@ -31,13 +32,13 @@ This DevContainer setup provides a ready-to-use development environment with Doc
    - Ensure Docker is running.
 
 4. **Build & Connect in DevContainer:**
-   - Trigger the build process by reopening the folder in a container:
-     - Open the Command Palette (Cmd+Shift+P or Ctrl+Shift+P).
+   - Reopen the folder in a container:
+     - Open Command Palette (Cmd+Shift+P or Ctrl+Shift+P).
      - Run `Remote-Containers: Reopen in Container`.
 
 5. **Environment Configuration:**
-   - **Set up API keys and credentials in `.env`:**
-     
+   - **Set API keys and credentials in `.env`:**
+
      ```
      OPENAI_API_KEY=""
      CORPORA_CLIENT_ID=""
@@ -46,7 +47,7 @@ This DevContainer setup provides a ready-to-use development environment with Doc
      ```
 
 6. **Post-Setup Commands:**
-   - Run server initialization commands:
+   - Run server initialization:
 
      ```bash
      cd py/packages/corpora_proj
@@ -62,11 +63,11 @@ This DevContainer setup provides a ready-to-use development environment with Doc
        - Update `.env` file with `CORPORA_CLIENT_ID` and `CORPORA_CLIENT_SECRET`.
 
 7. **Rebuild DevContainer:**
-   - Reload the container to apply `.env` updates.
+   - Reload to apply `.env` changes.
 
 ## Usage Example
 
-With `.env` configured and the devcontainer running, use CLI commands from the project root:
+With `.env` configured and the devcontainer running, use CLI commands:
 
 ```bash
 corpora corpus init
@@ -80,4 +81,8 @@ corpora plan issue
 - **Database:** 5432
 
 ## Notes
-- Zsh customizations and Git configurations persist across sessions. All dependencies are managed within the container, ensuring a consistent development setup.
+- Variations in Docker setup can be found in `../docker-compose.yaml` and `../docker/README.md`.
+- To run without VS Code, use Docker Compose directly.
+- The directory sets up Docker and Compose for VS Code integration.
+- Contains `README.md`, `devcontainer.json`, `setup.sh`.
+- Interactive container includes Rust/Cargo, full Python/Django/Postgres setup, with zsh.

@@ -1,4 +1,4 @@
-This repository is structured as a polyglot monorepo, focused on Python. The organization prioritizes modularity and scalability.
+This repository is structured as a polyglot monorepo, focused on Python and Rust. The organization prioritizes modularity and scalability.
 
 - **py/**: Core Python codebase.
   - **packages/**: Primary location for Python packages, set as PYTHONPATH.
@@ -11,6 +11,13 @@ This repository is structured as a polyglot monorepo, focused on Python. The org
   - **requirements.txt**: Python dependencies.
   - **requirements-dev.txt**: Development dependencies.
   - **pyproject.toml, pytest.ini**: Python packaging and testing configuration.
+
+- **rs/**: Multipackage Rust workspace.
+  - **corpora_cli/**: Rust-based command-line interface tool.
+    - **src/**: Source code for the CLI.
+  - **corpora_client/**: API client library.
+    - **src/apis/**: Generated API clients.
+    - **src/models/**: Data models.
 
 - **.devcontainer/**: Configurations for the development container setup.
 
