@@ -8,7 +8,7 @@ Corpora is an experimental polyglot monorepo focused on creating tools to enhanc
 
 - [**.corpora/**](.corpora/README.md): Repository-specific metadata and guidelines.
 - [**.devcontainer/**](.devcontainer/README.md): Provides a development environment with Docker, allowing easy setup for contributors and users.
-- [**.github/**](.github/README.md): GitHub Actions workflows for CI/CD.
+- [**.github/**](.github/ABOUT.md): GitHub Actions workflows for CI/CD.
 - [**docker/**](docker/README.md): Docker configurations for deployment and testing environments.
 - [**md/**](md/README.md): Documentation and notes.
 - [**py/**](py/README.md): Contains core Python codebase, including modular packages and Django apps.
