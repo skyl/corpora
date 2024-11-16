@@ -14,7 +14,7 @@ This DevContainer setup provides a development environment with Docker Compose, 
 
 ## Quick Setup
 1. **Clone the Repository:**
-   
+
    ```bash
    git clone https://github.com/skyl/corpora.git
    cd corpora
@@ -22,7 +22,7 @@ This DevContainer setup provides a development environment with Docker Compose, 
 
 2. **Create `.env` from Example:**
    - Copy `.env.example` to `.env`:
-     
+
      ```bash
      cp .env.example .env
      ```
@@ -38,7 +38,7 @@ This DevContainer setup provides a development environment with Docker Compose, 
 
 5. **Environment Configuration:**
    - **Set API keys and credentials in `.env`:**
-     
+
      ```
      OPENAI_API_KEY=""
      CORPORA_CLIENT_ID=""
@@ -54,7 +54,13 @@ This DevContainer setup provides a development environment with Docker Compose, 
      ./manage.py migrate
      ./manage.py createsuperuser
      ```
-   - Access at `localhost:8877/admin/` to set up OAuth.
+   - Open your host browser and go to `localhost:8877/admin/`.
+     - Log in with your superuser account.
+     - Create an OAuth application:
+       - URL: `http://localhost:8877/admin/oauth2_provider/application/add/`
+       - Choose `Confidential` and `Client credentials`
+       - Add your superuser as the owner of the application
+       - Update `.env` file with `CORPORA_CLIENT_ID` and `CORPORA_CLIENT_SECRET`.
 
 7. **Rebuild DevContainer:**
    - Reload to apply `.env` changes.
