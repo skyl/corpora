@@ -17,7 +17,6 @@ npx @openapitools/openapi-generator-cli generate \
     -i "$TEMP_DIR/openapi.json" \
     -g rust \
     -o "$TEMP_DIR/corpora_client" \
-    --template-dir "templates" \
     --additional-properties=packageName=corpora_client,library=reqwest,supportAsync=false
 
 echo "Step 3: Moving generated code to $OUTPUT_DIR..."
