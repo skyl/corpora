@@ -5,7 +5,7 @@ pub mod workon;
 
 use clap::Subcommand;
 
-/// Define all subcommands for the CLI
+/// Define all top-level subcommands for the CLI
 #[derive(Subcommand)]
 pub enum Commands {
     #[command(about = "Initial setup and uploads to the server")]
@@ -14,6 +14,6 @@ pub enum Commands {
     Sync,
     #[command(about = "Work on a specific file")]
     Workon(workon::WorkonArgs),
-    #[command(about = "Manage issues")]
+    #[command(about = "Manage issues", subcommand)]
     Issue(issue::IssueCommands),
 }

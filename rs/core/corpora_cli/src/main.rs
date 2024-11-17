@@ -24,7 +24,7 @@ fn main() {
         Commands::Sync => commands::sync::run(),
         Commands::Workon(args) => commands::workon::run(args),
         Commands::Issue(issue_command) => match issue_command {
-            issue::IssueCommands::Create(args) => issue::create(args),
+            issue::IssueCommands::Create => issue::create(),
             issue::IssueCommands::Update(args) => issue::update(args),
             issue::IssueCommands::Label(args) => issue::label(args),
         },

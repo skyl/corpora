@@ -8,7 +8,7 @@ use clap::Subcommand;
 #[derive(Subcommand)]
 pub enum IssueCommands {
     #[command(about = "Create a new issue")]
-    Create(create::CreateArgs),
+    Create,
     #[command(about = "Update an existing issue by ID")]
     Update(update::UpdateArgs),
     #[command(about = "Label an existing issue by ID")]
