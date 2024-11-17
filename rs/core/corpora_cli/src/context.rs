@@ -1,5 +1,3 @@
-use reqwest;
-use serde_json;
 use std::env;
 
 use corpora_client::apis::configuration::Configuration;
@@ -20,10 +18,12 @@ impl Context {
         // Perform OAuth authentication to fetch a bearer token
         let bearer_access_token = Self::get_oauth_token(&client_id, &client_secret, server_url);
 
-        // Configure the client
-        let mut config = Configuration::default();
-        config.base_path = server_url.to_string();
-        config.bearer_access_token = Some(bearer_access_token);
+        // Configure the client using a struct literal
+        let config = Configuration {
+            base_path: server_url.to_string(),
+            bearer_access_token: Some(bearer_access_token),
+            ..Default::default() // Fill in other fields with their default values
+        };
 
         Context { config }
     }
