@@ -1,10 +1,13 @@
-pub mod corpus;
+pub mod init;
+pub mod sync;
+pub mod workon;
 
 use clap::Subcommand;
 
 /// Define all subcommands for the CLI
 #[derive(Subcommand)]
 pub enum Commands {
-    /// Manage corpora
-    Corpus(corpus::CorpusArgs),
+    Init,
+    Sync,
+    Workon(workon::WorkonArgs),
 }
