@@ -41,7 +41,7 @@ pub fn get_collector(config: &CorporaConfig) -> Result<Box<dyn Collector>, Box<d
 /// A boolean indicating whether the repository is a Git repository.
 fn is_git_repo(config: &CorporaConfig) -> bool {
     // print the root_path
-    println!("Root path: {:?}", config.root_path);
+    // println!("Root path: {:?}", config.root_path);
     git2::Repository::discover(&config.root_path).is_ok()
 }
 
