@@ -18,7 +18,7 @@ class CorpusAdmin(admin.ModelAdmin):
 class CorpusTextFileAdmin(admin.ModelAdmin):
     autocomplete_fields = ("corpus",)
     list_display = ("path", "corpus", "checksum", "created_at", "updated_at")
-    search_fields = ("path", "checksum", "corpus__name")
+    search_fields = ("path", "checksum", "corpus__name", "corpus__id")
     ordering = ("corpus", "path")
     readonly_fields = ("checksum", "created_at", "updated_at")
     fieldsets = (
