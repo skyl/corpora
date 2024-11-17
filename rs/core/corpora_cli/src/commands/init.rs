@@ -1,6 +1,7 @@
 use crate::context::Context;
 use flate2::write::GzEncoder;
 use flate2::Compression;
+use std::io::Write;
 use std::{fs, io, path::Path, process::Command};
 
 pub fn run(ctx: &Context) {
@@ -36,6 +37,11 @@ pub fn run(ctx: &Context) {
     ) {
         Ok(response) => {
             println!("Corpus created successfully: {:?}", response);
+
+            // Write the response ID to `.corpora/.id`
+            if let Err(err) = write_corpus_id(&root_path, &response.id) {
+                eprintln!("Failed to write corpus ID: {:?}", err);
+            }
         }
         Err(err) => {
             eprintln!("Failed to create corpus: {:?}", err);
@@ -56,7 +62,6 @@ fn find_repo_root() -> Option<std::path::PathBuf> {
 
 /// Create a tarball of all tracked files in the Git repository and save to a temporary file
 fn create_tarball_from_git(root_path: &Path) -> io::Result<std::path::PathBuf> {
-    // Get the list of tracked files using `git ls-files`
     let output = Command::new("git")
         .arg("ls-files")
         .current_dir(root_path)
@@ -69,22 +74,17 @@ fn create_tarball_from_git(root_path: &Path) -> io::Result<std::path::PathBuf> {
         ));
     }
 
-    // Parse the output into a list of file paths
     let files = String::from_utf8_lossy(&output.stdout)
         .lines()
         .map(|line| root_path.join(line))
         .collect::<Vec<_>>();
 
-    // Create a temporary file for the tarball
     let tarball_path = root_path.join("temp_tarball.tar.gz");
-
     let tar_gz_file = fs::File::create(&tarball_path)?;
     let mut encoder = GzEncoder::new(tar_gz_file, Compression::default());
 
     {
-        // Create a tar archive in the gzip encoder
         let mut tar = tar::Builder::new(&mut encoder);
-
         for file_path in files {
             if file_path.is_file() {
                 let file_name = file_path.strip_prefix(root_path).unwrap();
@@ -92,10 +92,26 @@ fn create_tarball_from_git(root_path: &Path) -> io::Result<std::path::PathBuf> {
                 tar.append_file(file_name, &mut file)?;
             }
         }
-
         tar.finish()?;
     }
 
     encoder.finish()?;
     Ok(tarball_path)
+}
+
+/// Write the corpus ID to `.corpora/.id` in the root path
+fn write_corpus_id(root_path: &Path, id: &uuid::Uuid) -> io::Result<()> {
+    let corpora_dir = root_path.join(".corpora");
+    let id_file_path = corpora_dir.join(".id");
+
+    // Ensure `.corpora` directory exists
+    if !corpora_dir.exists() {
+        fs::create_dir_all(&corpora_dir)?;
+    }
+
+    // Write the ID to `.corpora/.id`
+    let mut id_file = fs::File::create(id_file_path)?;
+    writeln!(id_file, "{}", id)?;
+
+    Ok(())
 }

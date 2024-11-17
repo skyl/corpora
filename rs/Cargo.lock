@@ -238,6 +238,7 @@ dependencies = [
  "serde_yaml",
  "tar",
  "tempfile",
+ "uuid",
 ]
 
 [[package]]
