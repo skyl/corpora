@@ -42,7 +42,7 @@ pub fn get_collector(config: &CorporaConfig) -> Result<Box<dyn Collector>, Box<d
 fn is_git_repo(config: &CorporaConfig) -> bool {
     // print the root_path
     println!("Root path: {:?}", config.root_path);
-    return git2::Repository::discover(&config.root_path).is_ok();
+    git2::Repository::discover(&config.root_path).is_ok()
 }
 
 pub mod git;
