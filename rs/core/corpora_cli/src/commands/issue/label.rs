@@ -11,5 +11,5 @@ pub struct LabelArgs {
 /// Run the `label` subcommand
 pub fn run(ctx: &Context, args: LabelArgs) {
     println!("Labeling issue with ID: {}", args.id);
-    println!("Server URL: {}", ctx.config.base_path);
+    println!("Server URL: {}", ctx.api_config.base_path);
 }

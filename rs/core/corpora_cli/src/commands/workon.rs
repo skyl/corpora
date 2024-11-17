@@ -11,5 +11,5 @@ pub struct WorkonArgs {
 /// Run the `workon` command
 pub fn run(ctx: &Context, args: WorkonArgs) {
     println!("Workon command executed with path: {}", args.path);
-    println!("Server URL: {}", ctx.config.base_path);
+    println!("Server URL: {}", ctx.api_config.base_path);
 }

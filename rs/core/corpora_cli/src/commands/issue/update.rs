@@ -11,5 +11,5 @@ pub struct UpdateArgs {
 /// Run the `update` subcommand
 pub fn run(ctx: &Context, args: UpdateArgs) {
     println!("Updating issue with ID: {}", args.id);
-    println!("Server URL: {}", ctx.config.base_path);
+    println!("Server URL: {}", ctx.api_config.base_path);
 }
