@@ -1,3 +1,4 @@
+use crate::context::Context;
 use clap::Args;
 
 /// The `workon` command arguments
@@ -8,6 +9,7 @@ pub struct WorkonArgs {
 }
 
 /// Run the `workon` command
-pub fn run(args: WorkonArgs) {
+pub fn run(ctx: &Context, args: WorkonArgs) {
     println!("Workon command executed with path: {}", args.path);
+    println!("Server URL: {}", ctx.api_config.base_path);
 }

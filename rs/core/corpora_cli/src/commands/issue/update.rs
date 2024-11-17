@@ -1,3 +1,4 @@
+use crate::context::Context;
 use clap::Args;
 
 /// Arguments for the `update` subcommand
@@ -8,6 +9,7 @@ pub struct UpdateArgs {
 }
 
 /// Run the `update` subcommand
-pub fn run(args: UpdateArgs) {
+pub fn run(ctx: &Context, args: UpdateArgs) {
     println!("Updating issue with ID: {}", args.id);
+    println!("Server URL: {}", ctx.api_config.base_path);
 }
