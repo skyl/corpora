@@ -1,5 +1,5 @@
 [package]
-name = "corpora_cli"
+name = "corpora"
 version = "0.1.0"
 edition = "2021"
 

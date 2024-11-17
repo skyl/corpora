@@ -1,9 +1,8 @@
 use clap::Args;
 
-/// Arguments for the `workon` subcommand
+/// The `workon` command arguments
 #[derive(Args)]
 pub struct WorkonArgs {
-    /// The path to work on
     #[arg(help = "Path to the file or directory")]
     pub path: String,
 }
