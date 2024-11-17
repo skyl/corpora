@@ -75,6 +75,7 @@ plan_router = Router(tags=["plan"], auth=BearerAuth())
 
 @plan_router.post("/issue", response=IssueSchema, operation_id="get_issue")
 async def get_issue(request, payload: IssueRequestSchema):
+    # print(f"CORPUS ID {payload.corpus_id}")
     corpus = await Corpus.objects.aget(id=payload.corpus_id)
 
     # TODO: split context could be ... ?
