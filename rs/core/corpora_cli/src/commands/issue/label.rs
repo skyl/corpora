@@ -1,3 +1,4 @@
+use crate::context::Context;
 use clap::Args;
 
 /// Arguments for the `label` subcommand
@@ -8,6 +9,7 @@ pub struct LabelArgs {
 }
 
 /// Run the `label` subcommand
-pub fn run(args: LabelArgs) {
+pub fn run(ctx: &Context, args: LabelArgs) {
     println!("Labeling issue with ID: {}", args.id);
+    println!("Server URL: {}", ctx.config.base_path);
 }

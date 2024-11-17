@@ -1,7 +1,9 @@
 mod commands;
+mod context;
 
 use clap::Parser;
 use commands::{issue, Commands};
+use context::Context;
 
 /// The main CLI app definition
 #[derive(Parser)]
@@ -18,15 +20,16 @@ struct Cli {
 
 fn main() {
     let cli = Cli::parse();
+    let ctx = Context::new("http://app:8877");
 
     match cli.command {
-        Commands::Init => commands::init::run(),
-        Commands::Sync => commands::sync::run(),
-        Commands::Workon(args) => commands::workon::run(args),
+        Commands::Init => commands::init::run(&ctx),
+        Commands::Sync => commands::sync::run(&ctx),
+        Commands::Workon(args) => commands::workon::run(&ctx, args),
         Commands::Issue(issue_command) => match issue_command {
-            issue::IssueCommands::Create => issue::create(),
-            issue::IssueCommands::Update(args) => issue::update(args),
-            issue::IssueCommands::Label(args) => issue::label(args),
+            issue::IssueCommands::Create => issue::create(&ctx),
+            issue::IssueCommands::Update(args) => issue::update(&ctx, args),
+            issue::IssueCommands::Label(args) => issue::label(&ctx, args),
         },
     }
 }
