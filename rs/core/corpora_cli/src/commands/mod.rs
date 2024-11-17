@@ -1,4 +1,5 @@
 pub mod init;
+pub mod issue;
 pub mod sync;
 pub mod workon;
 
@@ -13,4 +14,6 @@ pub enum Commands {
     Sync,
     #[command(about = "Work on a specific file")]
     Workon(workon::WorkonArgs),
+    #[command(about = "Manage issues")]
+    Issue(issue::IssueCommands),
 }
