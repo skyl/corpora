@@ -20,7 +20,7 @@ struct Cli {
 
 fn main() {
     let cli = Cli::parse();
-    let ctx = Context::new("http://app:8877");
+    let ctx = Context::new();
 
     match cli.command {
         Commands::Init => commands::init::run(&ctx),
