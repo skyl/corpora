@@ -3,12 +3,10 @@
 - build rust CLI to try across platforms in different corpora, evaluate rust for CLI
   - https://rust-cli.github.io/book/index.html
   - Corpus!!
-- `corpora plan update_issue 17`
-  - label issue
 
 # Next
 
-
+- label issue
 - more python CI checks, local tools - rm unused imports, for instance (on save, in CI..)
   - consider ruff - one shot to rule them all
   - pytest --cov=. --cov-report term
@@ -38,3 +36,4 @@
   ?
 - nearest neighbor vector search endpoint(s)
   - compare vector of summary versus vector of splits, create search endpoint(s) test adhoc queries
+- `corpora plan update_issue 17`

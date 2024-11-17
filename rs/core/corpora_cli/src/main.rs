@@ -1,7 +1,7 @@
 mod commands;
 
 use clap::Parser;
-use commands::{corpus, Commands};
+use commands::{issue, Commands};
 
 /// The main CLI app definition
 #[derive(Parser)]
@@ -20,6 +20,13 @@ fn main() {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Corpus(args) => corpus::run(args),
+        Commands::Init => commands::init::run(),
+        Commands::Sync => commands::sync::run(),
+        Commands::Workon(args) => commands::workon::run(args),
+        Commands::Issue(issue_command) => match issue_command {
+            issue::IssueCommands::Create => issue::create(),
+            issue::IssueCommands::Update(args) => issue::update(args),
+            issue::IssueCommands::Label(args) => issue::label(args),
+        },
     }
 }

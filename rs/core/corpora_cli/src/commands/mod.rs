@@ -1,10 +1,19 @@
-pub mod corpus;
+pub mod init;
+pub mod issue;
+pub mod sync;
+pub mod workon;
 
 use clap::Subcommand;
 
-/// Define all subcommands for the CLI
+/// Define all top-level subcommands for the CLI
 #[derive(Subcommand)]
 pub enum Commands {
-    /// Manage corpora
-    Corpus(corpus::CorpusArgs),
+    #[command(about = "Initial setup and uploads to the server")]
+    Init,
+    #[command(about = "Find the diff and sync changes to the server")]
+    Sync,
+    #[command(about = "Work on a specific file")]
+    Workon(workon::WorkonArgs),
+    #[command(about = "Manage issues", subcommand)]
+    Issue(issue::IssueCommands),
 }
