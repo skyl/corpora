@@ -76,14 +76,8 @@ fn create_tarball_from_git(root_path: &Path) -> io::Result<std::path::PathBuf> {
         .collect::<Vec<_>>();
 
     // Create a temporary file for the tarball
-    let temp_tarball = tempfile::Builder::new()
-        .prefix("corpus_tarball")
-        .suffix(".tar.gz")
-        .tempfile()?;
+    let tarball_path = root_path.join("temp_tarball.tar.gz");
 
-    let tarball_path = temp_tarball.path().to_path_buf();
-
-    // Compress the tarball with gzip
     let tar_gz_file = fs::File::create(&tarball_path)?;
     let mut encoder = GzEncoder::new(tar_gz_file, Compression::default());
 
