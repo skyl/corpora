@@ -27,13 +27,18 @@
                 "terminal.integrated.shell.linux": "/bin/zsh"
             },
             "extensions": [
+                // py
                 "ms-python.python",
                 "ms-python.black-formatter",
-                "ms-azuretools.vscode-docker",
-                "tamasfe.even-better-toml",
+                // github
                 "GitHub.copilot",
                 "GitHub.copilot-chat",
-                "github.vscode-github-actions"
+                "github.vscode-github-actions",
+                // rust
+                "rust-lang.rust-analyzer",
+                // tools
+                "tamasfe.even-better-toml",
+                "ms-azuretools.vscode-docker"
             ]
         }
     },
