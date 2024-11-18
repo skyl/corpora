@@ -4,6 +4,7 @@ use corpora_client::models::{CorpusFileChatSchema, MessageSchema};
 use dialoguer::{theme::ColorfulTheme, Confirm, Input};
 use std::fs::{self, File};
 use std::io::Write;
+use std::path::Path;
 
 #[derive(Args)]
 pub struct WorkonArgs {
@@ -13,13 +14,33 @@ pub struct WorkonArgs {
 
 /// The `workon` command operation
 pub fn run(ctx: &Context, args: WorkonArgs) {
-    let path = args.path.clone();
-    ctx.success(&format!("Working on file: {}", path));
-    let ext = path.split('.').last().unwrap_or("");
+    // get path as a path from the string
+    let path = Path::new(&args.path);
+    // get cwd
+    let cwd = std::env::current_dir().unwrap();
+    ctx.print(
+        &format!("Current working directory: {}", cwd.display()),
+        dialoguer::console::Style::new().dim(),
+    );
+    // add cwd and args.path
+    let absolute_path = Path::join(&cwd, path);
+    // rm the config.root_path to get the relative path
+    let relative_path = absolute_path
+        .strip_prefix(&ctx.corpora_config.root_path)
+        .unwrap();
+    // ctx.success(&format!("Working on file: {}", relative_path.display()));
+    ctx.print(
+        &format!("Working on file: {}", relative_path.display()),
+        dialoguer::console::Style::new().dim().green(),
+    );
+    let ext = relative_path
+        .extension()
+        .unwrap_or_default()
+        .to_str()
+        .unwrap_or("");
 
     // Show current file content, load the content from the
-    // CWD and print it with dim
-    let current_file_content = match fs::read_to_string(&path) {
+    let current_file_content = match fs::read_to_string(path) {
         Ok(content) => content,
         Err(_) => {
             File::create(&path).expect("Failed to create file");
@@ -28,7 +49,10 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
     };
 
     ctx.success("Current file content:");
-    println!("{}", current_file_content);
+    ctx.print(
+        &current_file_content,
+        dialoguer::console::Style::new().dim(),
+    );
 
     let mut messages: Vec<MessageSchema> = Vec::new();
 
@@ -36,8 +60,9 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
         messages.push(MessageSchema {
             role: "user".to_string(),
             text: format!(
-                "The original file content was:\n```{}\n{}```",
-                ext, current_file_content
+                "The original content of `{}` was:\n```{}\n```",
+                relative_path.display(),
+                current_file_content
             ),
         });
     }
@@ -81,7 +106,7 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
                     .id
                     .clone()
                     .expect("Failed to get corpus ID"),
-                path: path.clone(),
+                path: relative_path.to_string_lossy().to_string(),
                 voice: Some(voice),
                 purpose: Some(purpose),
                 structure: Some(structure),
@@ -95,8 +120,12 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
             }
         };
 
-        println!("{}", revision);
-        println!("{}", path);
+        ctx.print(&revision, dialoguer::console::Style::new().dim());
+        // println!("{}", relative_path.display());
+        ctx.print(
+            &format!("Revision for `{}`:", relative_path.display()),
+            dialoguer::console::Style::new().dim().magenta().on_green(),
+        );
         messages.push(MessageSchema {
             role: "assistant".to_string(),
             text: revision.clone(),
@@ -107,7 +136,7 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
             .interact()
             .unwrap()
         {
-            let mut file = File::create(&path).expect("Failed to open file");
+            let mut file = File::create(&relative_path).expect("Failed to open file");
             file.write_all(revision.as_bytes())
                 .expect("Failed to write file");
             ctx.success("File written!");
