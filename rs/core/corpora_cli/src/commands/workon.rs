@@ -43,7 +43,7 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
     let current_file_content = match fs::read_to_string(path) {
         Ok(content) => content,
         Err(_) => {
-            File::create(&path).expect("Failed to create file");
+            File::create(path).expect("Failed to create file");
             String::new()
         }
     };
@@ -136,7 +136,7 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
             .interact()
             .unwrap()
         {
-            let mut file = File::create(&path).expect("Failed to open file");
+            let mut file = File::create(path).expect("Failed to open file");
             file.write_all(revision.as_bytes())
                 .expect("Failed to write file");
             ctx.success("File written!");
