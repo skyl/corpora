@@ -3,13 +3,29 @@ use std::error::Error;
 
 /// Trait defining the behavior of a file collector
 pub trait Collector {
-    /// Collects files and returns a list of file paths as strings
+    /// Collects a list of `PathBuf` objects representing all available paths
     ///
     /// # Errors
-    /// Returns an error if the collector fails to gather files.
-    // fn collect_files(&self) -> Result<Vec<String>, Box<dyn Error>>;
+    /// Returns an error if the collector fails to gather paths.
     fn collect_paths(&self) -> Result<Vec<std::path::PathBuf>, Box<dyn Error>>;
+
+    /// Creates a tarball containing all files tracked by the collector
+    ///
+    /// # Errors
+    /// Returns an error if the tarball creation fails.
     fn collect_tarball(&self) -> Result<std::path::PathBuf, Box<dyn Error>>;
+
+    /// Creates a tarball containing only the specified paths
+    ///
+    /// # Arguments
+    /// * `paths` - A list of paths to include in the tarball.
+    ///
+    /// # Errors
+    /// Returns an error if the tarball creation fails.
+    fn collect_tarball_for_paths(
+        &self,
+        paths: Vec<&std::path::PathBuf>,
+    ) -> Result<std::path::PathBuf, Box<dyn Error>>;
 }
 
 /// Gets the appropriate file collector based on the configuration
