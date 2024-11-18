@@ -136,7 +136,7 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
             .interact()
             .unwrap()
         {
-            let mut file = File::create(&relative_path).expect("Failed to open file");
+            let mut file = File::create(&path).expect("Failed to open file");
             file.write_all(revision.as_bytes())
                 .expect("Failed to write file");
             ctx.success("File written!");
