@@ -1,6 +1,8 @@
 import os
 import unittest
 from unittest.mock import patch, MagicMock
+
+from openai import azure_endpoint
 from corpora_ai.provider_loader import load_llm_provider
 from corpora_ai.llm_interface import LLMBaseInterface
 
@@ -20,7 +22,9 @@ class TestLoadLLMProvider(unittest.TestCase):
 
         provider = load_llm_provider()
 
-        MockOpenAIClient.assert_called_once_with(api_key="test_api_key")
+        MockOpenAIClient.assert_called_once_with(
+            api_key="test_api_key", azure_endpoint=None
+        )
         self.assertIsInstance(provider, LLMBaseInterface)
         self.assertEqual(provider, mock_client_instance)
 

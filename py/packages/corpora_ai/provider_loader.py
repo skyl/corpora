@@ -2,13 +2,13 @@ import os
 from typing import Optional
 from corpora_ai.llm_interface import LLMBaseInterface
 
-# Import provider-specific clients
 try:
     from corpora_ai_openai.llm_client import OpenAIClient
 except ImportError:
-    OpenAIClient = None  # This handles cases where the OpenAI client isn't installed
+    OpenAIClient = None
 
-# Future imports for other providers, e.g., Anthropic or Cohere, would follow the same pattern
+# Future imports for other providers,
+# e.g., Anthropic or Cohere, would follow the same pattern
 
 
 def load_llm_provider() -> Optional[LLMBaseInterface]:
@@ -25,7 +25,10 @@ def load_llm_provider() -> Optional[LLMBaseInterface]:
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             raise ValueError("OPENAI_API_KEY environment variable is not set.")
-        return OpenAIClient(api_key=api_key)
+        return OpenAIClient(
+            api_key=api_key,
+            azure_endpoint=os.getenv("OPENAI_AZURE_ENDPOINT", None),
+        )
 
     # Placeholder for additional providers (e.g., Anthropic)
     # elif provider_name == "anthropic" and AnthropicClient:

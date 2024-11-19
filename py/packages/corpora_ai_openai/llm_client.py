@@ -1,6 +1,6 @@
 import json
 from typing import List, Type, TypeVar
-from openai import OpenAI, OpenAIError
+from openai import OpenAI, OpenAIError, AzureOpenAI
 from pydantic import BaseModel
 
 from corpora_ai.llm_interface import LLMBaseInterface, ChatCompletionTextMessage
@@ -15,8 +15,17 @@ class OpenAIClient(LLMBaseInterface):
         api_key: str,
         completion_model: str = "gpt-4o",
         embedding_model: str = "text-embedding-3-small",
+        azure_endpoint: str = None,
     ):
-        self.client = OpenAI(api_key=api_key)
+        if azure_endpoint:
+            self.client = AzureOpenAI(
+                api_key=api_key,
+                azure_endpoint=azure_endpoint,
+                # What's the behavior of not pinning the API version?
+                # api_version="2024-10-01-preview",
+            )
+        else:
+            self.client = OpenAI(api_key=api_key)
         self.completion_model = completion_model
         self.embedding_model = embedding_model
 
