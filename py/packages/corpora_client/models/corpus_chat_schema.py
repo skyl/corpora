@@ -24,9 +24,9 @@ from typing import Optional, Set
 from typing_extensions import Self
 
 
-class IssueRequestSchema(BaseModel):
+class CorpusChatSchema(BaseModel):
     """
-    IssueRequestSchema
+    CorpusChatSchema
     """  # noqa: E501
 
     corpus_id: StrictStr
@@ -61,7 +61,7 @@ class IssueRequestSchema(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of IssueRequestSchema from a JSON string"""
+        """Create an instance of CorpusChatSchema from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -92,7 +92,7 @@ class IssueRequestSchema(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of IssueRequestSchema from a dict"""
+        """Create an instance of CorpusChatSchema from a dict"""
         if obj is None:
             return None
 

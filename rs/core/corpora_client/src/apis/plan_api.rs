@@ -22,7 +22,7 @@ pub enum GetIssueError {
 
 pub fn get_issue(
     configuration: &configuration::Configuration,
-    issue_request_schema: models::IssueRequestSchema,
+    corpus_chat_schema: models::CorpusChatSchema,
 ) -> Result<models::IssueSchema, Error<GetIssueError>> {
     let local_var_configuration = configuration;
 
@@ -42,7 +42,7 @@ pub fn get_issue(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&issue_request_schema);
+    local_var_req_builder = local_var_req_builder.json(&corpus_chat_schema);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req)?;

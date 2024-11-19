@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 
 # **get_issue**
-> IssueSchema get_issue(issue_request_schema)
+> IssueSchema get_issue(corpus_chat_schema)
 
 Get Issue
 
@@ -18,7 +18,7 @@ Get Issue
 
 ```python
 import corpora_client
-from corpora_client.models.issue_request_schema import IssueRequestSchema
+from corpora_client.models.corpus_chat_schema import CorpusChatSchema
 from corpora_client.models.issue_schema import IssueSchema
 from corpora_client.rest import ApiException
 from pprint import pprint
@@ -43,11 +43,11 @@ configuration = corpora_client.Configuration(
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.PlanApi(api_client)
-    issue_request_schema = corpora_client.IssueRequestSchema() # IssueRequestSchema | 
+    corpus_chat_schema = corpora_client.CorpusChatSchema() # CorpusChatSchema | 
 
     try:
         # Get Issue
-        api_response = api_instance.get_issue(issue_request_schema)
+        api_response = api_instance.get_issue(corpus_chat_schema)
         print("The response of PlanApi->get_issue:\n")
         pprint(api_response)
     except Exception as e:
@@ -61,7 +61,7 @@ with corpora_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **issue_request_schema** | [**IssueRequestSchema**](IssueRequestSchema.md)|  | 
+ **corpus_chat_schema** | [**CorpusChatSchema**](CorpusChatSchema.md)|  | 
 
 ### Return type
 

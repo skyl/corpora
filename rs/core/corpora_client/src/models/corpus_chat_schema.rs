@@ -12,7 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct IssueRequestSchema {
+pub struct CorpusChatSchema {
     #[serde(rename = "corpus_id")]
     pub corpus_id: String,
     #[serde(rename = "messages")]
@@ -27,9 +27,9 @@ pub struct IssueRequestSchema {
     pub directions: Option<String>,
 }
 
-impl IssueRequestSchema {
-    pub fn new(corpus_id: String, messages: Vec<models::MessageSchema>) -> IssueRequestSchema {
-        IssueRequestSchema {
+impl CorpusChatSchema {
+    pub fn new(corpus_id: String, messages: Vec<models::MessageSchema>) -> CorpusChatSchema {
+        CorpusChatSchema {
             corpus_id,
             messages,
             voice: None,

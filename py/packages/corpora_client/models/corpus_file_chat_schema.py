@@ -31,19 +31,19 @@ class CorpusFileChatSchema(BaseModel):
 
     corpus_id: StrictStr
     messages: List[MessageSchema]
-    path: StrictStr
     voice: Optional[StrictStr] = ""
     purpose: Optional[StrictStr] = ""
     structure: Optional[StrictStr] = ""
     directions: Optional[StrictStr] = ""
+    path: StrictStr
     __properties: ClassVar[List[str]] = [
         "corpus_id",
         "messages",
-        "path",
         "voice",
         "purpose",
         "structure",
         "directions",
+        "path",
     ]
 
     model_config = ConfigDict(
@@ -109,7 +109,6 @@ class CorpusFileChatSchema(BaseModel):
                     if obj.get("messages") is not None
                     else None
                 ),
-                "path": obj.get("path"),
                 "voice": obj.get("voice") if obj.get("voice") is not None else "",
                 "purpose": obj.get("purpose") if obj.get("purpose") is not None else "",
                 "structure": (
@@ -118,6 +117,7 @@ class CorpusFileChatSchema(BaseModel):
                 "directions": (
                     obj.get("directions") if obj.get("directions") is not None else ""
                 ),
+                "path": obj.get("path"),
             }
         )
         return _obj

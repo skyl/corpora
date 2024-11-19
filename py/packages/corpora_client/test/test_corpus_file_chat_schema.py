@@ -42,11 +42,11 @@ class TestCorpusFileChatSchema(unittest.TestCase):
                         role = '', 
                         text = '', )
                     ],
-                path = '',
                 voice = '',
                 purpose = '',
                 structure = '',
-                directions = ''
+                directions = '',
+                path = ''
             )
         else:
             return CorpusFileChatSchema(

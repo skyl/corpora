@@ -5,7 +5,7 @@ from ninja import Router
 from asgiref.sync import sync_to_async
 
 from ..models import Corpus, Split
-from ..schema import SplitResponseSchema, SplitVectorSearchSchema
+from ..schema.core import SplitResponseSchema, SplitVectorSearchSchema
 from ..auth import BearerAuth
 
 split_router = Router(tags=["split"], auth=BearerAuth())

@@ -1,7 +1,7 @@
-from typing import List
 from ninja import Router, Schema
 from asgiref.sync import sync_to_async
 
+from corpora.schema.chat import CorpusChatSchema, get_additional_context
 from corpora_ai.llm_interface import ChatCompletionTextMessage
 from corpora_ai.provider_loader import load_llm_provider
 from corpora.auth import BearerAuth
@@ -26,55 +26,11 @@ class IssueSchema(Schema):
     body: str
 
 
-class MessageSchema(Schema):
-    role: str  # e.g., "user", "system", "assistant"
-    text: str
-
-
-# TODO: DRY this out with workon.py? It's a bit different tho.
-class IssueRequestSchema(Schema):
-    corpus_id: str
-    messages: List[MessageSchema]
-    voice: str = ""
-    purpose: str = ""
-    structure: str = ""
-    directions: str = ""
-
-
-def get_additional_context(payload: IssueRequestSchema) -> str:
-    # TODO: more automatically expandable implementation
-    # without the ifs
-    context = ""
-    if any(
-        [
-            payload.voice,
-            payload.purpose,
-            payload.structure,
-            payload.directions,
-        ]
-    ):
-        context += "\n\nADDITIONAL CONTEXT:\n\n"
-
-    if payload.voice:
-        context += f"VOICE:\n\n{payload.voice}\n\n"
-
-    if payload.purpose:
-        context += f"PURPOSE of corpus:\n\n{payload.purpose}\n\n"
-
-    if payload.structure:
-        context += f"STRUCTURE of corpus:\n\n{payload.structure}\n\n"
-
-    if payload.directions:
-        context += f"DIRECTIONS for issue:\n\n{payload.directions}\n\n"
-
-    return context
-
-
 plan_router = Router(tags=["plan"], auth=BearerAuth())
 
 
 @plan_router.post("/issue", response=IssueSchema, operation_id="get_issue")
-async def get_issue(request, payload: IssueRequestSchema):
+async def get_issue(request, payload: CorpusChatSchema):
     corpus = await Corpus.objects.aget(id=payload.corpus_id)
 
     # TODO: split context could be ... ?

@@ -1,3 +1,5 @@
+pub mod corpus_chat_schema;
+pub use self::corpus_chat_schema::CorpusChatSchema;
 pub mod corpus_file_chat_schema;
 pub use self::corpus_file_chat_schema::CorpusFileChatSchema;
 pub mod corpus_response_schema;
@@ -10,8 +12,6 @@ pub mod file_response_schema;
 pub use self::file_response_schema::FileResponseSchema;
 pub mod file_schema;
 pub use self::file_schema::FileSchema;
-pub mod issue_request_schema;
-pub use self::issue_request_schema::IssueRequestSchema;
 pub mod issue_schema;
 pub use self::issue_schema::IssueSchema;
 pub mod message_schema;

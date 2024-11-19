@@ -2,7 +2,7 @@ from typing import List
 import typer
 from prompt_toolkit.shortcuts import PromptSession
 
-from corpora_client.models.issue_request_schema import IssueRequestSchema
+from corpora_client.models.corpus_chat_schema import CorpusChatSchema
 from corpora_client.models.message_schema import MessageSchema
 from corpora_pm.providers.provider_loader import Corpus, load_provider
 from corpora_cli.context import ContextObject
@@ -66,7 +66,7 @@ def issue(ctx: typer.Context):
         directions = get_file_content_or_create(".corpora/md/DIRECTIONS.md")
 
         draft_issue = c.plan_api.get_issue(
-            IssueRequestSchema(
+            CorpusChatSchema(
                 messages=messages,
                 corpus_id=c.config["id"],
                 voice=voice,
@@ -158,7 +158,7 @@ def update_issue(ctx: typer.Context, issue_number: int):
         directions = get_file_content_or_create(".corpora/md/DIRECTIONS.md")
 
         updated_issue = c.plan_api.get_issue(
-            IssueRequestSchema(
+            CorpusChatSchema(
                 messages=messages,
                 corpus_id=c.config["id"],
                 voice=voice,

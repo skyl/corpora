@@ -14,11 +14,11 @@
 
 import unittest
 
-from corpora_client.models.issue_request_schema import IssueRequestSchema
+from corpora_client.models.corpus_chat_schema import CorpusChatSchema
 
 
-class TestIssueRequestSchema(unittest.TestCase):
-    """IssueRequestSchema unit test stubs"""
+class TestCorpusChatSchema(unittest.TestCase):
+    """CorpusChatSchema unit test stubs"""
 
     def setUp(self):
         pass
@@ -26,16 +26,16 @@ class TestIssueRequestSchema(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> IssueRequestSchema:
-        """Test IssueRequestSchema
+    def make_instance(self, include_optional) -> CorpusChatSchema:
+        """Test CorpusChatSchema
         include_optional is a boolean, when False only required
         params are included, when True both required and
         optional params are included"""
-        # uncomment below to create an instance of `IssueRequestSchema`
+        # uncomment below to create an instance of `CorpusChatSchema`
         """
-        model = IssueRequestSchema()
+        model = CorpusChatSchema()
         if include_optional:
-            return IssueRequestSchema(
+            return CorpusChatSchema(
                 corpus_id = '',
                 messages = [
                     corpora_client.models.message_schema.MessageSchema(
@@ -48,7 +48,7 @@ class TestIssueRequestSchema(unittest.TestCase):
                 directions = ''
             )
         else:
-            return IssueRequestSchema(
+            return CorpusChatSchema(
                 corpus_id = '',
                 messages = [
                     corpora_client.models.message_schema.MessageSchema(
@@ -58,8 +58,8 @@ class TestIssueRequestSchema(unittest.TestCase):
         )
         """
 
-    def testIssueRequestSchema(self):
-        """Test IssueRequestSchema"""
+    def testCorpusChatSchema(self):
+        """Test CorpusChatSchema"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

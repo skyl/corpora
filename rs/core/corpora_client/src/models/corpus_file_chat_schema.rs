@@ -17,8 +17,6 @@ pub struct CorpusFileChatSchema {
     pub corpus_id: String,
     #[serde(rename = "messages")]
     pub messages: Vec<models::MessageSchema>,
-    #[serde(rename = "path")]
-    pub path: String,
     #[serde(rename = "voice", skip_serializing_if = "Option::is_none")]
     pub voice: Option<String>,
     #[serde(rename = "purpose", skip_serializing_if = "Option::is_none")]
@@ -27,6 +25,8 @@ pub struct CorpusFileChatSchema {
     pub structure: Option<String>,
     #[serde(rename = "directions", skip_serializing_if = "Option::is_none")]
     pub directions: Option<String>,
+    #[serde(rename = "path")]
+    pub path: String,
 }
 
 impl CorpusFileChatSchema {
@@ -38,11 +38,11 @@ impl CorpusFileChatSchema {
         CorpusFileChatSchema {
             corpus_id,
             messages,
-            path,
             voice: None,
             purpose: None,
             structure: None,
             directions: None,
+            path,
         }
     }
 }
