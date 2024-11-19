@@ -14,13 +14,13 @@
 
 
 # import models into model package
+from corpora_client.models.corpus_chat_schema import CorpusChatSchema
 from corpora_client.models.corpus_file_chat_schema import CorpusFileChatSchema
 from corpora_client.models.corpus_response_schema import CorpusResponseSchema
 from corpora_client.models.corpus_schema import CorpusSchema
 from corpora_client.models.corpus_update_files_schema import CorpusUpdateFilesSchema
 from corpora_client.models.file_response_schema import FileResponseSchema
 from corpora_client.models.file_schema import FileSchema
-from corpora_client.models.issue_request_schema import IssueRequestSchema
 from corpora_client.models.issue_schema import IssueSchema
 from corpora_client.models.message_schema import MessageSchema
 from corpora_client.models.split_response_schema import SplitResponseSchema

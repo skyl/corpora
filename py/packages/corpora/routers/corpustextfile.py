@@ -7,7 +7,7 @@ from ninja.errors import HttpError
 from ..lib.files import compute_checksum
 from ..lib.dj.decorators import async_raise_not_found
 from ..models import Corpus, CorpusTextFile
-from ..schema import FileSchema, FileResponseSchema
+from ..schema.core import FileSchema, FileResponseSchema
 from ..auth import BearerAuth
 
 file_router = Router(tags=["file"], auth=BearerAuth())

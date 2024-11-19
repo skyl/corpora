@@ -76,17 +76,15 @@ configuration = corpora_client.Configuration(
 with corpora_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = corpora_client.CorpusApi(api_client)
-    name = 'name_example' # str | 
-    tarball = None # bytearray | 
-    url = 'url_example' # str |  (optional)
+    corpus_chat_schema = corpora_client.CorpusChatSchema() # CorpusChatSchema | 
 
     try:
-        # Create Corpus
-        api_response = api_instance.create_corpus(name, tarball, url=url)
-        print("The response of CorpusApi->create_corpus:\n")
+        # Chat
+        api_response = api_instance.chat(corpus_chat_schema)
+        print("The response of CorpusApi->chat:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling CorpusApi->create_corpus: %s\n" % e)
+        print("Exception when calling CorpusApi->chat: %s\n" % e)
 
 ```
 
@@ -96,6 +94,7 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*CorpusApi* | [**chat**](docs/CorpusApi.md#chat) | **POST** /api/corpora/corpus/chat | Chat
 *CorpusApi* | [**create_corpus**](docs/CorpusApi.md#create_corpus) | **POST** /api/corpora/corpus | Create Corpus
 *CorpusApi* | [**delete_corpus**](docs/CorpusApi.md#delete_corpus) | **DELETE** /api/corpora/corpus | Delete Corpus
 *CorpusApi* | [**get_corpus**](docs/CorpusApi.md#get_corpus) | **GET** /api/corpora/corpus/{corpus_id} | Get Corpus
@@ -114,13 +113,13 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [CorpusChatSchema](docs/CorpusChatSchema.md)
  - [CorpusFileChatSchema](docs/CorpusFileChatSchema.md)
  - [CorpusResponseSchema](docs/CorpusResponseSchema.md)
  - [CorpusSchema](docs/CorpusSchema.md)
  - [CorpusUpdateFilesSchema](docs/CorpusUpdateFilesSchema.md)
  - [FileResponseSchema](docs/FileResponseSchema.md)
  - [FileSchema](docs/FileSchema.md)
- - [IssueRequestSchema](docs/IssueRequestSchema.md)
  - [IssueSchema](docs/IssueSchema.md)
  - [MessageSchema](docs/MessageSchema.md)
  - [SplitResponseSchema](docs/SplitResponseSchema.md)

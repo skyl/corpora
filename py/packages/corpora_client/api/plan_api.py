@@ -16,7 +16,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from corpora_client.models.issue_request_schema import IssueRequestSchema
+from corpora_client.models.corpus_chat_schema import CorpusChatSchema
 from corpora_client.models.issue_schema import IssueSchema
 
 from corpora_client.api_client import ApiClient, RequestSerialized
@@ -39,7 +39,7 @@ class PlanApi:
     @validate_call
     def get_issue(
         self,
-        issue_request_schema: IssueRequestSchema,
+        corpus_chat_schema: CorpusChatSchema,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -55,8 +55,8 @@ class PlanApi:
         """Get Issue
 
 
-        :param issue_request_schema: (required)
-        :type issue_request_schema: IssueRequestSchema
+        :param corpus_chat_schema: (required)
+        :type corpus_chat_schema: CorpusChatSchema
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -80,7 +80,7 @@ class PlanApi:
         """  # noqa: E501
 
         _param = self._get_issue_serialize(
-            issue_request_schema=issue_request_schema,
+            corpus_chat_schema=corpus_chat_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -102,7 +102,7 @@ class PlanApi:
     @validate_call
     def get_issue_with_http_info(
         self,
-        issue_request_schema: IssueRequestSchema,
+        corpus_chat_schema: CorpusChatSchema,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -118,8 +118,8 @@ class PlanApi:
         """Get Issue
 
 
-        :param issue_request_schema: (required)
-        :type issue_request_schema: IssueRequestSchema
+        :param corpus_chat_schema: (required)
+        :type corpus_chat_schema: CorpusChatSchema
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -143,7 +143,7 @@ class PlanApi:
         """  # noqa: E501
 
         _param = self._get_issue_serialize(
-            issue_request_schema=issue_request_schema,
+            corpus_chat_schema=corpus_chat_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -165,7 +165,7 @@ class PlanApi:
     @validate_call
     def get_issue_without_preload_content(
         self,
-        issue_request_schema: IssueRequestSchema,
+        corpus_chat_schema: CorpusChatSchema,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -181,8 +181,8 @@ class PlanApi:
         """Get Issue
 
 
-        :param issue_request_schema: (required)
-        :type issue_request_schema: IssueRequestSchema
+        :param corpus_chat_schema: (required)
+        :type corpus_chat_schema: CorpusChatSchema
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -206,7 +206,7 @@ class PlanApi:
         """  # noqa: E501
 
         _param = self._get_issue_serialize(
-            issue_request_schema=issue_request_schema,
+            corpus_chat_schema=corpus_chat_schema,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -223,7 +223,7 @@ class PlanApi:
 
     def _get_issue_serialize(
         self,
-        issue_request_schema,
+        corpus_chat_schema,
         _request_auth,
         _content_type,
         _headers,
@@ -248,8 +248,8 @@ class PlanApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if issue_request_schema is not None:
-            _body_params = issue_request_schema
+        if corpus_chat_schema is not None:
+            _body_params = corpus_chat_schema
 
         # set the HTTP header `Accept`
         if "Accept" not in _header_params:

@@ -26,6 +26,13 @@ class TestCorpusApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
+    def test_chat(self) -> None:
+        """Test case for chat
+
+        Chat
+        """
+        pass
+
     def test_create_corpus(self) -> None:
         """Test case for create_corpus
 
