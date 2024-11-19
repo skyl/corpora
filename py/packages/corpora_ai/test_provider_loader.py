@@ -1,6 +1,8 @@
 import os
 import unittest
 from unittest.mock import patch, MagicMock
+
+from openai import azure_endpoint
 from corpora_ai.provider_loader import load_llm_provider
 from corpora_ai.llm_interface import LLMBaseInterface
 
@@ -8,7 +10,8 @@ from corpora_ai.llm_interface import LLMBaseInterface
 class TestLoadLLMProvider(unittest.TestCase):
 
     @patch.dict(
-        os.environ, {"LLM_PROVIDER": "openai", "OPENAI_API_KEY": "test_api_key"}
+        os.environ, {"LLM_PROVIDER": "openai",
+                     "OPENAI_API_KEY": "test_api_key"}
     )
     @patch("corpora_ai.provider_loader.OpenAIClient")
     def test_load_openai_provider_success(self, MockOpenAIClient):
@@ -20,7 +23,8 @@ class TestLoadLLMProvider(unittest.TestCase):
 
         provider = load_llm_provider()
 
-        MockOpenAIClient.assert_called_once_with(api_key="test_api_key")
+        MockOpenAIClient.assert_called_once_with(
+            api_key="test_api_key", azure_endpoint=None)
         self.assertIsInstance(provider, LLMBaseInterface)
         self.assertEqual(provider, mock_client_instance)
 
@@ -47,7 +51,8 @@ class TestLoadLLMProvider(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             load_llm_provider()
 
-        self.assertEqual(str(context.exception), "No valid LLM provider found.")
+        self.assertEqual(str(context.exception),
+                         "No valid LLM provider found.")
 
     @patch.dict(os.environ, {})
     @patch("corpora_ai.provider_loader.OpenAIClient", None)
@@ -58,7 +63,8 @@ class TestLoadLLMProvider(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             load_llm_provider()
 
-        self.assertEqual(str(context.exception), "No valid LLM provider found.")
+        self.assertEqual(str(context.exception),
+                         "No valid LLM provider found.")
 
 
 if __name__ == "__main__":
