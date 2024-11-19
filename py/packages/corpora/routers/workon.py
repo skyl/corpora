@@ -1,7 +1,7 @@
-from typing import List
 from ninja import Router, Schema
 from asgiref.sync import sync_to_async
 
+from corpora.schema.chat import CorpusFileChatSchema, get_additional_context
 from corpora_ai.llm_interface import ChatCompletionTextMessage
 from corpora_ai.provider_loader import load_llm_provider
 from corpora.models import Corpus
@@ -9,22 +9,6 @@ from corpora.models import Corpus
 from ..auth import BearerAuth
 
 workon_router = Router(tags=["workon"], auth=BearerAuth())
-
-
-class MessageSchema(Schema):
-    role: str  # e.g., "user", "system", "assistant"
-    text: str
-
-
-class CorpusFileChatSchema(Schema):
-    corpus_id: str
-    messages: List[MessageSchema]
-    path: str
-    # optional additional context: voice, purpose, structure, directions
-    voice: str = ""
-    purpose: str = ""
-    structure: str = ""
-    directions: str = ""
 
 
 FILE_EDITOR_SYSTEM_MESSAGE = (
@@ -36,36 +20,6 @@ FILE_EDITOR_SYSTEM_MESSAGE = (
 
 class FileRevisionResponse(Schema):
     new_file_revision: str
-
-
-def get_additional_context(payload: CorpusFileChatSchema) -> str:
-    # TODO: more automatically expandable implementation
-    # without the ifs
-    context = ""
-    if any(
-        [
-            payload.voice,
-            payload.purpose,
-            payload.structure,
-            payload.directions,
-        ]
-    ):
-        context += "\n\nADDITIONAL CONTEXT:\n\n"
-
-    if payload.voice:
-        context += f"VOICE:\n\n{payload.voice}\n\n"
-
-    if payload.purpose:
-        context += f"PURPOSE of corpus:\n\n{payload.purpose}\n\n"
-
-    if payload.structure:
-        context += f"STRUCTURE of corpus:\n\n{payload.structure}\n\n"
-
-    if payload.directions:
-        ext = payload.path.split(".")[-1]
-        context += f"DIRECTIONS for {ext} filetype:\n\n{payload.directions}\n\n"
-
-    return context
 
 
 @workon_router.post("/file", response=str, operation_id="file")
@@ -89,14 +43,8 @@ async def file(request, payload: CorpusFileChatSchema):
             text=f"You are focused on the file: {payload.path} "
             f"in the {corpus.name} corpus. "
             f"{FILE_EDITOR_SYSTEM_MESSAGE}"
-            f"{get_additional_context(payload)}",
+            f"{get_additional_context(payload, ext=payload.path.split('.')[-1])}",
         ),
-        # Alternatively we use multiple system messages?
-        # ChatCompletionTextMessage(role="system", text=VOICE_TEXT),
-        # .corpora/VOICE.md
-        # .corpora/PURPOSE.md
-        # .corpora/STRUCTURE.md
-        # .corpora/{ext}/DIRECTIONS.md
         ChatCompletionTextMessage(
             role="user",
             text=(
