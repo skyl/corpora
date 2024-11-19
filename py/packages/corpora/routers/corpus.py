@@ -130,7 +130,7 @@ async def get_corpus(request, corpus_id: uuid.UUID):
 
 @corpus_router.post(
     "/chat",
-    response=str,
+    response={200: str, 404: str},
     operation_id="chat",
 )
 @async_raise_not_found
