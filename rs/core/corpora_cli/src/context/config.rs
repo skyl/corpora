@@ -12,11 +12,12 @@ pub struct CorporaConfig {
     pub server: ServerConfig,
     pub url: String,
 
-    // Additional fields
     #[serde(skip)]
-    pub root_path: PathBuf, // Root directory where `.corpora.yaml` was found
+    pub root_path: PathBuf,
     #[serde(skip)]
-    pub id: Option<String>, // Contents of `.corpora/.id` file if it exists
+    pub relative_path: String,
+    #[serde(skip)]
+    pub id: Option<String>,
 }
 
 pub fn load_config() -> Option<CorporaConfig> {
@@ -30,6 +31,11 @@ pub fn load_config() -> Option<CorporaConfig> {
 
             // Add the root_path field
             config.root_path = current_dir.clone();
+            config.relative_path = current_dir
+                .strip_prefix(&config.root_path) // Borrow config.root_path
+                .ok()?
+                .to_string_lossy()
+                .to_string();
 
             // Check if the `.corpora/.id` file exists and read its content
             let id_file_path = current_dir.join(".corpora/.id");

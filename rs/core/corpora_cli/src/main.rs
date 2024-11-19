@@ -25,6 +25,7 @@ fn main() {
     match cli.command {
         Commands::Init => commands::init::run(&ctx),
         Commands::Sync => commands::sync::run(&ctx),
+        Commands::Chat => commands::chat::run(&ctx),
         Commands::Workon(args) => commands::workon::run(&ctx, args),
         Commands::Issue(issue_command) => match issue_command {
             issue::IssueCommands::Create => issue::create(&ctx),
