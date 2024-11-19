@@ -92,6 +92,7 @@ class CorpusApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "str",
+            "404": "str",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -156,6 +157,7 @@ class CorpusApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "str",
+            "404": "str",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout
@@ -220,6 +222,7 @@ class CorpusApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "200": "str",
+            "404": "str",
         }
         response_data = self.api_client.call_api(
             *_param, _request_timeout=_request_timeout

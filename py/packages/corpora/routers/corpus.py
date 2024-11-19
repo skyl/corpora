@@ -24,10 +24,7 @@ from ..tasks.sync import process_tarball
 corpus_router = Router(tags=["corpus"], auth=BearerAuth())
 
 
-CHAT_SYSTEM_MESSAGE = (
-    "Use the context provided to generate a response to the user. "
-    "Be imaginative and creative, but stay within the context. "
-)
+CHAT_SYSTEM_MESSAGE = "Be imaginative and creative in answering the user's questions. "
 
 
 class CorpusUpdateFilesSchema(BaseModel):
@@ -59,6 +56,57 @@ async def create_corpus(
 
     process_tarball.delay(str(corpus_instance.id), tarball_content)
     return 201, corpus_instance
+
+
+@corpus_router.post(
+    "/chat",
+    response={200: str, 404: str},
+    operation_id="chat",
+)
+@async_raise_not_found
+async def chat(request, payload: CorpusChatSchema):
+    """Chat with the Corpus."""
+    corpus = await Corpus.objects.aget(id=payload.corpus_id)
+    # TODO: last 2 messages? Eventually we need to worry about
+    # token count limits.
+    # Ideally we might roll-up a summary of the entire conversation.
+    # But, in the current design, we let the client decide the messages.
+    # A separate endpoint could be used by the client to "compress conversation"
+    split_context = await sync_to_async(corpus.get_relevant_splits_context)(
+        "\n".join(message.text for message in payload.messages[-2:])
+    )
+
+    print(payload.messages[-1].text)
+
+    all_messages = [
+        ChatCompletionTextMessage(
+            role="system",
+            text=f"You can explain everything in the {corpus.name} corpus. "
+            f"{CHAT_SYSTEM_MESSAGE}"
+            f"{get_additional_context(payload)}",
+        ),
+        # Alternatively we use multiple system messages?
+        # ChatCompletionTextMessage(role="system", text=VOICE_TEXT),
+        # .corpora/VOICE.md
+        # .corpora/PURPOSE.md
+        # .corpora/STRUCTURE.md
+        # .corpora/{ext}/DIRECTIONS.md
+        ChatCompletionTextMessage(
+            role="user",
+            text=(
+                f"I searched the broader corpus and found the following context:\n"
+                f"---\n{split_context}\n---"
+            ),
+        ),
+        *[
+            ChatCompletionTextMessage(role=msg.role, text=msg.text)
+            for msg in payload.messages
+        ],
+    ]
+
+    llm = load_llm_provider()
+    resp = llm.get_text_completion(all_messages)
+    return resp
 
 
 # update_files takes a corpus_id and a tarball upload with the files to add or update
@@ -126,55 +174,3 @@ async def get_corpus(request, corpus_id: uuid.UUID):
     """Retrieve a Corpus by ID."""
     corpus = await Corpus.objects.aget(id=corpus_id)
     return corpus
-
-
-@corpus_router.post(
-    "/chat",
-    response={200: str, 404: str},
-    operation_id="chat",
-)
-@async_raise_not_found
-async def chat(request, payload: CorpusChatSchema):
-    """Chat with the Corpus."""
-    corpus = await Corpus.objects.aget(id=payload.corpus_id)
-    # TODO: last 2 messages? Eventually we need to worry about
-    # token count limits.
-    # Ideally we might roll-up a summary of the entire conversation.
-    # But, in the current design, we let the client decide the messages.
-    # A separate endpoint could be used by the client to "compress conversation"
-    split_context = await sync_to_async(corpus.get_relevant_splits_context)(
-        "\n".join(message.text for message in payload.messages[-2:])
-    )
-
-    print(payload.messages[-1].text)
-
-    all_messages = [
-        ChatCompletionTextMessage(
-            role="system",
-            text=f"You are focused on the file: {payload.path} "
-            f"in the {corpus.name} corpus. "
-            f"{CHAT_SYSTEM_MESSAGE}"
-            f"{get_additional_context(payload)}",
-        ),
-        # Alternatively we use multiple system messages?
-        # ChatCompletionTextMessage(role="system", text=VOICE_TEXT),
-        # .corpora/VOICE.md
-        # .corpora/PURPOSE.md
-        # .corpora/STRUCTURE.md
-        # .corpora/{ext}/DIRECTIONS.md
-        ChatCompletionTextMessage(
-            role="user",
-            text=(
-                f"I searched the broader corpus and found the following context:\n"
-                f"---\n{split_context}\n---"
-            ),
-        ),
-        *[
-            ChatCompletionTextMessage(role=msg.role, text=msg.text)
-            for msg in payload.messages
-        ],
-    ]
-
-    llm = load_llm_provider()
-    resp = llm.get_text_completion(all_messages)
-    return resp

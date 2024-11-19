@@ -2,6 +2,7 @@ use crate::context::Context;
 use corpora_client::models::{CorpusChatSchema, MessageSchema};
 use dialoguer::{theme::ColorfulTheme, Input};
 use std::fs;
+use termimad::MadSkin;
 
 /// The `workon` command operation
 pub fn run(ctx: &Context) {
@@ -51,7 +52,10 @@ pub fn run(ctx: &Context) {
             }
         };
 
-        ctx.print(&response, dialoguer::console::Style::new().dim());
+        // ctx.print(&response, dialoguer::console::Style::new().dim());
+        let skin = MadSkin::default();
+        skin.print_text(&response);
+
         // println!("{}", relative_path.display());
         messages.push(MessageSchema {
             role: "assistant".to_string(),
