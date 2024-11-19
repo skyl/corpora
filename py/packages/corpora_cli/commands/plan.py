@@ -158,7 +158,7 @@ def update_issue(ctx: typer.Context, issue_number: int):
         directions = get_file_content_or_create(".corpora/md/DIRECTIONS.md")
 
         updated_issue = c.plan_api.get_issue(
-            IssueRequestSchema(
+            CorpusChatSchema(
                 messages=messages,
                 corpus_id=c.config["id"],
                 voice=voice,
