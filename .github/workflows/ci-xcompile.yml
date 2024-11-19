@@ -27,13 +27,15 @@ jobs:
           toolchain: stable
 
       - name: Install cross
+        working-directory: rs
         run: cargo install cross --git https://github.com/cross-rs/cross
 
       - name: Build the project using cross
+        working-directory: rs
         run: cross build --release --target ${{ matrix.target }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}-binary
-          path: target/${{ matrix.target }}/release/<your-binary-name>
+          path: rs/target/${{ matrix.target }}/release/<your-binary-name>
