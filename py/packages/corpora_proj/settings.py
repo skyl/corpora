@@ -84,7 +84,7 @@ DATABASES = {
         "USER": os.environ.get("POSTGRES_USER", "postgres"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
         # db is from the docker compose service name
-        "HOST": os.environ.get("POSTGRES_HOST", "db"),
+        "HOST": os.environ.get("POSTGRES_HOST", "corpora_db"),
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
         # not usable with async
         # "ATOMIC_REQUESTS": True,

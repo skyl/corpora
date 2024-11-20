@@ -17,6 +17,8 @@ services:
       - corpora_celery
     ports:
       - "8877:8877"
+    networks:
+      - shared-network
 
   corpora_celery:
     build:
@@ -73,6 +75,7 @@ services:
 volumes:
   postgres-data:
 
-# networks:
-#   shared-network:
-#     name: shared-network
+
+networks:
+  shared-network:
+    name: shared-network

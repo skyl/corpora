@@ -6,7 +6,7 @@ from django.views import View
 
 class BinaryView(View):
     def get(self, request, arch, *args, **kwargs):
-        path = f"/workspace/rs/target/{arch}/release/corpora_cli"
+        path = f"/workspace/rs/target/{arch}/release/corpora"
         if not os.path.exists(path):
             return HttpResponse("Binary not found", status=404)
 
