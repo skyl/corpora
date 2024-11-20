@@ -25,7 +25,16 @@ fn main() {
     match cli.command {
         Commands::Init => commands::init::run(&ctx),
         Commands::Sync => commands::sync::run(&ctx),
-        Commands::Chat => commands::chat::run(&ctx),
+        // TODO: Unify All Commands to Return Result
+        // Modify the run functions for all commands (init, sync, etc.)
+        // to return Result<(), std::io::Error>.
+        // This aligns with idiomatic Rust practices
+        // where errors are propagated explicitly.
+        Commands::Chat => {
+            if let Err(err) = commands::chat::run(&ctx) {
+                eprintln!("Error in chat command: {}", err);
+            }
+        }
         Commands::Workon(args) => commands::workon::run(&ctx, args),
         Commands::Issue(issue_command) => match issue_command {
             issue::IssueCommands::Create => issue::create(&ctx),
