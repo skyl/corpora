@@ -1,7 +1,7 @@
 {
     "name": "Corpora DevContainer",
     "dockerComposeFile": "../docker-compose.yaml",
-    "service": "interactive",
+    "service": "corpora_interactive",
     "workspaceFolder": "/workspace",
     "customizations": {
         "vscode": {

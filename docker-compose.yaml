@@ -72,3 +72,7 @@ services:
 
 volumes:
   postgres-data:
+
+# networks:
+#   shared-network:
+#     name: shared-network
