@@ -3,7 +3,10 @@ from dataclasses import dataclass
 from typing import List, Type, TypeVar
 from pydantic import BaseModel
 
-from corpora_ai.prompts import SUMMARIZE_SYSTEM_MESSAGE
+from corpora_ai.prompts import (
+    SUMMARIZE_SYSTEM_MESSAGE,
+    SYNTHETIC_EMBEDDING_SYSTEM_MESSAGE,
+)
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -84,6 +87,24 @@ class LLMBaseInterface(ABC):
                 ChatCompletionTextMessage(
                     role="user",
                     text=f"Summarize the following:\n {text}",
+                ),
+            ]
+        )
+
+    def get_synthetic_embedding_text(self, text: str) -> str:
+        """
+        Given a short prompt, generate a synthetic embedding text
+        that is more like to match splits in the corpus.
+        """
+        return self.get_text_completion(
+            [
+                ChatCompletionTextMessage(
+                    role="system",
+                    text=SYNTHETIC_EMBEDDING_SYSTEM_MESSAGE,
+                ),
+                ChatCompletionTextMessage(
+                    role="user",
+                    text=text,
                 ),
             ]
         )
