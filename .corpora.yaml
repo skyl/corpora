@@ -1,4 +1,4 @@
 name: skyl/corpora
 server:
-  base_url: http://corpora_app:8877
+  base_url: http://corpora-app:8877
 url: https://github.com/skyl/corpora

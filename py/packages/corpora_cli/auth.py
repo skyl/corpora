@@ -14,7 +14,7 @@ class AuthError(Exception):
 class AuthResolver:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        base_url = config.get("base_url", "http://corpora_app:8877")
+        base_url = config.get("base_url", "http://corpora-app:8877")
         self.token_url = f"{base_url}/o/token/"
 
     def resolve_auth(self) -> str:
@@ -100,6 +100,7 @@ class AuthResolver:
         }
         data = {"grant_type": "client_credentials"}
 
-        response = requests.post(self.token_url, headers=headers, data=data, timeout=10)
+        response = requests.post(
+            self.token_url, headers=headers, data=data, timeout=10)
         response.raise_for_status()
         return response.json().get("access_token")

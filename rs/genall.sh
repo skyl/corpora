@@ -2,7 +2,7 @@
 set -e  # Exit on any error
 
 # Define constants
-SPEC_URL="http://corpora_app:8877/api/openapi.json"
+SPEC_URL="http://corpora-app:8877/api/openapi.json"
 OUTPUT_DIR="core/corpora_client"
 TEMP_DIR="gen"
 

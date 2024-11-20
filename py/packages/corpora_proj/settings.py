@@ -27,7 +27,7 @@ ALLOWED_HOSTS = [
     "host.docker.internal",
     "127.0.0.1",
     "localhost",
-    "corpora_app",
+    "corpora-app",
 ]
 
 INSTALLED_APPS = [
@@ -84,7 +84,7 @@ DATABASES = {
         "USER": os.environ.get("POSTGRES_USER", "postgres"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
         # db is from the docker compose service name
-        "HOST": os.environ.get("POSTGRES_HOST", "corpora_db"),
+        "HOST": os.environ.get("POSTGRES_HOST", "corpora-db"),
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
         # not usable with async
         # "ATOMIC_REQUESTS": True,
@@ -133,5 +133,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery settings
-CELERY_BROKER_URL = os.getenv("REDIS_URL", "redis://corpora_redis:6379/0")
-CELERY_RESULT_BACKEND = os.getenv("REDIS_URL", "redis://corpora_redis:6379/0")
+CELERY_BROKER_URL = os.getenv("REDIS_URL", "redis://corpora-redis:6379/0")
+CELERY_RESULT_BACKEND = os.getenv("REDIS_URL", "redis://corpora-redis:6379/0")

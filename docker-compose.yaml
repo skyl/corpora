@@ -1,5 +1,5 @@
 services:
-  corpora_app:
+  corpora-app:
     build:
       context: .
       dockerfile: docker/Dockerfile.app
@@ -7,20 +7,20 @@ services:
       - .:/workspace
     environment:
       PYTHONPATH: "/workspace/py/packages"
-      REDIS_URL: "redis://corpora_redis:6379/0"
+      REDIS_URL: "redis://corpora-redis:6379/0"
       OPENAI_API_KEY: "${OPENAI_API_KEY}"
     command: python manage.py runserver 0.0.0.0:8877
     working_dir: /workspace/py/packages/corpora_proj
     depends_on:
-      - corpora_db
-      - corpora_redis
-      - corpora_celery
+      - corpora-db
+      - corpora-redis
+      - corpora-celery
     ports:
       - "8877:8877"
     networks:
       - shared-network
 
-  corpora_celery:
+  corpora-celery:
     build:
       context: .
       dockerfile: docker/Dockerfile.app
@@ -29,15 +29,15 @@ services:
       - .:/workspace
     environment:
       PYTHONPATH: "/workspace/py/packages"
-      REDIS_URL: "redis://corpora_redis:6379/0"
+      REDIS_URL: "redis://corpora-redis:6379/0"
       OPENAI_API_KEY: "${OPENAI_API_KEY}"
     depends_on:
-      corpora_redis:
+      corpora-redis:
         condition: service_healthy
     networks:
       - shared-network
 
-  corpora_db:
+  corpora-db:
     build:
       context: .
       dockerfile: docker/Dockerfile.pgvector
@@ -52,7 +52,7 @@ services:
     networks:
       - shared-network
 
-  corpora_redis:
+  corpora-redis:
     image: redis:latest
     ports:
       - "6379:6379"
@@ -64,7 +64,7 @@ services:
     networks:
       - shared-network
 
-  corpora_interactive:
+  corpora-interactive:
     build:
       context: .
       dockerfile: docker/Dockerfile
