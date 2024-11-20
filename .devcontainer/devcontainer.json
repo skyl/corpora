@@ -1,7 +1,7 @@
 {
     "name": "Corpora DevContainer",
     "dockerComposeFile": "../docker-compose.yaml",
-    "service": "interactive",
+    "service": "corpora-interactive",
     "workspaceFolder": "/workspace",
     "customizations": {
         "vscode": {
@@ -47,8 +47,7 @@
     ],
     "postCreateCommand": "/workspace/.devcontainer/setup.sh",
     "forwardPorts": [
-        8877,
-        5432
+        8877
     ],
     "remoteUser": "vscode"
 }
