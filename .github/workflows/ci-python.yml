@@ -20,9 +20,8 @@ jobs:
     services:
       postgres:
         image: ghcr.io/${{ github.repository_owner }}/postgres-pgvector:17
-        # command: postgres -c listen_addresses=* -c port=5482
         ports:
-          - 5482:5482
+          - 5432:5432
         env:
           POSTGRES_DB: postgres
           POSTGRES_USER: postgres
@@ -32,7 +31,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          -- listen_addresses=* port=5482
 
     steps:
       - name: Check out code

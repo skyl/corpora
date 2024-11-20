@@ -41,18 +41,12 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.pgvector
-    command:
-      - postgres
-      - -c
-      - listen_addresses=*
-      - -c
-      - port=5482
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
-      - "5482:5482"
+      - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:

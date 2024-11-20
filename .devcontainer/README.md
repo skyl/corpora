@@ -78,7 +78,6 @@ corpora plan issue
 
 ## Ports
 - **App:** 8877
-- **Database:** 5482
 
 ## Notes
 - Variations in Docker setup can be found in `../docker-compose.yaml` and `../docker/README.md`.
