@@ -34,6 +34,8 @@ services:
     depends_on:
       corpora_redis:
         condition: service_healthy
+    networks:
+      - shared-network
 
   corpora_db:
     build:
@@ -47,6 +49,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - shared-network
 
   corpora_redis:
     image: redis:latest
@@ -57,6 +61,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - shared-network
 
   corpora_interactive:
     build:
@@ -71,6 +77,8 @@ services:
       GITHUB_TOKEN: "${GITHUB_TOKEN}"
     command: sleep infinity
     working_dir: /workspace
+    networks:
+      - shared-network
 
 volumes:
   postgres-data:
