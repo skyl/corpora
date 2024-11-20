@@ -14,7 +14,7 @@ class AuthError(Exception):
 class AuthResolver:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        base_url = config.get("base_url", "http://app:8877")
+        base_url = config.get("base_url", "http://corpora_app:8877")
         self.token_url = f"{base_url}/o/token/"
 
     def resolve_auth(self) -> str:

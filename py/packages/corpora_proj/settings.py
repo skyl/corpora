@@ -27,7 +27,7 @@ ALLOWED_HOSTS = [
     "host.docker.internal",
     "127.0.0.1",
     "localhost",
-    "app",
+    "corpora_app",
 ]
 
 INSTALLED_APPS = [
@@ -132,6 +132,6 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Celelry settings
-CELERY_BROKER_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-CELERY_RESULT_BACKEND = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+# Celery settings
+CELERY_BROKER_URL = os.getenv("REDIS_URL", "redis://corpora_redis:6379/0")
+CELERY_RESULT_BACKEND = os.getenv("REDIS_URL", "redis://corpora_redis:6379/0")
