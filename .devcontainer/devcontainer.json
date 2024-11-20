@@ -48,7 +48,7 @@
     "postCreateCommand": "/workspace/.devcontainer/setup.sh",
     "forwardPorts": [
         8877,
-        5432
+        5482
     ],
     "remoteUser": "vscode"
 }
