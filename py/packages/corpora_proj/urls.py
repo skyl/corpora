@@ -23,5 +23,5 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += [
-        path("bin/<str:arch>/", BinaryView.as_view(), name="binary"),
+        path("bin/<str:arch>", BinaryView.as_view(), name="binary"),
     ]

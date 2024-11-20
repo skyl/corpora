@@ -1,26 +1,42 @@
-# Start with Alpine for its Musl-based minimal footprint
-FROM alpine:latest
+# Use Alpine for its musl-based environment
+FROM alpine:latest as builder
 
-# Install necessary tools and libraries for Rust and Musl
+# Install required tools
 RUN apk add --no-cache \
-    musl-dev \
     build-base \
+    musl-dev \
     linux-headers \
-    openssl-dev \
-    curl \
     perl \
-    git
+    curl \
+    git \
+    gcc \
+    make
 
-# Install Rust and add the Musl target
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
-    && source $HOME/.cargo/env \
-    && rustup target add x86_64-unknown-linux-musl
+# Build OpenSSL statically for musl
+WORKDIR /openssl
+RUN curl -O -L https://www.openssl.org/source/openssl-3.4.0.tar.gz \
+    && tar -xzf openssl-3.4.0.tar.gz \
+    && cd openssl-3.4.0 \
+    && CC=gcc ./Configure no-shared no-zlib linux-aarch64 \
+    && make -j$(nproc) \
+    && make install_sw
 
-# Set up environment variables for Musl builds
+# Install Rust
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:$PATH"
 
-# Set the working directory inside the container
+# Add musl target
+RUN rustup target add aarch64-unknown-linux-musl
+
+# Set environment variables for static linking with OpenSSL
+ENV OPENSSL_DIR=/usr/local \
+    OPENSSL_LIB_DIR=/usr/local/lib \
+    OPENSSL_INCLUDE_DIR=/usr/local/include \
+    CC=gcc \
+    CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=gcc
+
+# Define working directory
 WORKDIR /workspace
 
-# Default command to prevent the container from exiting immediately
+# Default command
 CMD ["/bin/sh"]
