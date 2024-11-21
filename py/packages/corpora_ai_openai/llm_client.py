@@ -15,8 +15,9 @@ class OpenAIClient(LLMBaseInterface):
         api_key: str,
         # TODO: we probably do need some way
         # to specify in runtime which model to use ;/
-        # completion_model: str = "gpt-4o",
-        completion_model: str = "gpt-4o-mini",
+        # I think we will have to expand the interface with options
+        # completion_model: str = "gpt-4o-mini",
+        completion_model: str = "gpt-4o",
         embedding_model: str = "text-embedding-3-small",
         azure_endpoint: str = None,
     ):
