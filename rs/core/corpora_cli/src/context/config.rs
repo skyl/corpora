@@ -18,6 +18,10 @@ pub struct CorporaConfig {
     pub relative_path: String,
     #[serde(skip)]
     pub id: Option<String>,
+    // #[serde(skip)]
+    // pub exclude_generated: Option<bool> = false,
+    #[serde(skip)]
+    pub exclude_generated: Option<bool>,
 }
 
 pub fn load_config() -> Option<CorporaConfig> {
@@ -27,6 +31,7 @@ pub fn load_config() -> Option<CorporaConfig> {
         if config_path.exists() {
             // Read and parse the .corpora.yaml file
             let contents = fs::read_to_string(&config_path).ok()?;
+            println!("{}", contents);
             let mut config: CorporaConfig = serde_yaml::from_str(&contents).ok()?;
 
             // Add the root_path field
@@ -46,7 +51,8 @@ pub fn load_config() -> Option<CorporaConfig> {
             } else {
                 config.id = None;
             }
-
+            // dump the whole object
+            println!("{:?}", config);
             return Some(config);
         }
 

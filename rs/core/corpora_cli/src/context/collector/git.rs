@@ -10,16 +10,18 @@ use std::process::Command;
 /// A collector implementation for Git repositories
 pub struct GitCollector {
     root_path: PathBuf,
+    exclude_generated: bool,
 }
 
 impl GitCollector {
     /// Creates a new instance of `GitCollector`
     ///
     /// # Arguments
-    /// * `config` - The `CorporaConfig` containing the root path information.
+    /// * `config` - The `CorporaConfig` containing the root path and exclude_generated information.
     pub fn new(config: &CorporaConfig) -> Self {
         Self {
             root_path: PathBuf::from(&config.root_path),
+            exclude_generated: config.exclude_generated.unwrap_or(false),
         }
     }
 
@@ -29,6 +31,21 @@ impl GitCollector {
             return contents.is_empty() || std::str::from_utf8(&contents).is_ok();
         }
         false
+    }
+
+    /// Check if a file is generated based on linguist's detection
+    fn is_generated_file(path: &Path) -> Result<bool, Box<dyn Error>> {
+        let output = Command::new("bash")
+            .arg("-c")
+            .arg(format!("git check-attr linguist-generated -- {}", path.display()))
+            .output()?;
+
+        if !output.status.success() {
+            return Err(format!("Failed to check if file is generated: {}", output.status).into());
+        }
+
+        let result = String::from_utf8_lossy(&output.stdout);
+        Ok(result.contains("true"))
     }
 }
 
@@ -49,6 +66,13 @@ impl Collector for GitCollector {
             .lines()
             .map(|line| self.root_path.join(line))
             .filter(|path| Self::is_text_file(path))
+            .filter(|path| {
+                if self.exclude_generated {
+                    !Self::is_generated_file(path).unwrap_or(false)
+                } else {
+                    true
+                }
+            })
             .collect();
 
         Ok(paths)
