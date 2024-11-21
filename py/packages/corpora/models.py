@@ -57,9 +57,10 @@ class Corpus(models.Model):
         from corpora_ai.provider_loader import load_llm_provider
 
         llm = load_llm_provider()
-        better_text = llm.get_synthetic_embedding_text(text)
-        print(f"better_text: {better_text}")
-        vector = llm.get_embedding(better_text)
+        # better_text = llm.get_synthetic_embedding_text(text)
+        # print(f"better_text: {better_text}")
+        # vector = llm.get_embedding(better_text)
+        vector = llm.get_embedding(text)
         return (
             Split.objects.filter(
                 vector__isnull=False,
