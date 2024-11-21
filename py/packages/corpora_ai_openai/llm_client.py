@@ -13,6 +13,10 @@ class OpenAIClient(LLMBaseInterface):
     def __init__(
         self,
         api_key: str,
+        # TODO: we probably do need some way
+        # to specify in runtime which model to use ;/
+        # I think we will have to expand the interface with options
+        # completion_model: str = "gpt-4o-mini",
         completion_model: str = "gpt-4o",
         embedding_model: str = "text-embedding-3-small",
         azure_endpoint: str = None,
@@ -21,8 +25,8 @@ class OpenAIClient(LLMBaseInterface):
             self.client = AzureOpenAI(
                 api_key=api_key,
                 azure_endpoint=azure_endpoint,
-                # What's the behavior of not pinning the API version?
-                # api_version="2024-10-01-preview",
+                # TODO: we should make this a parameter or what?
+                api_version="2024-10-01-preview",
             )
         else:
             self.client = OpenAI(api_key=api_key)

@@ -30,6 +30,10 @@ pub fn run(ctx: &Context) {
         let structure =
             fs::read_to_string(root_path.join(".corpora/STRUCTURE.md")).unwrap_or_default();
 
+        // println!("Voice: {}", voice);
+        // println!("Purpose: {}", purpose);
+        // println!("Structure: {}", structure);
+
         let response = match corpora_client::apis::corpus_api::chat(
             &ctx.api_config,
             CorpusChatSchema {

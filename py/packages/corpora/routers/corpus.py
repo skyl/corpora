@@ -14,6 +14,7 @@ from pydantic import BaseModel
 from corpora.schema.chat import CorpusChatSchema, get_additional_context
 from corpora_ai.llm_interface import ChatCompletionTextMessage
 from corpora_ai.provider_loader import load_llm_provider
+from corpora_ai.prompts import CHAT_SYSTEM_MESSAGE
 
 from ..auth import BearerAuth
 from ..lib.dj.decorators import async_raise_not_found
@@ -22,9 +23,6 @@ from ..schema.core import CorpusSchema, CorpusResponseSchema
 from ..tasks.sync import process_tarball
 
 corpus_router = Router(tags=["corpus"], auth=BearerAuth())
-
-
-CHAT_SYSTEM_MESSAGE = "Be imaginative and creative in answering the user's questions. "
 
 
 class CorpusUpdateFilesSchema(BaseModel):
@@ -81,7 +79,7 @@ async def chat(request, payload: CorpusChatSchema):
     all_messages = [
         ChatCompletionTextMessage(
             role="system",
-            text=f"You can explain everything in the {corpus.name} corpus. "
+            text=f"You are helping the user understand or evolve the **{corpus.name}** project. "
             f"{CHAT_SYSTEM_MESSAGE}"
             f"{get_additional_context(payload)}",
         ),

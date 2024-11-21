@@ -2,6 +2,7 @@ use super::Collector;
 use crate::context::config::CorporaConfig;
 use flate2::write::GzEncoder;
 use flate2::Compression;
+use globset::{Glob, GlobSet, GlobSetBuilder};
 use std::error::Error;
 use std::fs::{self, File};
 use std::path::{Path, PathBuf};
@@ -10,16 +11,29 @@ use std::process::Command;
 /// A collector implementation for Git repositories
 pub struct GitCollector {
     root_path: PathBuf,
+    exclude_globs: GlobSet,
 }
 
 impl GitCollector {
     /// Creates a new instance of `GitCollector`
     ///
     /// # Arguments
-    /// * `config` - The `CorporaConfig` containing the root path information.
+    /// * `config` - The `CorporaConfig` containing the root path and exclude_globs information.
     pub fn new(config: &CorporaConfig) -> Self {
+        // Build a GlobSet from the exclude globs in the configuration
+        let mut glob_builder = GlobSetBuilder::new();
+        if let Some(exclude_patterns) = &config.exclude_globs {
+            for pattern in exclude_patterns {
+                glob_builder.add(Glob::new(pattern).expect("Invalid glob pattern in config"));
+            }
+        }
+        let exclude_globs = glob_builder
+            .build()
+            .expect("Failed to build globset from exclude patterns");
+
         Self {
             root_path: PathBuf::from(&config.root_path),
+            exclude_globs,
         }
     }
 
@@ -35,6 +49,9 @@ impl GitCollector {
 impl Collector for GitCollector {
     /// Collects a list of `PathBuf` objects representing tracked text files
     fn collect_paths(&self) -> Result<Vec<PathBuf>, Box<dyn Error>> {
+        println!("Starting to collect paths");
+
+        // Get a list of tracked files using `git ls-files`
         let output = Command::new("git")
             .arg("ls-files")
             .current_dir(&self.root_path)
@@ -45,18 +62,26 @@ impl Collector for GitCollector {
             return Err(format!("Git command failed with status {}", output.status).into());
         }
 
-        let paths = String::from_utf8_lossy(&output.stdout)
+        let tracked_files: Vec<PathBuf> = String::from_utf8_lossy(&output.stdout)
             .lines()
-            .map(|line| self.root_path.join(line))
-            .filter(|path| Self::is_text_file(path))
+            .map(|line| self.root_path.join(line)) // Join the root path for full paths
+            .filter(|path| {
+                Self::is_text_file(path) // Check if it's a text file
+                    && !self
+                        .exclude_globs
+                        .is_match(path.strip_prefix(&self.root_path).unwrap_or(path))
+                // Match relative paths to globs
+            })
             .collect();
 
-        Ok(paths)
+        println!("Filtered paths: {:?}", tracked_files.len());
+        Ok(tracked_files)
     }
-
     /// Creates a tarball containing all tracked text files and returns the `PathBuf` to the tarball
     fn collect_tarball(&self) -> Result<PathBuf, Box<dyn Error>> {
+        println!("Starting to collect tarball");
         let files = self.collect_paths()?;
+        println!("Files to include in tarball: {:?}", files.len());
         self.collect_tarball_for_paths(files.iter().collect())
     }
 
