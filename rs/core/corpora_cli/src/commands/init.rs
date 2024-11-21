@@ -39,10 +39,10 @@ pub fn run(ctx: &Context) {
             return;
         }
     };
-    // can we print the tarball size here?
     let tarball_size = fs::metadata(&tarball_path).unwrap().len();
+    let tarball_size_mb = (tarball_size as f64) / (1024.0 * 1024.0);
     ctx.print(
-        &format!("Tarball size: {} bytes", tarball_size),
+        &format!("Tarball size: {:.8} MB", tarball_size_mb),
         console::Style::new().blue(),
     );
 
