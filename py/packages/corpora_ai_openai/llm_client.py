@@ -25,8 +25,8 @@ class OpenAIClient(LLMBaseInterface):
             self.client = AzureOpenAI(
                 api_key=api_key,
                 azure_endpoint=azure_endpoint,
-                # What's the behavior of not pinning the API version?
-                # api_version="2024-10-01-preview",
+                # TODO: we should make this a parameter or what?
+                api_version="2024-10-01-preview",
             )
         else:
             self.client = OpenAI(api_key=api_key)
