@@ -19,6 +19,7 @@ def load_llm_provider() -> Optional[LLMBaseInterface]:
         Optional[LLMBaseInterface]: An instance of the best available LLM provider.
     """
     provider_name = os.getenv("LLM_PROVIDER", "openai")
+    model_name = os.getenv("LLM_MODEL", "gpt-4o-mini")
 
     # Check for the OpenAI provider
     if provider_name == "openai" and OpenAIClient:
@@ -27,6 +28,7 @@ def load_llm_provider() -> Optional[LLMBaseInterface]:
             raise ValueError("OPENAI_API_KEY environment variable is not set.")
         return OpenAIClient(
             api_key=api_key,
+            completion_model=model_name,
             azure_endpoint=os.getenv("OPENAI_AZURE_ENDPOINT", None),
         )
 

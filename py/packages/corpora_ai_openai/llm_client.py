@@ -13,7 +13,10 @@ class OpenAIClient(LLMBaseInterface):
     def __init__(
         self,
         api_key: str,
-        completion_model: str = "gpt-4o",
+        # TODO: we probably do need some way
+        # to specify in runtime which model to use ;/
+        # completion_model: str = "gpt-4o",
+        completion_model: str = "gpt-4o-mini",
         embedding_model: str = "text-embedding-3-small",
         azure_endpoint: str = None,
     ):
