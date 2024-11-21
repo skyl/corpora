@@ -28,7 +28,7 @@ def process_tarball(corpus_id: str, tarball: bytes) -> None:
                 corpus_file.save()
                 corpus_file.splits.all().delete()
 
-                generate_summary_task.delay(corpus_file.id)
+                # generate_summary_task.delay(corpus_file.id)
                 split_file_task.delay(corpus_file.id)
 
 
