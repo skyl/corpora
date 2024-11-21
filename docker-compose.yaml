@@ -9,6 +9,7 @@ services:
       PYTHONPATH: "/workspace/py/packages"
       REDIS_URL: "redis://corpora-redis:6379/0"
       OPENAI_API_KEY: "${OPENAI_API_KEY}"
+      OPENAI_AZURE_ENDPOINT: "${OPENAI_AZURE_ENDPOINT}"
     command: python manage.py runserver 0.0.0.0:8877
     working_dir: /workspace/py/packages/corpora_proj
     depends_on:
@@ -31,6 +32,7 @@ services:
       PYTHONPATH: "/workspace/py/packages"
       REDIS_URL: "redis://corpora-redis:6379/0"
       OPENAI_API_KEY: "${OPENAI_API_KEY}"
+      OPENAI_AZURE_ENDPOINT: "${OPENAI_AZURE_ENDPOINT}"
     depends_on:
       corpora-redis:
         condition: service_healthy
