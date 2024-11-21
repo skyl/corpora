@@ -2,6 +2,7 @@ use super::Collector;
 use crate::context::config::CorporaConfig;
 use flate2::write::GzEncoder;
 use flate2::Compression;
+use globset::{Glob, GlobSet, GlobSetBuilder};
 use std::error::Error;
 use std::fs::{self, File};
 use std::path::{Path, PathBuf};
@@ -10,18 +11,29 @@ use std::process::Command;
 /// A collector implementation for Git repositories
 pub struct GitCollector {
     root_path: PathBuf,
-    exclude_generated: bool,
+    exclude_globs: GlobSet,
 }
 
 impl GitCollector {
     /// Creates a new instance of `GitCollector`
     ///
     /// # Arguments
-    /// * `config` - The `CorporaConfig` containing the root path and exclude_generated information.
+    /// * `config` - The `CorporaConfig` containing the root path and exclude_globs information.
     pub fn new(config: &CorporaConfig) -> Self {
+        // Build a GlobSet from the exclude globs in the configuration
+        let mut glob_builder = GlobSetBuilder::new();
+        if let Some(exclude_patterns) = &config.exclude_globs {
+            for pattern in exclude_patterns {
+                glob_builder.add(Glob::new(pattern).expect("Invalid glob pattern in config"));
+            }
+        }
+        let exclude_globs = glob_builder
+            .build()
+            .expect("Failed to build globset from exclude patterns");
+
         Self {
             root_path: PathBuf::from(&config.root_path),
-            exclude_generated: config.exclude_generated.unwrap_or(false),
+            exclude_globs,
         }
     }
 
@@ -32,26 +44,14 @@ impl GitCollector {
         }
         false
     }
-
-    /// Check if a file is generated based on linguist's detection
-    fn is_generated_file(path: &Path) -> Result<bool, Box<dyn Error>> {
-        let output = Command::new("bash")
-            .arg("-c")
-            .arg(format!("git check-attr linguist-generated -- {}", path.display()))
-            .output()?;
-
-        if !output.status.success() {
-            return Err(format!("Failed to check if file is generated: {}", output.status).into());
-        }
-
-        let result = String::from_utf8_lossy(&output.stdout);
-        Ok(result.contains("true"))
-    }
 }
 
 impl Collector for GitCollector {
     /// Collects a list of `PathBuf` objects representing tracked text files
     fn collect_paths(&self) -> Result<Vec<PathBuf>, Box<dyn Error>> {
+        println!("Starting to collect paths");
+
+        // Get a list of tracked files using `git ls-files`
         let output = Command::new("git")
             .arg("ls-files")
             .current_dir(&self.root_path)
@@ -62,25 +62,22 @@ impl Collector for GitCollector {
             return Err(format!("Git command failed with status {}", output.status).into());
         }
 
-        let paths = String::from_utf8_lossy(&output.stdout)
+        // Filter files based on text type and exclusion globs
+        let tracked_files: Vec<PathBuf> = String::from_utf8_lossy(&output.stdout)
             .lines()
             .map(|line| self.root_path.join(line))
-            .filter(|path| Self::is_text_file(path))
-            .filter(|path| {
-                if self.exclude_generated {
-                    !Self::is_generated_file(path).unwrap_or(false)
-                } else {
-                    true
-                }
-            })
+            .filter(|path| Self::is_text_file(path) && !self.exclude_globs.is_match(path))
             .collect();
 
-        Ok(paths)
+        println!("Filtered paths: {:?}", tracked_files.len());
+        Ok(tracked_files)
     }
 
     /// Creates a tarball containing all tracked text files and returns the `PathBuf` to the tarball
     fn collect_tarball(&self) -> Result<PathBuf, Box<dyn Error>> {
+        println!("Starting to collect tarball");
         let files = self.collect_paths()?;
+        println!("Files to include in tarball: {:?}", files.len());
         self.collect_tarball_for_paths(files.iter().collect())
     }
 

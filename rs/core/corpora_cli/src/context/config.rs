@@ -11,6 +11,8 @@ pub struct CorporaConfig {
     pub name: String,
     pub server: ServerConfig,
     pub url: String,
+    /// A list of glob patterns to exclude
+    pub exclude_globs: Option<Vec<String>>,
 
     #[serde(skip)]
     pub root_path: PathBuf,
@@ -18,10 +20,6 @@ pub struct CorporaConfig {
     pub relative_path: String,
     #[serde(skip)]
     pub id: Option<String>,
-    // #[serde(skip)]
-    // pub exclude_generated: Option<bool> = false,
-    #[serde(skip)]
-    pub exclude_generated: Option<bool>,
 }
 
 pub fn load_config() -> Option<CorporaConfig> {
@@ -29,20 +27,18 @@ pub fn load_config() -> Option<CorporaConfig> {
     loop {
         let config_path = current_dir.join(".corpora.yaml");
         if config_path.exists() {
-            // Read and parse the .corpora.yaml file
             let contents = fs::read_to_string(&config_path).ok()?;
             println!("{}", contents);
             let mut config: CorporaConfig = serde_yaml::from_str(&contents).ok()?;
 
-            // Add the root_path field
+            // Set additional fields that are not part of the config file
             config.root_path = current_dir.clone();
             config.relative_path = current_dir
-                .strip_prefix(&config.root_path) // Borrow config.root_path
+                .strip_prefix(&config.root_path)
                 .ok()?
                 .to_string_lossy()
                 .to_string();
 
-            // Check if the `.corpora/.id` file exists and read its content
             let id_file_path = current_dir.join(".corpora/.id");
             if id_file_path.exists() {
                 if let Ok(id_content) = fs::read_to_string(&id_file_path) {
@@ -51,12 +47,11 @@ pub fn load_config() -> Option<CorporaConfig> {
             } else {
                 config.id = None;
             }
-            // dump the whole object
+
             println!("{:?}", config);
             return Some(config);
         }
 
-        // Move to the parent directory
         if !current_dir.pop() {
             break;
         }
