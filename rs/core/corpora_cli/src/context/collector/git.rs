@@ -62,17 +62,21 @@ impl Collector for GitCollector {
             return Err(format!("Git command failed with status {}", output.status).into());
         }
 
-        // Filter files based on text type and exclusion globs
         let tracked_files: Vec<PathBuf> = String::from_utf8_lossy(&output.stdout)
             .lines()
-            .map(|line| self.root_path.join(line))
-            .filter(|path| Self::is_text_file(path) && !self.exclude_globs.is_match(path))
+            .map(|line| self.root_path.join(line)) // Join the root path for full paths
+            .filter(|path| {
+                Self::is_text_file(path) // Check if it's a text file
+                    && !self
+                        .exclude_globs
+                        .is_match(path.strip_prefix(&self.root_path).unwrap_or(path))
+                // Match relative paths to globs
+            })
             .collect();
 
         println!("Filtered paths: {:?}", tracked_files.len());
         Ok(tracked_files)
     }
-
     /// Creates a tarball containing all tracked text files and returns the `PathBuf` to the tarball
     fn collect_tarball(&self) -> Result<PathBuf, Box<dyn Error>> {
         println!("Starting to collect tarball");
