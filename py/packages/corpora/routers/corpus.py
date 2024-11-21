@@ -79,7 +79,7 @@ async def chat(request, payload: CorpusChatSchema):
     all_messages = [
         ChatCompletionTextMessage(
             role="system",
-            text=f"You can explain everything in the {corpus.name} corpus. "
+            text=f"You are helping the user understand or evolve the **{corpus.name}** project. "
             f"{CHAT_SYSTEM_MESSAGE}"
             f"{get_additional_context(payload)}",
         ),
