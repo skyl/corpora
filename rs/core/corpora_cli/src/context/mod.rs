@@ -87,6 +87,7 @@ impl Context {
     /// A boolean indicating whether the user confirmed.
     pub fn prompt_confirm(&self, prompt: &str) -> bool {
         dialoguer::Confirm::new()
+            .default(false)
             .with_prompt(prompt)
             .interact()
             .unwrap_or_else(|_| {
@@ -140,5 +141,14 @@ impl Context {
     pub fn warn(&self, message: &str) {
         let warn_style = Style::new().yellow().bold();
         self.print(message, warn_style);
+    }
+
+    /// Print a dim message
+    /// Dim messages are used for less important information
+    /// # Arguments
+    /// * `message` - The message to print.
+    pub fn dim(&self, message: &str) {
+        let dim_style = Style::new().dim();
+        self.print(message, dim_style);
     }
 }

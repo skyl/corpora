@@ -1,6 +1,27 @@
 use crate::context::Context;
 use std::{collections::HashMap, fs, path::PathBuf};
 
+// Implement the `cleanup_temp_files` function
+// // Clean up the tarball
+// ctx.success("Cleaning up temporary tarball file...");
+// if let Err(err) = fs::remove_file(&tarball_path) {
+//     ctx.warn(&format!("Failed to remove temporary tarball: {:?}", err));
+// } else {
+//     ctx.success("Temporary tarball file removed successfully.");
+// }
+
+/// Clean up a list of temporary files
+pub fn cleanup_temp_files(files: &[PathBuf], ctx: &Context) {
+    for file in files {
+        ctx.success(&format!("Cleaning up temporary file: {}", file.display()));
+        if let Err(err) = fs::remove_file(file) {
+            ctx.warn(&format!("Failed to remove temporary file: {:?}", err));
+        } else {
+            ctx.success("Temporary file removed successfully.");
+        }
+    }
+}
+
 /// Run the `sync` command
 pub fn run(ctx: &Context) {
     ctx.success("Starting corpus sync...");
@@ -70,17 +91,14 @@ pub fn run(ctx: &Context) {
         .cloned()
         .collect();
 
-    // Log the differences
-    ctx.success("Files to update/add:");
+    ctx.warn(&format!("Files to update/add ({}):", files_to_update.len()));
     for file in files_to_update.keys() {
-        ctx.success(&format!(" - {}", file));
+        ctx.dim(&format!(" - {}", file));
     }
-
-    ctx.success("Files to delete:");
+    ctx.warn(&format!("Files to delete ({}):", files_to_delete.len()));
     for file in &files_to_delete {
-        ctx.success(&format!(" - {}", file));
+        ctx.dim(&format!(" - {}", file));
     }
-
     if files_to_update.is_empty() && files_to_delete.is_empty() {
         ctx.success("No changes detected. Everything is up-to-date!");
         return;
@@ -109,8 +127,13 @@ pub fn run(ctx: &Context) {
         }
     };
 
-    // Send the update to the server
-    ctx.success("Uploading changes to the server...");
+    let upload = ctx.prompt_confirm("Do you want to upload?");
+    if !upload {
+        cleanup_temp_files(&[tarball_path], ctx);
+        ctx.warn("Aborting sync. No changes have been made.");
+        return;
+    }
+
     match corpora_client::apis::corpus_api::update_files(
         &ctx.api_config,
         &corpus_id,
@@ -125,13 +148,7 @@ pub fn run(ctx: &Context) {
         }
     }
 
-    // Clean up the tarball
-    ctx.success("Cleaning up temporary tarball file...");
-    if let Err(err) = fs::remove_file(&tarball_path) {
-        ctx.warn(&format!("Failed to remove temporary tarball: {:?}", err));
-    } else {
-        ctx.success("Temporary tarball file removed successfully.");
-    }
+    cleanup_temp_files(&[tarball_path], ctx);
 }
 
 /// Calculate a hash for the given file path

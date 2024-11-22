@@ -1,5 +1,7 @@
+from math import log
 import os
 import uuid
+from venv import logger
 
 from django.db import models
 from django.utils import timezone
@@ -197,6 +199,10 @@ class Split(models.Model):
         return f"{self.file.corpus.name}:{self.file.path}:{self.order}"
 
     def get_and_save_vector(self):
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"{self.content[:30]} ... {self.content[-30:]}")
+        # print(f"***{self.content[:100]} ... {self.content[-100:]}")
         from corpora_ai.provider_loader import load_llm_provider
 
         llm = load_llm_provider()
