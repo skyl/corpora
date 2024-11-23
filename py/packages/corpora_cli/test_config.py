@@ -41,7 +41,7 @@ def mocked_env():
 @patch("builtins.open", new_callable=mock_open)
 @patch("yaml.safe_load")
 def test_load_config_success(
-    mock_yaml_load, mock_file_open, yaml_content, mocked_env
+    mock_yaml_load, mock_file_open, yaml_content, mocked_env,
 ):
     """Test load_config with successful loading and env substitution."""
     # Set up mock for yaml.safe_load to return the parsed YAML structure
@@ -76,7 +76,7 @@ def test_load_config_missing_file(mock_file_open):
         return_value="https://example.com/test-repo",
     ):
         with patch(
-            "corpora_cli.config.get_git_repo_name", return_value="test-repo"
+            "corpora_cli.config.get_git_repo_name", return_value="test-repo",
         ):
             config = load_config()
 
@@ -95,7 +95,7 @@ def test_load_config_invalid_yaml(mock_file_open):
 
     # Mock yaml.safe_load to raise a YAMLError
     with patch(
-        "yaml.safe_load", side_effect=yaml.YAMLError("YAML parsing error")
+        "yaml.safe_load", side_effect=yaml.YAMLError("YAML parsing error"),
     ):
         with pytest.raises(yaml.YAMLError, match="YAML parsing error"):
             load_config()
