@@ -11,7 +11,6 @@ client = TestAsyncClient(file_router)
 
 
 class CorpusTextFileAPITestCase(TestCase):
-
     @pytest.mark.django_db
     async def test_get_file_by_path(self):
         """Test retrieving a file by path within a corpus."""
@@ -19,7 +18,7 @@ class CorpusTextFileAPITestCase(TestCase):
         corpus = await create_corpus(
             "Path Retrieval Corpus", "https://example.com/repo", user
         )
-        file = await create_file(corpus, "nested/file1.txt", "Sample content")
+        await create_file(corpus, "nested/file1.txt", "Sample content")
 
         response = await client.get(
             f"/corpus/{corpus.id}?path=nested/file1.txt", headers=headers
@@ -60,7 +59,9 @@ class CorpusTextFileAPITestCase(TestCase):
     async def test_create_file(self):
         """Test creating a file within a corpus."""
         user, headers = await create_user_and_token()
-        corpus = await create_corpus("File Corpus", "https://example.com/repo", user)
+        corpus = await create_corpus(
+            "File Corpus", "https://example.com/repo", user
+        )
         payload = {
             "path": "file1.txt",
             "content": "Sample content",
@@ -78,7 +79,9 @@ class CorpusTextFileAPITestCase(TestCase):
     async def test_create_file_with_duplicate_path(self):
         """Test creating a file with a duplicate path within the same corpus."""
         user, headers = await create_user_and_token()
-        corpus = await create_corpus("File Corpus", "https://example.com/repo", user)
+        corpus = await create_corpus(
+            "File Corpus", "https://example.com/repo", user
+        )
         await create_file(corpus, "file1.txt", "Sample content")
 
         payload = {

@@ -76,7 +76,7 @@ def issue(ctx: typer.Context):
             )
         )
         # Display the generated draft issue
-        c.console.print(f"Draft Issue:", style="bold green")
+        c.console.print("Draft Issue:", style="bold green")
         c.console.print(f"Title: {draft_issue.title}", style="magenta")
         c.console.print(f"Body:\n{draft_issue.body}", style="dim")
 
@@ -168,7 +168,7 @@ def update_issue(ctx: typer.Context, issue_number: int):
             )
         )
         # Display the updated draft issue
-        c.console.print(f"Updated Draft Issue:", style="bold green")
+        c.console.print("Updated Draft Issue:", style="bold green")
         c.console.print(f"Title: {updated_issue.title}", style="magenta")
         c.console.print(f"Body:\n{updated_issue.body}", style="dim")
 

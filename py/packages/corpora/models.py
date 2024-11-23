@@ -1,7 +1,6 @@
-from math import log
+import logging
 import os
 import uuid
-from venv import logger
 
 from django.db import models
 from django.utils import timezone
@@ -10,10 +9,12 @@ from django.contrib.auth import get_user_model
 # from django.contrib.postgres.fields import ArrayField
 from pgvector.django import VectorField, CosineDistance
 
-
 from corpora_ai.split import get_text_splitter
+from corpora_ai.provider_loader import load_llm_provider
 
 User = get_user_model()
+
+logger = logging.getLogger(__name__)
 
 
 class Corpus(models.Model):
@@ -56,8 +57,6 @@ class Corpus(models.Model):
         """
         Given a text query, return the most relevant splits from this corpus.
         """
-        from corpora_ai.provider_loader import load_llm_provider
-
         llm = load_llm_provider()
         # better_text = llm.get_synthetic_embedding_text(text)
         # print(f"better_text: {better_text}")
@@ -130,8 +129,6 @@ class CorpusTextFile(models.Model):
         return f"{self.corpus.name}:{self.path}"
 
     def get_and_save_summary(self):
-        from corpora_ai.provider_loader import load_llm_provider
-
         llm = load_llm_provider()
         summary = llm.get_summary(self._get_text_representation())
         self.ai_summary = summary
@@ -141,8 +138,6 @@ class CorpusTextFile(models.Model):
         return f"{self.corpus.name}:{self.path}\n\n{self.content}"
 
     def get_and_save_vector_of_summary(self):
-        from corpora_ai.provider_loader import load_llm_provider
-
         llm = load_llm_provider()
         vector = llm.get_embedding(self.ai_summary)
         self.vector_of_summary = vector
@@ -199,12 +194,7 @@ class Split(models.Model):
         return f"{self.file.corpus.name}:{self.file.path}:{self.order}"
 
     def get_and_save_vector(self):
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.info(f"{self.content[:30]} ... {self.content[-30:]}")
-        # print(f"***{self.content[:100]} ... {self.content[-100:]}")
-        from corpora_ai.provider_loader import load_llm_provider
-
+        logger.info(f"{self.file.path}: {self.content[:10]} ... {self.content[-10:]}")
         llm = load_llm_provider()
         vector = llm.get_embedding(self.content)
         self.vector = vector

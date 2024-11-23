@@ -34,4 +34,4 @@ Each package serves a distinct purpose:
 ## Development Workflow
 
 - **API Development**: Add endpoints in `corpora`. Use `./genall.sh` to update `corpora_client` and `corpora_cli`.
-- **Testing and Formatting**: Use `black` for code formatting and `pytest` for tests.
+- **Testing and Formatting**: Use `ruff` for code formatting and `pytest` for tests.

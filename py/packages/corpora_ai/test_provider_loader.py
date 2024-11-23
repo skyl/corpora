@@ -2,7 +2,6 @@ import os
 import unittest
 from unittest.mock import patch, MagicMock
 
-from openai import azure_endpoint
 from corpora_ai.provider_loader import load_llm_provider
 from corpora_ai.llm_interface import LLMBaseInterface
 

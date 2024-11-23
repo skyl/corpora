@@ -1,6 +1,5 @@
 import subprocess
 
-from httpx import get
 
 
 def run_command(command: list) -> str:

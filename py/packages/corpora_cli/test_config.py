@@ -2,7 +2,6 @@ import os
 import yaml
 import pytest
 from unittest.mock import patch, mock_open
-import typer
 
 from corpora_cli.config import load_config, substitute_env_variables
 
