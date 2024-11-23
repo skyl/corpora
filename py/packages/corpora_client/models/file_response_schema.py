@@ -23,12 +23,10 @@ from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class FileResponseSchema(BaseModel):
     """
     FileResponseSchema
-    """  # noqa: E501
-
+    """ # noqa: E501
     id: StrictStr
     corpus_id: StrictStr
     path: StrictStr
@@ -36,21 +34,14 @@ class FileResponseSchema(BaseModel):
     checksum: StrictStr
     created_at: datetime
     updated_at: datetime
-    __properties: ClassVar[List[str]] = [
-        "id",
-        "corpus_id",
-        "path",
-        "content",
-        "checksum",
-        "created_at",
-        "updated_at",
-    ]
+    __properties: ClassVar[List[str]] = ["id", "corpus_id", "path", "content", "checksum", "created_at", "updated_at"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -76,7 +67,8 @@ class FileResponseSchema(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -94,15 +86,15 @@ class FileResponseSchema(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "id": obj.get("id"),
-                "corpus_id": obj.get("corpus_id"),
-                "path": obj.get("path"),
-                "content": obj.get("content"),
-                "checksum": obj.get("checksum"),
-                "created_at": obj.get("created_at"),
-                "updated_at": obj.get("updated_at"),
-            }
-        )
+        _obj = cls.model_validate({
+            "id": obj.get("id"),
+            "corpus_id": obj.get("corpus_id"),
+            "path": obj.get("path"),
+            "content": obj.get("content"),
+            "checksum": obj.get("checksum"),
+            "created_at": obj.get("created_at"),
+            "updated_at": obj.get("updated_at")
+        })
         return _obj
+
+

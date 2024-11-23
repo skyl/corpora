@@ -23,30 +23,23 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Set
 from typing_extensions import Self
 
-
 class CorpusResponseSchema(BaseModel):
     """
     CorpusResponseSchema
-    """  # noqa: E501
-
+    """ # noqa: E501
     id: StrictStr
     name: StrictStr
     url: Optional[StrictStr] = None
     created_at: datetime
     updated_at: datetime
-    __properties: ClassVar[List[str]] = [
-        "id",
-        "name",
-        "url",
-        "created_at",
-        "updated_at",
-    ]
+    __properties: ClassVar[List[str]] = ["id", "name", "url", "created_at", "updated_at"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -72,7 +65,8 @@ class CorpusResponseSchema(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -82,7 +76,7 @@ class CorpusResponseSchema(BaseModel):
         # set to None if url (nullable) is None
         # and model_fields_set contains the field
         if self.url is None and "url" in self.model_fields_set:
-            _dict["url"] = None
+            _dict['url'] = None
 
         return _dict
 
@@ -95,13 +89,13 @@ class CorpusResponseSchema(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "id": obj.get("id"),
-                "name": obj.get("name"),
-                "url": obj.get("url"),
-                "created_at": obj.get("created_at"),
-                "updated_at": obj.get("updated_at"),
-            }
-        )
+        _obj = cls.model_validate({
+            "id": obj.get("id"),
+            "name": obj.get("name"),
+            "url": obj.get("url"),
+            "created_at": obj.get("created_at"),
+            "updated_at": obj.get("updated_at")
+        })
         return _obj
+
+

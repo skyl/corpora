@@ -22,12 +22,10 @@ from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class MessageSchema(BaseModel):
     """
     MessageSchema
-    """  # noqa: E501
-
+    """ # noqa: E501
     role: StrictStr
     text: StrictStr
     __properties: ClassVar[List[str]] = ["role", "text"]
@@ -37,6 +35,7 @@ class MessageSchema(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -62,7 +61,8 @@ class MessageSchema(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -80,5 +80,10 @@ class MessageSchema(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"role": obj.get("role"), "text": obj.get("text")})
+        _obj = cls.model_validate({
+            "role": obj.get("role"),
+            "text": obj.get("text")
+        })
         return _obj
+
+

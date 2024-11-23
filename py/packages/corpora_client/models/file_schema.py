@@ -22,12 +22,10 @@ from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class FileSchema(BaseModel):
     """
     FileSchema
-    """  # noqa: E501
-
+    """ # noqa: E501
     path: StrictStr
     content: StrictStr
     corpus_id: StrictStr
@@ -38,6 +36,7 @@ class FileSchema(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -63,7 +62,8 @@ class FileSchema(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -81,11 +81,11 @@ class FileSchema(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "path": obj.get("path"),
-                "content": obj.get("content"),
-                "corpus_id": obj.get("corpus_id"),
-            }
-        )
+        _obj = cls.model_validate({
+            "path": obj.get("path"),
+            "content": obj.get("content"),
+            "corpus_id": obj.get("corpus_id")
+        })
         return _obj
+
+

@@ -22,12 +22,10 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Set
 from typing_extensions import Self
 
-
 class CorpusUpdateFilesSchema(BaseModel):
     """
     CorpusUpdateFilesSchema
-    """  # noqa: E501
-
+    """ # noqa: E501
     delete_files: Optional[List[StrictStr]] = None
     __properties: ClassVar[List[str]] = ["delete_files"]
 
@@ -36,6 +34,7 @@ class CorpusUpdateFilesSchema(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -61,7 +60,8 @@ class CorpusUpdateFilesSchema(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -71,7 +71,7 @@ class CorpusUpdateFilesSchema(BaseModel):
         # set to None if delete_files (nullable) is None
         # and model_fields_set contains the field
         if self.delete_files is None and "delete_files" in self.model_fields_set:
-            _dict["delete_files"] = None
+            _dict['delete_files'] = None
 
         return _dict
 
@@ -84,5 +84,9 @@ class CorpusUpdateFilesSchema(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"delete_files": obj.get("delete_files")})
+        _obj = cls.model_validate({
+            "delete_files": obj.get("delete_files")
+        })
         return _obj
+
+

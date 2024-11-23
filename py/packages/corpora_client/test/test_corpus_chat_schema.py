@@ -16,7 +16,6 @@ import unittest
 
 from corpora_client.models.corpus_chat_schema import CorpusChatSchema
 
-
 class TestCorpusChatSchema(unittest.TestCase):
     """CorpusChatSchema unit test stubs"""
 
@@ -28,9 +27,9 @@ class TestCorpusChatSchema(unittest.TestCase):
 
     def make_instance(self, include_optional) -> CorpusChatSchema:
         """Test CorpusChatSchema
-        include_optional is a boolean, when False only required
-        params are included, when True both required and
-        optional params are included"""
+            include_optional is a boolean, when False only required
+            params are included, when True both required and
+            optional params are included """
         # uncomment below to create an instance of `CorpusChatSchema`
         """
         model = CorpusChatSchema()
@@ -63,6 +62,5 @@ class TestCorpusChatSchema(unittest.TestCase):
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

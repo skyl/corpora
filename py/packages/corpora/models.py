@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from pgvector.django import VectorField, CosineDistance
 
 from corpora_ai.split import get_text_splitter
-from corpora_ai.provider_loader import load_llm_provider
+# from corpora_ai.provider_loader import load_llm_provider
 
 User = get_user_model()
 
@@ -43,7 +43,8 @@ class Corpus(models.Model):
         help_text="Timestamp indicating when the corpus was created.",
     )
     updated_at = models.DateTimeField(
-        auto_now=True, help_text="Timestamp indicating the last update of the corpus."
+        auto_now=True,
+        help_text="Timestamp indicating the last update of the corpus.",
     )
 
     class Meta:
@@ -57,6 +58,8 @@ class Corpus(models.Model):
         """
         Given a text query, return the most relevant splits from this corpus.
         """
+        from corpora_ai.provider_loader import load_llm_provider
+
         llm = load_llm_provider()
         # better_text = llm.get_synthetic_embedding_text(text)
         # print(f"better_text: {better_text}")
@@ -79,7 +82,9 @@ class Corpus(models.Model):
         splits = self.get_relevant_splits(text, limit)
         split_context = ""
         for split in splits:
-            split_context += f"\n\n{split.file.path}:\n```\n{split.content}\n```\n\n"
+            split_context += (
+                f"\n\n{split.file.path}:\n```\n{split.content}\n```\n\n"
+            )
         return split_context
 
     def get_file_hashes(self) -> dict:
@@ -102,7 +107,9 @@ class CorpusTextFile(models.Model):
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    corpus = models.ForeignKey(Corpus, on_delete=models.CASCADE, related_name="files")
+    corpus = models.ForeignKey(
+        Corpus, on_delete=models.CASCADE, related_name="files"
+    )
     path = models.CharField(max_length=1024)
     content = models.TextField(blank=True)
     ai_summary = models.TextField(blank=True)
@@ -129,6 +136,8 @@ class CorpusTextFile(models.Model):
         return f"{self.corpus.name}:{self.path}"
 
     def get_and_save_summary(self):
+        from corpora_ai.provider_loader import load_llm_provider
+
         llm = load_llm_provider()
         summary = llm.get_summary(self._get_text_representation())
         self.ai_summary = summary
@@ -138,6 +147,8 @@ class CorpusTextFile(models.Model):
         return f"{self.corpus.name}:{self.path}\n\n{self.content}"
 
     def get_and_save_vector_of_summary(self):
+        from corpora_ai.provider_loader import load_llm_provider
+
         llm = load_llm_provider()
         vector = llm.get_embedding(self.ai_summary)
         self.vector_of_summary = vector
@@ -194,7 +205,11 @@ class Split(models.Model):
         return f"{self.file.corpus.name}:{self.file.path}:{self.order}"
 
     def get_and_save_vector(self):
-        logger.info(f"{self.file.path}: {self.content[:10]} ... {self.content[-10:]}")
+        logger.info(
+            f"{self.file.path}: {self.content[:10]} ... {self.content[-10:]}"
+        )
+        from corpora_ai.provider_loader import load_llm_provider
+
         llm = load_llm_provider()
         vector = llm.get_embedding(self.content)
         self.vector = vector
