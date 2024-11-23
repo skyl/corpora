@@ -10,6 +10,8 @@ from django.contrib.auth import get_user_model
 from pgvector.django import VectorField, CosineDistance
 
 from corpora_ai.split import get_text_splitter
+
+# TODO: This loads too early and makes it hard to mock
 # from corpora_ai.provider_loader import load_llm_provider
 
 User = get_user_model()

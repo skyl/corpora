@@ -1,7 +1,6 @@
 import subprocess
 
 
-
 def run_command(command: list) -> str:
     """
     Run a command and return its output as a string.

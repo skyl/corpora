@@ -52,9 +52,7 @@ def file(ctx: typer.Context, path: str):
         )
 
         if not user_input:
-            c.console.print(
-                "No input provided. Please try again.", style="yellow"
-            )
+            c.console.print("No input provided. Please try again.", style="yellow")
             continue
 
         # Add the user's input as a new message

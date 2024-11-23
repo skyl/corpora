@@ -1,5 +1,10 @@
+# https://docs.astral.sh/ruff/configuration/
 [tool.ruff]
 line-length = 80
+fixable = ["ALL"]
 
 [tool.ruff.lint]
 ignore = ["E721"]
+
+[tool.ruff.format]
+quote-style = "double"

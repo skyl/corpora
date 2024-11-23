@@ -59,9 +59,7 @@ class CorpusTextFileAPITestCase(TestCase):
     async def test_create_file(self):
         """Test creating a file within a corpus."""
         user, headers = await create_user_and_token()
-        corpus = await create_corpus(
-            "File Corpus", "https://example.com/repo", user
-        )
+        corpus = await create_corpus("File Corpus", "https://example.com/repo", user)
         payload = {
             "path": "file1.txt",
             "content": "Sample content",
@@ -79,9 +77,7 @@ class CorpusTextFileAPITestCase(TestCase):
     async def test_create_file_with_duplicate_path(self):
         """Test creating a file with a duplicate path within the same corpus."""
         user, headers = await create_user_and_token()
-        corpus = await create_corpus(
-            "File Corpus", "https://example.com/repo", user
-        )
+        corpus = await create_corpus("File Corpus", "https://example.com/repo", user)
         await create_file(corpus, "file1.txt", "Sample content")
 
         payload = {

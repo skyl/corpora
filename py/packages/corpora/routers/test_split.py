@@ -22,9 +22,7 @@ class SplitAPITestCase(TestCase):
     async def test_get_split(self):
         """Test retrieving a split by ID."""
         user, headers = await create_user_and_token()
-        corpus = await create_corpus(
-            "Test Corpus", "https://example.com/repo", user
-        )
+        corpus = await create_corpus("Test Corpus", "https://example.com/repo", user)
         file = await create_file(corpus, "file1.txt", "Sample content")
         split = await create_split(file, "Split content", [0.1] * 1536)
 
@@ -38,9 +36,7 @@ class SplitAPITestCase(TestCase):
     async def test_list_splits_for_file(self):
         """Test listing all splits for a specific file."""
         user, headers = await create_user_and_token()
-        corpus = await create_corpus(
-            "Test Corpus", "https://example.com/repo", user
-        )
+        corpus = await create_corpus("Test Corpus", "https://example.com/repo", user)
         file = await create_file(corpus, "file1.txt", "Sample content")
         await create_split(file, "Split content 1", [0.1] * 1536, order=1)
         await create_split(file, "Split content 2", [0.2] * 1536, order=2)
@@ -56,9 +52,7 @@ class SplitAPITestCase(TestCase):
     async def test_vector_search_splits(self):
         """Test performing a vector similarity search on splits."""
         user, headers = await create_user_and_token()
-        corpus = await create_corpus(
-            "Test Corpus", "https://example.com/repo", user
-        )
+        corpus = await create_corpus("Test Corpus", "https://example.com/repo", user)
         file = await create_file(corpus, "file1.txt", "Sample content")
         await create_split(file, "Split content 1", [0.1] * 1536, order=1)
         await create_split(file, "Split content 2", [0.2] * 1536, order=2)
@@ -70,18 +64,14 @@ class SplitAPITestCase(TestCase):
         }
 
         # Mock the load_llm_provider and its get_embedding function
-        with patch(
-            "corpora_ai.provider_loader.load_llm_provider"
-        ) as mock_llm_provider:
+        with patch("corpora_ai.provider_loader.load_llm_provider") as mock_llm_provider:
             mock_llm_instance = mock_llm_provider.return_value
             mock_llm_instance.get_embedding.return_value = [
                 0.1
             ] * 1536  # Mocked embedding
 
             # Execute the test request
-            response = await client.post(
-                "/search", json=payload, headers=headers
-            )
+            response = await client.post("/search", json=payload, headers=headers)
             print(response.content)
 
             # Assertions
