@@ -1,8 +1,8 @@
 from datetime import timedelta
 
+from asgiref.sync import sync_to_async
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from asgiref.sync import sync_to_async
 from oauth2_provider.models import AccessToken, Application
 
 from corpora.models import Corpus, CorpusTextFile, Split
@@ -14,7 +14,7 @@ User = get_user_model()
 @sync_to_async
 def create_user_and_token():
     user, _ = User.objects.get_or_create(
-        username="testuser", defaults={"password": "password123"}
+        username="testuser", defaults={"password": "password123"},
     )
     application, _ = Application.objects.get_or_create(
         name="Test App",

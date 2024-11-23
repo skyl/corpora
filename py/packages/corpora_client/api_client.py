@@ -32,7 +32,12 @@ import corpora_client.models
 from corpora_client import rest
 from corpora_client.exceptions import (
     ApiValueError,
-    ApiException
+    ApiException,
+    BadRequestException,
+    UnauthorizedException,
+    ForbiddenException,
+    NotFoundException,
+    ServiceException
 )
 
 RequestSerialized = Tuple[str, str, Dict[str, str], Optional[str], List[str]]

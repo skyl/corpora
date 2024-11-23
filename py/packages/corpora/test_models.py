@@ -1,7 +1,9 @@
-import pytest
 from unittest.mock import patch
+
+import pytest
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+
 from corpora.models import Corpus, CorpusTextFile, Split
 
 User = get_user_model()
@@ -12,7 +14,7 @@ def test_corpus_creation():
     """Test creating a Corpus instance."""
     user = User.objects.create(username="testuser", password="password123")
     corpus = Corpus.objects.create(
-        name="Test Corpus", owner=user, url="https://example.com"
+        name="Test Corpus", owner=user, url="https://example.com",
     )
 
     assert corpus.name == "Test Corpus"
@@ -34,16 +36,16 @@ def test_get_relevant_splits(mock_llm_provider):
     user = User.objects.create(username="testuser", password="password123")
     corpus = Corpus.objects.create(name="Test Corpus", owner=user)
     file = CorpusTextFile.objects.create(
-        corpus=corpus, path="test.txt", content="Content of the file."
+        corpus=corpus, path="test.txt", content="Content of the file.",
     )
     split_1 = Split.objects.create(
-        file=file, order=1, content="First split content", vector=[0.1] * 1536
+        file=file, order=1, content="First split content", vector=[0.1] * 1536,
     )
     split_2 = Split.objects.create(
-        file=file, order=2, content="Second split content", vector=[0.2] * 1536
+        file=file, order=2, content="Second split content", vector=[0.2] * 1536,
     )
     split_3 = Split.objects.create(
-        file=file, order=3, content="Third split content", vector=[0.3] * 1536
+        file=file, order=3, content="Third split content", vector=[0.3] * 1536,
     )
 
     # Call the method
@@ -86,7 +88,7 @@ def test_split_creation():
     user = User.objects.create(username="testuser", password="password123")
     corpus = Corpus.objects.create(name="Test Corpus", owner=user)
     file = CorpusTextFile.objects.create(
-        corpus=corpus, path="test.txt", content="Split content."
+        corpus=corpus, path="test.txt", content="Split content.",
     )
     split = Split.objects.create(file=file, order=1, content="First split part")
 
@@ -104,7 +106,7 @@ def test_get_and_save_summary(mock_llm_provider):
     user = User.objects.create(username="testuser", password="password123")
     corpus = Corpus.objects.create(name="Test Corpus", owner=user)
     file = CorpusTextFile.objects.create(
-        corpus=corpus, path="test.txt", content="Some content"
+        corpus=corpus, path="test.txt", content="Some content",
     )
 
     file.get_and_save_summary()
@@ -122,7 +124,7 @@ def test_get_and_save_vector_of_summary(mock_llm_provider):
     user = User.objects.create(username="testuser", password="password123")
     corpus = Corpus.objects.create(name="Test Corpus", owner=user)
     file = CorpusTextFile.objects.create(
-        corpus=corpus, path="test.txt", ai_summary="Summary content"
+        corpus=corpus, path="test.txt", ai_summary="Summary content",
     )
 
     file.get_and_save_vector_of_summary()

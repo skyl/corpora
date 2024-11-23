@@ -1,11 +1,12 @@
-from django.contrib import admin
-from django.urls import include, path
-from django.conf import settings
-from oauth2_provider import urls as oauth2_urls
-from ninja import NinjaAPI
+"""URL Configuration for corpora_proj."""
 
 from corpora.router import api as corpora_router
 from corpora.views import BinaryView
+from django.conf import settings
+from django.contrib import admin
+from django.urls import include, path
+from ninja import NinjaAPI
+from oauth2_provider import urls as oauth2_urls
 
 router = NinjaAPI(
     title="Corpora API",

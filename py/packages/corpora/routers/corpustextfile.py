@@ -4,18 +4,18 @@ from django.db import IntegrityError
 from ninja import Query, Router
 from ninja.errors import HttpError
 
-from ..lib.files import compute_checksum
-from ..lib.dj.decorators import async_raise_not_found
-from ..models import Corpus, CorpusTextFile
-from ..schema.core import FileSchema, FileResponseSchema
 from ..auth import BearerAuth
+from ..lib.dj.decorators import async_raise_not_found
+from ..lib.files import compute_checksum
+from ..models import Corpus, CorpusTextFile
+from ..schema.core import FileResponseSchema, FileSchema
 
 file_router = Router(tags=["file"], auth=BearerAuth())
 
 
 # Get file by path, given a corpus ID
 @file_router.get(
-    "/corpus/{corpus_id}", response=FileResponseSchema, operation_id="get_file_by_path"
+    "/corpus/{corpus_id}", response=FileResponseSchema, operation_id="get_file_by_path",
 )
 @async_raise_not_found
 async def get_file_by_path(
@@ -24,9 +24,8 @@ async def get_file_by_path(
     path: str = Query(..., description="Path to the file"),
 ):
     """Retrieve a File by path within a Corpus."""
-
     ctf = await CorpusTextFile.objects.select_related("corpus").aget(
-        corpus__id=corpus_id, path=path
+        corpus__id=corpus_id, path=path,
     )
     return ctf
 
@@ -40,7 +39,7 @@ async def get_file(request, file_id: uuid.UUID):
 
 
 @file_router.post(
-    "", response={201: FileResponseSchema, 409: str}, operation_id="create_file"
+    "", response={201: FileResponseSchema, 409: str}, operation_id="create_file",
 )
 @async_raise_not_found
 async def create_file(request, payload: FileSchema):

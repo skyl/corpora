@@ -2,8 +2,7 @@ import tiktoken
 
 
 def count_tokens(text: str, model: str = "gpt-3.5-turbo") -> int:
-    """
-    Counts the number of tokens in a given text string for a specific model.
+    """Counts the number of tokens in a given text string for a specific model.
 
     Args:
         text (str): The text to count tokens for.
@@ -11,6 +10,7 @@ def count_tokens(text: str, model: str = "gpt-3.5-turbo") -> int:
 
     Returns:
         int: The number of tokens in the text.
+
     """
     # Load the tokenizer for the specified model
     encoding = tiktoken.encoding_for_model(model)

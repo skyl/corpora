@@ -1,7 +1,9 @@
 import os
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
-from corpora_cli.auth import AuthResolver, AuthError
+
+from corpora_cli.auth import AuthError, AuthResolver
 
 
 @pytest.fixture
@@ -18,7 +20,7 @@ def test_resolve_auth_success_with_env_credential(auth_resolver):
     # Mock environment variable CREDENTIAL
     with patch.dict(os.environ, {"CREDENTIAL": "encodedcredential"}):
         with patch.object(
-            auth_resolver, "_request_token_with_basic_auth", return_value="test_token"
+            auth_resolver, "_request_token_with_basic_auth", return_value="test_token",
         ) as mock_request:
             token = auth_resolver.resolve_auth()
             assert token == "test_token"
@@ -32,11 +34,11 @@ def test_resolve_auth_success_with_client_credentials(auth_resolver):
         {"CORPORA_CLIENT_ID": "test_id", "CORPORA_CLIENT_SECRET": "test_secret"},
     ):
         with patch.object(
-            auth_resolver, "_request_token_with_basic_auth", return_value="test_token"
+            auth_resolver, "_request_token_with_basic_auth", return_value="test_token",
         ) as mock_request:
             token = auth_resolver.resolve_auth()
             encoded_credentials = auth_resolver._encode_credentials(
-                "test_id", "test_secret"
+                "test_id", "test_secret",
             )
             assert token == "test_token"
             mock_request.assert_called_once_with(encoded_credentials)

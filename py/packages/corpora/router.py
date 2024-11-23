@@ -3,10 +3,9 @@ from ninja import Router
 from .auth import BearerAuth
 from .routers.corpus import corpus_router
 from .routers.corpustextfile import file_router
-from .routers.split import split_router
 from .routers.plan import plan_router
+from .routers.split import split_router
 from .routers.workon import workon_router
-
 
 api = Router(tags=["corpora"], auth=BearerAuth())
 

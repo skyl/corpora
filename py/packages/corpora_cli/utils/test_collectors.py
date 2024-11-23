@@ -1,32 +1,36 @@
 import io
 import tarfile
-from pathlib import Path
 import unittest
-from unittest.mock import patch, MagicMock
+from pathlib import Path
+from unittest.mock import MagicMock, patch
+
 from corpora_cli.utils.collectors import (
+    ConfigCorpusFileCollector,
     CorpusFileCollector,
     GitCorpusFileCollector,
-    ConfigCorpusFileCollector,
+    get_best_collector,
     is_git_installed,
     is_git_repository,
-    get_best_collector,
 )
 
 
 class TestCorpusFileCollector(unittest.TestCase):
     def setUp(self):
         self.repo_root = Path("/fake/repo")
-        self.files = [self.repo_root / "file1.txt", self.repo_root / "file2.txt"]
+        self.files = [
+            self.repo_root / "file1.txt",
+            self.repo_root / "file2.txt",
+        ]
 
     @patch(
-        "pathlib.Path.exists", return_value=True
+        "pathlib.Path.exists",
+        return_value=True,
     )  # Mock Path.exists to pretend files exist
     @patch(
-        "tarfile.TarFile.add"
+        "tarfile.TarFile.add",
     )  # Mock tarfile.TarFile.add to simulate adding files without real I/O
     def test_create_tarball(self, mock_add, mock_exists):
         """Test that create_tarball creates a tar.gz archive in memory without needing actual files."""
-
         # Create a CorpusFileCollector instance and call create_tarball
         collector = CorpusFileCollector()
         tar_buffer = collector.create_tarball(self.files, self.repo_root)
@@ -38,7 +42,11 @@ class TestCorpusFileCollector(unittest.TestCase):
         # Patch the TarFile.open context to mock entries in the tarball
         with tarfile.open(fileobj=tar_buffer, mode="r:gz") as tar:
             # Instead of actual files, we mock the members of the tar archive
-            with patch.object(tar, "getnames", return_value=["file1.txt", "file2.txt"]):
+            with patch.object(
+                tar,
+                "getnames",
+                return_value=["file1.txt", "file2.txt"],
+            ):
                 tar_members = tar.getnames()
                 self.assertIn("file1.txt", tar_members)
                 self.assertIn("file2.txt", tar_members)
@@ -70,7 +78,10 @@ class TestGitCorpusFileCollector(unittest.TestCase):
         )
 
         # Check that the returned files match expected output
-        expected_files = [self.repo_root / "file1.txt", self.repo_root / "file2.txt"]
+        expected_files = [
+            self.repo_root / "file1.txt",
+            self.repo_root / "file2.txt",
+        ]
         self.assertEqual(files, expected_files)
 
 

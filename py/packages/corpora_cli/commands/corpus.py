@@ -1,14 +1,15 @@
 import os
 from pathlib import Path
-import typer
 from pprint import pformat
+
+import typer
+from corpora_client.exceptions import ApiException
 
 from corpora_cli.config import CONFIG_FILE_PATH, ID_FILE_PATH, save_config
 from corpora_cli.constants import CORPUS_EXISTS_MESSAGE
 from corpora_cli.context import ContextObject
 from corpora_cli.utils.collectors import get_best_collector
 from corpora_cli.utils.git import get_file_hash
-from corpora_client.exceptions import ApiException
 
 app = typer.Typer(help="Corpus commands")
 
@@ -80,7 +81,8 @@ def sync(ctx: typer.Context):
     collector = get_best_collector(repo_root, c.config)
     local_files = collector.collect_files()
     local_files_hash_map = {
-        file.relative_to(repo_root): get_file_hash(str(file)) for file in local_files
+        file.relative_to(repo_root): get_file_hash(str(file))
+        for file in local_files
     }
     # TODO: debug flag!
     # c.console.print("Local file hash map:")
@@ -108,14 +110,18 @@ def sync(ctx: typer.Context):
     c.console.print(pformat(files_to_delete, width=80))
 
     if not files_to_update and not files_to_delete:
-        c.console.print("No changes detected. Everything is up-to-date!", style="green")
+        c.console.print(
+            "No changes detected. Everything is up-to-date!",
+            style="green",
+        )
         return
 
     # Create tarball for files to update/add
     if files_to_update or files_to_delete:
         c.console.print("Creating tarball for updated/added files... ")
         tarball = collector.create_tarball(
-            [repo_root / p for p in files_to_update.keys()], repo_root
+            [repo_root / p for p in files_to_update],
+            repo_root,
         ).getvalue()
         c.console.print(f"Tarball created: {len(tarball)} bytes")
 
@@ -194,8 +200,9 @@ def print(ctx: typer.Context):
     c.console.print(table)
 
     # Progress bar
-    from rich.progress import track
     import time
+
+    from rich.progress import track
 
     for _ in track(range(10), description="Processing..."):
         time.sleep(0.1)  # Simulate a task
@@ -212,7 +219,11 @@ def print(ctx: typer.Context):
     # Panel
     from rich.panel import Panel
 
-    panel = Panel("This is inside a panel.", title="Panel Title", border_style="blue")
+    panel = Panel(
+        "This is inside a panel.",
+        title="Panel Title",
+        border_style="blue",
+    )
     c.console.print(panel)
 
     # Exceptions

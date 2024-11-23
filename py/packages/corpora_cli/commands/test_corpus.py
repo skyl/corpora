@@ -1,11 +1,11 @@
-from unittest.mock import patch, Mock, mock_open
 from io import StringIO
-from typer.testing import CliRunner
-from rich.console import Console
+from unittest.mock import Mock, mock_open, patch
 
 from corpora_client.exceptions import ApiException
-from corpora_cli.commands.corpus import app
+from rich.console import Console
+from typer.testing import CliRunner
 
+from corpora_cli.commands.corpus import app
 
 runner = CliRunner()
 
@@ -16,7 +16,7 @@ runner = CliRunner()
 @patch("corpora_cli.commands.corpus.ContextObject")
 @patch("builtins.open", new_callable=mock_open)
 def test_init_command(
-    mock_open_file, mock_context, mock_get_best_collector, mock_path, mock_save_config
+    mock_open_file, mock_context, mock_get_best_collector, mock_path, mock_save_config,
 ):
     """Test the `init` command for basic behavior."""
     # Create a real console and capture output in a StringIO buffer
@@ -77,7 +77,7 @@ def test_init_command(
         {
             "name": "test_repo",
             "url": "https://github.com/test/repo",
-        }
+        },
     )
 
     # Ensure `open` was called to write the corpus ID
@@ -103,7 +103,7 @@ def test_delete_command(mock_context):
     assert "Deleting corpus: test_corpus" in output
     assert "test_corpus deleted" in output
     mock_context_instance.corpus_api.delete_corpus.assert_called_once_with(
-        "test_corpus"
+        "test_corpus",
     )
 
 
@@ -119,7 +119,7 @@ def test_delete_command_corpus_not_found(mock_context):
 
     # Use ApiException with a status attribute to simulate 404 response
     mock_context_instance.corpus_api.delete_corpus.side_effect = ApiException(
-        status=404
+        status=404,
     )
 
     result = runner.invoke(app, ["delete"], obj=mock_context_instance)

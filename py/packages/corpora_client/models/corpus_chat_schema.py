@@ -20,7 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from corpora_client.models.message_schema import MessageSchema
-from typing import Set
+from typing import Optional, Set
 from typing_extensions import Self
 
 class CorpusChatSchema(BaseModel):

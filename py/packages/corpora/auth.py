@@ -1,7 +1,7 @@
 from asgiref.sync import sync_to_async
+from django.utils import timezone
 from ninja.security import HttpBearer
 from oauth2_provider.models import AccessToken
-from django.utils import timezone
 
 
 class BearerAuth(HttpBearer):

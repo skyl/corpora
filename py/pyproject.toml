@@ -1,10 +1,44 @@
 # https://docs.astral.sh/ruff/configuration/
 [tool.ruff]
 line-length = 80
-fixable = ["ALL"]
 
 [tool.ruff.lint]
-ignore = ["E721"]
+select = ["ALL"]
+fixable = ["ALL"]
+
+ignore = [
+    "E501",   # Line too long
+    "D",      # Docstrings
+    "ERA001", # commented out code
+    "EM",     # Exception .. string literal, assign to variable first
+    "TRY",    # Avoid specifying long messages outside the exception class
+    "ANN",    # type annotations
+    "T",      # print statements
+    "PGH",    # specific rules with noqa
+    "FIX",    # I do TODO how I feel
+    "TD",     # I do TODO how I feel
+    "TID",    # relative imports
+    "PT",     # pytest - maybe we turn on
+    "DTZ",    # datetime timezone - maybe we turn on
+    "UP",     # UP006 Use `list` instead of `List` for type annotation
+    "PLR",    # Too many arguments in function definition (7 > 5)
+    "FA",     # FA100 Add `from __future__ import annotations` to simplify `typing.Optional`
+    "A",      # A002 Function argument `id` is shadowing a Python builtin
+    "SIM",    # SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+    "ARG",    # ARG002 Unused method argument
+    "S",      # subprocess
+    "RUF",    # RUF100 [*] Unused `noqa` directive
+    "SLF",    # SLF001 Private member accessed
+    "PTH",    # PTH123 `open()` should be replaced by `Path.open()`
+    "B",      # B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+    "RET",    # RET504 Unnecessary assignment to `config` before `return`
+    "G004",   # Logging statement uses f-string
+    "N803",   # Argument name `MockOpenAIClient` should be lowercase"
+    "FBT002", # Boolean default positional argument in function definition"
+    "TC001",  # Move application import `corpora_cli.context.ContextObject` into a type-checking blockRuffTC001
+
+]
+exclude = ["packages/corpora_client/*"]
 
 [tool.ruff.format]
 quote-style = "double"

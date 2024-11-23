@@ -12,7 +12,7 @@ class BinaryView(View):
 
         with open(path, "rb") as binary_file:
             response = HttpResponse(
-                binary_file.read(), content_type="application/octet-stream"
+                binary_file.read(), content_type="application/octet-stream",
             )
             response["Content-Disposition"] = "attachment; filename=corpora"
             return response

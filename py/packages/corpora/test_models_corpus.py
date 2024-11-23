@@ -1,10 +1,12 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 from django.contrib.auth import get_user_model
+
 from corpora.models import (
     Corpus,
-    Split,
     CorpusTextFile,
+    Split,
 )
 
 User = get_user_model()
@@ -19,14 +21,14 @@ class TestCorpusModelMethods:
     @pytest.fixture
     def corpus(self, user):
         return Corpus.objects.create(
-            name="Test Corpus", owner=user, url="https://example.com"
+            name="Test Corpus", owner=user, url="https://example.com",
         )
 
     @pytest.fixture
     def file(self, corpus):
         # Create a file associated with the corpus
         return CorpusTextFile.objects.create(
-            corpus=corpus, path="test.txt", checksum="abc123", content="File content"
+            corpus=corpus, path="test.txt", checksum="abc123", content="File content",
         )
 
     @pytest.fixture
@@ -48,7 +50,7 @@ class TestCorpusModelMethods:
 
     def test_get_relevant_splits(self, corpus, mock_splits):
         with patch(
-            "corpora_ai.provider_loader.load_llm_provider"
+            "corpora_ai.provider_loader.load_llm_provider",
         ) as mock_load_llm_provider:
             mock_llm = MagicMock()
             mock_load_llm_provider.return_value = mock_llm
@@ -63,7 +65,7 @@ class TestCorpusModelMethods:
 
     def test_get_relevant_splits_context(self, corpus, mock_splits):
         with patch(
-            "corpora_ai.provider_loader.load_llm_provider"
+            "corpora_ai.provider_loader.load_llm_provider",
         ) as mock_load_llm_provider:
             mock_llm = MagicMock()
             mock_load_llm_provider.return_value = mock_llm

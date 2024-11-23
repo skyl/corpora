@@ -11,11 +11,13 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+import warnings
 from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import StrictBytes
+from pydantic import StrictBytes, StrictStr
+from typing import Dict, List, Optional, Tuple, Union
 from corpora_client.models.corpus_chat_schema import CorpusChatSchema
 from corpora_client.models.corpus_response_schema import CorpusResponseSchema
 

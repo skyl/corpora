@@ -9,7 +9,10 @@ app = typer.Typer(help="File operations within a corpus")
 def add(ctx: typer.Context, corpus_id: str, path: str):
     """Add a file to a specified corpus."""
     c: ContextObject = ctx.obj
-    c.console.print(f"Adding file at {path} to corpus {corpus_id}", style="green")
+    c.console.print(
+        f"Adding file at {path} to corpus {corpus_id}",
+        style="green",
+    )
 
 
 @app.command()

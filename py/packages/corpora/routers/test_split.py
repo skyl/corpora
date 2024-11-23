@@ -1,17 +1,17 @@
-import pytest
 from unittest.mock import patch
-from django.test import TestCase
+
+import pytest
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 from ninja.testing import TestAsyncClient
 
 from .split import split_router
 from .test_lib import (
-    create_user_and_token,
     create_corpus,
     create_file,
     create_split,
+    create_user_and_token,
 )
-
 
 User = get_user_model()
 client = TestAsyncClient(split_router)
@@ -67,7 +67,7 @@ class SplitAPITestCase(TestCase):
         with patch("corpora_ai.provider_loader.load_llm_provider") as mock_llm_provider:
             mock_llm_instance = mock_llm_provider.return_value
             mock_llm_instance.get_embedding.return_value = [
-                0.1
+                0.1,
             ] * 1536  # Mocked embedding
 
             # Execute the test request

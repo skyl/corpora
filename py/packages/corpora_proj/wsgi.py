@@ -1,5 +1,4 @@
-"""
-WSGI config for corpora_proj project.
+"""WSGI config for corpora_proj project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

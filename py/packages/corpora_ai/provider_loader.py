@@ -1,5 +1,6 @@
 import os
 from typing import Optional
+
 from corpora_ai.llm_interface import LLMBaseInterface
 
 try:
@@ -12,11 +13,11 @@ except ImportError:
 
 
 def load_llm_provider() -> Optional[LLMBaseInterface]:
-    """
-    Dynamically loads the best LLM provider based on environment variables.
+    """Dynamically loads the best LLM provider based on environment variables.
 
     Returns:
         Optional[LLMBaseInterface]: An instance of the best available LLM provider.
+
     """
     provider_name = os.getenv("LLM_PROVIDER", "openai")
     # TODO: we need to specify the model in the interface really

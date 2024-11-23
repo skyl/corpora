@@ -5,10 +5,10 @@ from unittest import mock
 import pytest
 
 from .sync import (
-    process_tarball,
     generate_summary_task,
-    split_file_task,
     generate_vector_task,
+    process_tarball,
+    split_file_task,
 )
 
 
@@ -51,7 +51,7 @@ class TestCeleryTasks:
         mock_corpus_get.assert_called_once_with(id="mock_corpus_id")
         mock_corpus.save.assert_called_once_with(update_fields=["updated_at"])
         mock_get_or_create.assert_called_once_with(
-            corpus=mock_corpus, path="test_file.txt"
+            corpus=mock_corpus, path="test_file.txt",
         )
         assert mock_file.content == "test file content"
         # assert mock_file.checksum == "mock_checksum"

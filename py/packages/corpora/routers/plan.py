@@ -1,12 +1,11 @@
-from ninja import Router, Schema
 from asgiref.sync import sync_to_async
-
-from corpora.schema.chat import CorpusChatSchema, get_additional_context
 from corpora_ai.llm_interface import ChatCompletionTextMessage
 from corpora_ai.provider_loader import load_llm_provider
+from ninja import Router, Schema
+
 from corpora.auth import BearerAuth
 from corpora.models import Corpus
-
+from corpora.schema.chat import CorpusChatSchema, get_additional_context
 
 ISSUE_MAKER_SYSTEM_MESSAGE = (
     "You are a skilled assistant focused on creating clear, actionable issues for this project. "
@@ -35,7 +34,7 @@ async def get_issue(request, payload: CorpusChatSchema):
 
     # TODO: split context could be ... ?
     split_context = await sync_to_async(corpus.get_relevant_splits_context)(
-        "\n".join(message.text for message in payload.messages[-2:])
+        "\n".join(message.text for message in payload.messages[-2:]),
     )
 
     print(split_context)

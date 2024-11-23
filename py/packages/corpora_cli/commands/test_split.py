@@ -1,7 +1,8 @@
 from io import StringIO
-from unittest.mock import patch, MagicMock
-from typer.testing import CliRunner
+from unittest.mock import MagicMock, patch
+
 from rich.console import Console
+from typer.testing import CliRunner
 
 from corpora_cli.commands.split import app  # Adjust if the path is different
 
@@ -62,7 +63,7 @@ def test_list_command(mock_context):
 
     # Mock APIs
     mock_context_instance.file_api.get_file_by_path.return_value = MagicMock(
-        id="file123"
+        id="file123",
     )
     mock_context_instance.split_api.list_splits_for_file.return_value = [
         MagicMock(order=1, content="This is split one."),

@@ -1,5 +1,7 @@
-import pytest
 import hashlib
+
+import pytest
+
 from corpora.lib.files import compute_checksum
 
 
