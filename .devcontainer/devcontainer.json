@@ -6,21 +6,13 @@
     "customizations": {
         "vscode": {
             "settings": {
-                "python.formatting.provider": "black",
-                "python.formatting.formatOnSave": true,
-                "python.formatting.blackArgs": [
-                    "--line-length",
-                    "88",
-                    "--config",
-                    "/workspace/py/pyproject.toml"
-                ],
-                // TODO: you have to uninstall autopep8 in devcontainer
-                // because of Microsoft defaults.
-                // ... if the editor is formatting wrongly
-                // then uninstall autopep8 extension.
-                // some day Microsoft will fix this?
-                "python.formatting.autopep8Path": "",
-                "editor.formatOnSave": true,
+                "[python]": {
+                    "editor.defaultFormatter": "charliermarsh.ruff",
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll": "explicit"
+                    }
+                },
                 "python.linting.enabled": true,
                 "python.pythonPath": "/usr/local/bin/python",
                 "python.analysis.autoImportCompletions": true,
@@ -29,7 +21,7 @@
             "extensions": [
                 // py
                 "ms-python.python",
-                "ms-python.black-formatter",
+                "charliermarsh.ruff",
                 // github
                 "GitHub.copilot",
                 "GitHub.copilot-chat",
