@@ -1,7 +1,8 @@
 import pytest
-from django.http import Http404
-from corpora.lib.dj.decorators import async_raise_not_found
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
+
+from corpora.lib.dj.decorators import async_raise_not_found
 
 
 # A sample async function to simulate normal and failing behavior

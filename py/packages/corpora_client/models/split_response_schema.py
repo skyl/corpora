@@ -22,12 +22,10 @@ from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class SplitResponseSchema(BaseModel):
     """
     SplitResponseSchema
-    """  # noqa: E501
-
+    """ # noqa: E501
     id: StrictStr
     content: StrictStr
     order: StrictInt
@@ -39,6 +37,7 @@ class SplitResponseSchema(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,7 +63,8 @@ class SplitResponseSchema(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -82,12 +82,12 @@ class SplitResponseSchema(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "id": obj.get("id"),
-                "content": obj.get("content"),
-                "order": obj.get("order"),
-                "file_id": obj.get("file_id"),
-            }
-        )
+        _obj = cls.model_validate({
+            "id": obj.get("id"),
+            "content": obj.get("content"),
+            "order": obj.get("order"),
+            "file_id": obj.get("file_id")
+        })
         return _obj
+
+

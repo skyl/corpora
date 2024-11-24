@@ -1,22 +1,26 @@
+import logging
 import os
 import uuid
 
-from django.db import models
-from django.utils import timezone
+from corpora_ai.split import get_text_splitter
 from django.contrib.auth import get_user_model
+from django.db import models
+from django.db.models.manager import BaseManager
+from django.utils import timezone
 
 # from django.contrib.postgres.fields import ArrayField
-from pgvector.django import VectorField, CosineDistance
+from pgvector.django import CosineDistance, VectorField
 
-
-from corpora_ai.split import get_text_splitter
+# TODO: This loads too early and makes it hard to mock
+# from corpora_ai.provider_loader import load_llm_provider
 
 User = get_user_model()
 
+logger = logging.getLogger(__name__)
+
 
 class Corpus(models.Model):
-    """
-    Represents a unique corpus, often corresponding to a specific repository
+    """Represents a unique corpus, often corresponding to a specific repository
     or collection of documents. A corpus can have an associated URL for
     tracking its origin, such as a GitHub repository.
     """
@@ -30,7 +34,6 @@ class Corpus(models.Model):
         help_text="User who owns the corpus.",
     )
     url = models.URLField(
-        null=True,
         blank=True,
         help_text="Optional URL associated with the corpus, e.g., a GitHub repository.",
     )
@@ -40,7 +43,8 @@ class Corpus(models.Model):
         help_text="Timestamp indicating when the corpus was created.",
     )
     updated_at = models.DateTimeField(
-        auto_now=True, help_text="Timestamp indicating the last update of the corpus."
+        auto_now=True,
+        help_text="Timestamp indicating the last update of the corpus.",
     )
 
     class Meta:
@@ -50,10 +54,12 @@ class Corpus(models.Model):
     def __str__(self):
         return self.name
 
-    def get_relevant_splits(self, text: str, limit: int = 10):
-        """
-        Given a text query, return the most relevant splits from this corpus.
-        """
+    def get_relevant_splits(
+        self,
+        text: str,
+        limit: int = 10,
+    ) -> BaseManager["Split"]:
+        """Given a text query, return the most relevant splits from this corpus."""
         from corpora_ai.provider_loader import load_llm_provider
 
         llm = load_llm_provider()
@@ -70,38 +76,37 @@ class Corpus(models.Model):
             .order_by("similarity")[:limit]
         )
 
-    def get_relevant_splits_context(self, text: str, limit: int = 10):
-        """
-        Given a text query, return the most relevant splits from this corpus
+    def get_relevant_splits_context(self, text: str, limit: int = 10) -> str:
+        """Given a text query, return the most relevant splits from this corpus
         along with the context of the split.
         """
         splits = self.get_relevant_splits(text, limit)
         split_context = ""
         for split in splits:
-            split_context += f"\n\n{split.file.path}:\n```\n{split.content}\n```\n\n"
+            split_context += (
+                f"\n\n{split.file.path}:\n```\n{split.content}\n```\n\n"
+            )
         return split_context
 
     def get_file_hashes(self) -> dict:
-        """
-        Retrieve a map of file paths to their hashes for this Corpus.
-        """
+        """Retrieve a map of file paths to their hashes for this Corpus."""
         # TODO: types?
         return {file.path: file.checksum for file in self.files.all()}
 
-    def delete_files(self, files: list):
-        """
-        Delete files from this Corpus by path.
-        """
+    def delete_files(self, files: list) -> None:
+        """Delete files from this Corpus by path."""
         self.files.filter(path__in=files).delete()
 
 
 class CorpusTextFile(models.Model):
-    """
-    A file with UTF-8 text content associated with a Corpus.
-    """
+    """A file with UTF-8 text content associated with a Corpus."""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    corpus = models.ForeignKey(Corpus, on_delete=models.CASCADE, related_name="files")
+    corpus = models.ForeignKey(
+        Corpus,
+        on_delete=models.CASCADE,
+        related_name="files",
+    )
     path = models.CharField(max_length=1024)
     content = models.TextField(blank=True)
     ai_summary = models.TextField(blank=True)
@@ -147,8 +152,7 @@ class CorpusTextFile(models.Model):
         self.save(update_fields=["vector_of_summary"])
 
     def split_content(self):
-        """
-        Splits the content of the file into smaller parts using an appropriate text splitter.
+        """Splits the content of the file into smaller parts using an appropriate text splitter.
         Returns a list of Split instances.
         """
         file_name = os.path.basename(self.path)
@@ -169,7 +173,9 @@ class CorpusTextFile(models.Model):
 class Split(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     file = models.ForeignKey(
-        CorpusTextFile, on_delete=models.CASCADE, related_name="splits"
+        CorpusTextFile,
+        on_delete=models.CASCADE,
+        related_name="splits",
     )
     order = models.PositiveIntegerField()
     content = models.TextField(blank=True)
@@ -197,6 +203,9 @@ class Split(models.Model):
         return f"{self.file.corpus.name}:{self.file.path}:{self.order}"
 
     def get_and_save_vector(self):
+        logger.info(
+            f"{self.file.path}: {self.content[:10]} ... {self.content[-10:]}",
+        )
         from corpora_ai.provider_loader import load_llm_provider
 
         llm = load_llm_provider()

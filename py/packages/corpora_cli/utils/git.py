@@ -1,14 +1,11 @@
 import subprocess
 
-from httpx import get
-
 
 def run_command(command: list) -> str:
-    """
-    Run a command and return its output as a string.
+    """Run a command and return its output as a string.
     """
     result = subprocess.run(
-        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True
+        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True,
     )
     return result.stdout.strip()
 
@@ -25,8 +22,7 @@ def get_file_hash(path: str) -> str:
 
 
 def get_git_remote_url() -> str:
-    """
-    Retrieve the main remote URL of the current Git repository.
+    """Retrieve the main remote URL of the current Git repository.
     """
     try:
         result = subprocess.run(
@@ -42,8 +38,7 @@ def get_git_remote_url() -> str:
 
 
 def get_git_repo_name(url: str) -> str:
-    """
-    Extract the repository name from a Git remote URL.
+    """Extract the repository name from a Git remote URL.
     """
     if not url:
         return ""

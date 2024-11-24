@@ -1,10 +1,9 @@
 import json
 from typing import List, Type, TypeVar
-from openai import OpenAI, OpenAIError, AzureOpenAI
+
+from corpora_ai.llm_interface import ChatCompletionTextMessage, LLMBaseInterface
+from openai import AzureOpenAI, OpenAI, OpenAIError
 from pydantic import BaseModel
-
-from corpora_ai.llm_interface import LLMBaseInterface, ChatCompletionTextMessage
-
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -39,15 +38,14 @@ class OpenAIClient(LLMBaseInterface):
         # Convert Message objects to dictionaries for the OpenAI API
         message_dicts = [{"role": msg.role, "content": msg.text} for msg in messages]
         response = self.client.chat.completions.create(
-            model=self.completion_model, messages=message_dicts
+            model=self.completion_model, messages=message_dicts,
         )
         return response.choices[0].message.content
 
     def get_data_completion(
-        self, messages: List[ChatCompletionTextMessage], model: Type[T]
+        self, messages: List[ChatCompletionTextMessage], model: Type[T],
     ) -> T:
-        """
-        Generates structured data completion using OpenAI's function calling.
+        """Generates structured data completion using OpenAI's function calling.
 
         Args:
             messages (List[ChatCompletionTextMessage]): Input messages for the completion.
@@ -55,6 +53,7 @@ class OpenAIClient(LLMBaseInterface):
 
         Returns:
             BaseModel: An instance of the provided Pydantic model populated with data.
+
         """
         if not issubclass(model, BaseModel):
             raise ValueError("Schema must be a subclass of pydantic.BaseModel.")

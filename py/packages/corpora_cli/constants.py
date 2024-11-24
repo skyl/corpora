@@ -15,7 +15,7 @@ Then, in your CLI environment, set the following environment variables:
 export CORPORA_CLIENT_ID="{your_client_id}"
 export CORPORA_CLIENT_SECRET="{your_client_secret}"
 ```
-"""
+""",
 )
 
 CORPUS_EXISTS_MESSAGE = Markdown(
@@ -23,5 +23,5 @@ CORPUS_EXISTS_MESSAGE = Markdown(
 A corpus with this name already exists for this owner.
 
 Call `corpus delete` to delete the existing corpus or use a different name.
-"""
+""",
 )

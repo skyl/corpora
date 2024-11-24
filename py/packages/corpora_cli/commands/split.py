@@ -1,7 +1,9 @@
 import typer
+from corpora_client.models.split_vector_search_schema import (
+    SplitVectorSearchSchema,
+)
 
 from corpora_cli.context import ContextObject
-from corpora_client.models.split_vector_search_schema import SplitVectorSearchSchema
 
 app = typer.Typer(help="Split commands")
 

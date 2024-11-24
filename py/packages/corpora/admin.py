@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Corpus, CorpusTextFile, Split
 
 
@@ -8,9 +9,11 @@ class CorpusAdmin(admin.ModelAdmin):
     search_fields = ("name", "id", "url")
     ordering = ("-updated_at",)
     readonly_fields = ("id", "created_at", "updated_at")
+    autocomplete_fields = ("owner",)
     fieldsets = (
         (None, {"fields": ("name", "id", "url")}),
         ("Timestamps", {"fields": ("created_at", "updated_at")}),
+        ("Owner", {"fields": ("owner",)}),
     )
 
 

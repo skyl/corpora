@@ -1,12 +1,13 @@
+from unittest.mock import Mock, patch
+
 import pytest
 import typer
-from unittest.mock import patch, Mock
-from typer.testing import CliRunner
 from rich.text import Text
+from typer.testing import CliRunner
 
-from corpora_cli.main import get_api_clients, main
-from corpora_cli.constants import NO_AUTHENTICATION_MESSAGE
 from corpora_cli.auth import AuthError
+from corpora_cli.constants import NO_AUTHENTICATION_MESSAGE
+from corpora_cli.main import get_api_clients, main
 
 runner = CliRunner()
 
@@ -28,7 +29,7 @@ def mock_token():
 
 @patch("corpora_cli.auth.AuthResolver.resolve_auth")
 def test_get_api_clients_successful_authentication(
-    mock_resolve_auth, mock_config, mock_token
+    mock_resolve_auth, mock_config, mock_token,
 ):
     """Test get_api_clients with successful authentication."""
     # Mock the resolve_auth method to return the token
@@ -49,7 +50,7 @@ def test_get_api_clients_successful_authentication(
 @patch("corpora_cli.main.Console")
 @patch("corpora_cli.main.AuthResolver")
 def test_get_api_clients_authentication_failure(
-    mock_auth_resolver, mock_console, mock_config
+    mock_auth_resolver, mock_console, mock_config,
 ):
     """Test get_api_clients with authentication failure."""
     # Mock AuthResolver to raise an AuthError
@@ -60,10 +61,10 @@ def test_get_api_clients_authentication_failure(
 
     # Verify console error message and exit code
     mock_console.return_value.print.assert_any_call(
-        Text("Auth failed", style="bold red")
+        Text("Auth failed", style="bold red"),
     )
     mock_console.return_value.print.assert_any_call(
-        NO_AUTHENTICATION_MESSAGE, style="yellow"
+        NO_AUTHENTICATION_MESSAGE, style="yellow",
     )
     # Check if typer.Exit was raised
     assert exc_info.type == typer.Exit

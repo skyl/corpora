@@ -1,8 +1,8 @@
-from typing import Any, Dict
 from dataclasses import dataclass
-from rich.console import Console
+from typing import Any, Dict
 
-from corpora_client import CorpusApi, FileApi, SplitApi, PlanApi, WorkonApi
+from corpora_client import CorpusApi, FileApi, PlanApi, SplitApi, WorkonApi
+from rich.console import Console
 
 
 @dataclass

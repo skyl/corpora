@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Dict, Any
 from datetime import datetime
+from typing import List, Optional
 
 
 class Issue:
-    """
-    A class representing a generic issue in an issue tracking system.
+    """A class representing a generic issue in an issue tracking system.
     """
 
     def __init__(
@@ -32,14 +31,12 @@ class Issue:
 
 
 class AbstractIssueTracker(ABC):
-    """
-    Abstract base class defining the interface for issue tracking systems.
+    """Abstract base class defining the interface for issue tracking systems.
     """
 
     @abstractmethod
     def list_issues(self, repo: str, state: str = "open") -> List[Issue]:
-        """
-        List issues for a repository.
+        """List issues for a repository.
 
         Args:
             repo (str): The repository name in the format "owner/repo".
@@ -47,13 +44,12 @@ class AbstractIssueTracker(ABC):
 
         Returns:
             List[Issue]: A list of issues.
+
         """
-        pass
 
     @abstractmethod
     def get_issue(self, repo: str, issue_id: int) -> Issue:
-        """
-        Retrieve a specific issue by ID.
+        """Retrieve a specific issue by ID.
 
         Args:
             repo (str): The repository name in the format "owner/repo".
@@ -61,8 +57,8 @@ class AbstractIssueTracker(ABC):
 
         Returns:
             Issue: The retrieved issue.
+
         """
-        pass
 
     @abstractmethod
     def create_issue(
@@ -73,8 +69,7 @@ class AbstractIssueTracker(ABC):
         labels: Optional[List[str]] = None,
         assignees: Optional[List[str]] = None,
     ) -> Issue:
-        """
-        Create a new issue.
+        """Create a new issue.
 
         Args:
             repo (str): The repository name in the format "owner/repo".
@@ -85,8 +80,8 @@ class AbstractIssueTracker(ABC):
 
         Returns:
             Issue: The created issue.
+
         """
-        pass
 
     @abstractmethod
     def update_issue(
@@ -99,8 +94,7 @@ class AbstractIssueTracker(ABC):
         labels: Optional[List[str]] = None,
         assignees: Optional[List[str]] = None,
     ) -> Issue:
-        """
-        Update an existing issue.
+        """Update an existing issue.
 
         Args:
             repo (str): The repository name in the format "owner/repo".
@@ -113,13 +107,12 @@ class AbstractIssueTracker(ABC):
 
         Returns:
             Issue: The updated issue.
+
         """
-        pass
 
     @abstractmethod
     def add_comment(self, repo: str, issue_id: int, comment: str) -> None:
-        """
-        Add a comment to an issue.
+        """Add a comment to an issue.
 
         Args:
             repo (str): The repository name in the format "owner/repo".
@@ -128,5 +121,5 @@ class AbstractIssueTracker(ABC):
 
         Returns:
             None
+
         """
-        pass

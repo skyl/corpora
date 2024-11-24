@@ -1,18 +1,18 @@
-from typing import List
 import uuid
+from typing import List
 
-from ninja import Router
 from asgiref.sync import sync_to_async
+from ninja import Router
 
+from ..auth import BearerAuth
 from ..models import Corpus, Split
 from ..schema.core import SplitResponseSchema, SplitVectorSearchSchema
-from ..auth import BearerAuth
 
 split_router = Router(tags=["split"], auth=BearerAuth())
 
 
 @split_router.post(
-    "/search", response=List[SplitResponseSchema], operation_id="vector_search"
+    "/search", response=List[SplitResponseSchema], operation_id="vector_search",
 )
 async def vector_search(request, payload: SplitVectorSearchSchema):
     """Perform a vector similarity search for splits using a provided query vector."""
@@ -21,7 +21,7 @@ async def vector_search(request, payload: SplitVectorSearchSchema):
     corpus = await Corpus.objects.aget(id=corpus_id)
 
     similar_splits = await sync_to_async(list)(
-        corpus.get_relevant_splits(query, limit=payload.limit)
+        corpus.get_relevant_splits(query, limit=payload.limit),
     )
     return similar_splits
 
@@ -41,6 +41,6 @@ async def get_split(request, split_id: uuid.UUID):
 async def list_splits_for_file(request, file_id: uuid.UUID):
     """List all Splits for a specific CorpusTextFile."""
     splits = await sync_to_async(list)(
-        Split.objects.filter(file_id=file_id).order_by("order")
+        Split.objects.filter(file_id=file_id).order_by("order"),
     )
     return splits

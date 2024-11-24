@@ -1,14 +1,14 @@
+from __future__ import annotations
+
 import os
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from corpora_pm.abstract import Issue, AbstractIssueTracker
+from corpora_pm.abstract import AbstractIssueTracker, Issue
 
 
 class GitHubIssueTracker(AbstractIssueTracker):
-    """
-    A concrete implementation of AbstractIssueTracker for GitHub.
-    """
+    """A concrete implementation of AbstractIssueTracker for GitHub."""
 
     def __init__(
         self,
@@ -19,17 +19,26 @@ class GitHubIssueTracker(AbstractIssueTracker):
         self.base_url = base_url
 
     def _request(
-        self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None
+        self,
+        method: str,
+        endpoint: str,
+        data: dict[str, Any] | None = None,
     ) -> Any:
         import requests
 
         headers = {"Authorization": f"token {self.token}"}
         url = f"{self.base_url}/{endpoint}"
-        response = requests.request(method, url, headers=headers, json=data)
+        response = requests.request(
+            method,
+            url,
+            headers=headers,
+            json=data,
+            timeout=10,
+        )
         response.raise_for_status()
         return response.json()
 
-    def list_issues(self, repo: str, state: str = "open") -> List[Issue]:
+    def list_issues(self, repo: str, state: str = "open") -> list[Issue]:
         endpoint = f"repos/{repo}/issues?state={state}"
         issues_data = self._request("GET", endpoint)
         return [
@@ -61,7 +70,8 @@ class GitHubIssueTracker(AbstractIssueTracker):
             state=issue_data["state"],
             labels=[label["name"] for label in issue_data.get("labels", [])],
             assignees=[
-                assignee["login"] for assignee in issue_data.get("assignees", [])
+                assignee["login"]
+                for assignee in issue_data.get("assignees", [])
             ],
             url=issue_data["html_url"],
         )
@@ -71,8 +81,8 @@ class GitHubIssueTracker(AbstractIssueTracker):
         repo: str,
         title: str,
         body: str,
-        labels: Optional[List[str]] = None,
-        assignees: Optional[List[str]] = None,
+        labels: list[str] | None = None,
+        assignees: list[str] | None = None,
     ) -> Issue:
         endpoint = f"repos/{repo}/issues"
         data = {
@@ -88,11 +98,11 @@ class GitHubIssueTracker(AbstractIssueTracker):
         self,
         repo: str,
         issue_id: int,
-        title: Optional[str] = None,
-        body: Optional[str] = None,
-        state: Optional[str] = None,
-        labels: Optional[List[str]] = None,
-        assignees: Optional[List[str]] = None,
+        title: str | None = None,
+        body: str | None = None,
+        state: str | None = None,
+        labels: list[str] | None = None,
+        assignees: list[str] | None = None,
     ) -> Issue:
         endpoint = f"repos/{repo}/issues/{issue_id}"
         data = {
@@ -103,7 +113,9 @@ class GitHubIssueTracker(AbstractIssueTracker):
             "assignees": assignees,
         }
         self._request(
-            "PATCH", endpoint, {k: v for k, v in data.items() if v is not None}
+            "PATCH",
+            endpoint,
+            {k: v for k, v in data.items() if v is not None},
         )
         return self.get_issue(repo, issue_id)
 

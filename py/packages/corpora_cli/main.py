@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
 from typing import Tuple
+
+import corpora_client
 import typer
 from rich.console import Console
 from rich.text import Text
 
-import corpora_client
-from corpora_cli.commands import corpus, file, split, plan, workon
+from corpora_cli.auth import AuthError, AuthResolver
+from corpora_cli.commands import corpus, file, plan, split, workon
 from corpora_cli.config import load_config
-from corpora_cli.auth import AuthResolver, AuthError
 from corpora_cli.constants import NO_AUTHENTICATION_MESSAGE
 from corpora_cli.context import ContextObject
 
@@ -24,8 +25,7 @@ def get_api_clients(
     corpora_client.PlanApi,
     corpora_client.WorkonApi,
 ]:
-    """
-    Initialize and authenticate API client with given config.
+    """Initialize and authenticate API client with given config.
     Returns an authenticated CorporaApi instance.
     """
     try:
@@ -42,7 +42,7 @@ def get_api_clients(
     client_config = corpora_client.Configuration()
     # TODO: deploy and default to the main production server?
     client_config.host = config.get("server", {}).get(
-        "base_url", "http://corpora-app:8877"
+        "base_url", "http://corpora-app:8877",
     )
     client_config.access_token = auth_token
     return (
@@ -58,7 +58,7 @@ def get_api_clients(
 def main(ctx: typer.Context):
     """Main entry point. Sets up configuration and API client."""
     corpus_api, files_api, split_api, plan_api, workon_api = get_api_clients(
-        load_config()
+        load_config(),
     )
 
     config = load_config()
@@ -79,7 +79,7 @@ app.add_typer(file.app, name="file", help="Commands for file operations")
 app.add_typer(split.app, name="split", help="Commands for split operations")
 app.add_typer(plan.app, name="plan", help="Commands for plan operations")
 app.add_typer(
-    workon.app, name="workon", help="Commands for working on files in the corpus"
+    workon.app, name="workon", help="Commands for working on files in the corpus",
 )
 
 if __name__ == "__main__":

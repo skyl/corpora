@@ -1,10 +1,10 @@
-from ninja import Router, Schema
 from asgiref.sync import sync_to_async
-
-from corpora.schema.chat import CorpusFileChatSchema, get_additional_context
 from corpora_ai.llm_interface import ChatCompletionTextMessage
 from corpora_ai.provider_loader import load_llm_provider
+from ninja import Router, Schema
+
 from corpora.models import Corpus
+from corpora.schema.chat import CorpusFileChatSchema, get_additional_context
 
 from ..auth import BearerAuth
 
@@ -32,7 +32,7 @@ async def file(request, payload: CorpusFileChatSchema):
     # But, in the current design, we let the client decide the messages.
     # A separate endpoint could be used by the client to "compress conversation"
     split_context = await sync_to_async(corpus.get_relevant_splits_context)(
-        "\n".join(message.text for message in payload.messages[-2:])
+        "\n".join(message.text for message in payload.messages[-2:]),
     )
 
     print(payload.messages[-1].text)

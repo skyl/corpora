@@ -1,8 +1,10 @@
 # from corpora.models import Corpus
 
 import uuid
-from ..abstract import AbstractIssueTracker
+
 from pydantic import BaseModel
+
+from ..abstract import AbstractIssueTracker
 
 
 class Corpus(BaseModel):
@@ -11,8 +13,7 @@ class Corpus(BaseModel):
 
 
 def load_provider(corpus: Corpus) -> AbstractIssueTracker:
-    """
-    Load an issue tracker provider for the given corpus.
+    """Load an issue tracker provider for the given corpus.
     """
     # TODO: better way to determine provider
     # - support enterprise with custom URL

@@ -2,10 +2,10 @@ import os
 from typing import Union
 
 from langchain_text_splitters import (
-    PythonCodeTextSplitter,
+    CharacterTextSplitter,
     # MarkdownHeaderTextSplitter,
     MarkdownTextSplitter,
-    CharacterTextSplitter,
+    PythonCodeTextSplitter,
 )
 
 
@@ -14,8 +14,7 @@ def get_text_splitter(
     chunk_size: int = 5000,  # number of characters
     chunk_overlap: int = 0,  # number of characters
 ) -> Union[PythonCodeTextSplitter, CharacterTextSplitter]:
-    """
-    Returns an appropriate text splitter based on the file extension or name.
+    """Returns an appropriate text splitter based on the file extension or name.
     """
     # Mapping specific extensions to splitters
     extension_to_splitter = {
@@ -29,7 +28,7 @@ def get_text_splitter(
     ext = ext.lower()
 
     # Handle files without extensions using a default splitter
-    splitter_class = extension_to_splitter.get(ext, None)
+    splitter_class = extension_to_splitter.get(ext)
 
     # For files with defined splitters, return the configured splitter instance
     if splitter_class:
@@ -37,5 +36,5 @@ def get_text_splitter(
 
     # For text-based formats or unknown extensions, use CharacterTextSplitter with `\n\n`
     return CharacterTextSplitter(
-        separator="\n\n", chunk_size=chunk_size, chunk_overlap=chunk_overlap
+        separator="\n\n", chunk_size=chunk_size, chunk_overlap=chunk_overlap,
     )

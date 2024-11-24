@@ -1,13 +1,14 @@
 import unittest
-from unittest.mock import patch, MagicMock
 from datetime import datetime
-from corpora_pm.providers.github.pm import GitHubIssueTracker
+from unittest.mock import MagicMock, patch
+
 from corpora_pm.abstract import Issue
+from corpora_pm.providers.github.pm import GitHubIssueTracker
 
 
 class TestGitHubIssueTracker(unittest.TestCase):
     def setUp(self):
-        self.token = "fake_token"
+        self.token = "fake_token"  # noqa: S105
         self.repo = "fake_repo"
         self.issue_id = 1
         self.tracker = GitHubIssueTracker(token=self.token)
@@ -26,7 +27,7 @@ class TestGitHubIssueTracker(unittest.TestCase):
                 "labels": [{"name": "bug"}],
                 "assignees": [{"login": "user1"}],
                 "html_url": "https://github.com/fake_repo/issues/1",
-            }
+            },
         ]
         mock_request.return_value = mock_response
 
@@ -79,7 +80,9 @@ class TestGitHubIssueTracker(unittest.TestCase):
             ),
         ):
             issue = self.tracker.create_issue(
-                self.repo, "New Issue", "Body of new issue"
+                self.repo,
+                "New Issue",
+                "Body of new issue",
             )
             self.assertIsInstance(issue, Issue)
             self.assertEqual(issue.id, 1)
@@ -127,6 +130,7 @@ class TestGitHubIssueTracker(unittest.TestCase):
             f"https://api.github.com/repos/{self.repo}/issues/{self.issue_id}/comments",
             headers={"Authorization": f"token {self.token}"},
             json={"body": "This is a comment"},
+            timeout=10,
         )
 
 

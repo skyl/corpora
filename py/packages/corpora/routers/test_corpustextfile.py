@@ -1,28 +1,27 @@
 import pytest
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 from ninja.testing import TestAsyncClient
 
 from .corpustextfile import file_router
-from .test_lib import create_user_and_token, create_corpus, create_file
+from .test_lib import create_corpus, create_file, create_user_and_token
 
 User = get_user_model()
 client = TestAsyncClient(file_router)
 
 
 class CorpusTextFileAPITestCase(TestCase):
-
     @pytest.mark.django_db
     async def test_get_file_by_path(self):
         """Test retrieving a file by path within a corpus."""
         user, headers = await create_user_and_token()
         corpus = await create_corpus(
-            "Path Retrieval Corpus", "https://example.com/repo", user
+            "Path Retrieval Corpus", "https://example.com/repo", user,
         )
-        file = await create_file(corpus, "nested/file1.txt", "Sample content")
+        await create_file(corpus, "nested/file1.txt", "Sample content")
 
         response = await client.get(
-            f"/corpus/{corpus.id}?path=nested/file1.txt", headers=headers
+            f"/corpus/{corpus.id}?path=nested/file1.txt", headers=headers,
         )
         assert response.status_code == 200
         data = response.json()
@@ -35,11 +34,11 @@ class CorpusTextFileAPITestCase(TestCase):
         """Test retrieving a non-existent file by path."""
         user, headers = await create_user_and_token()
         corpus = await create_corpus(
-            "Nonexistent File Corpus", "https://example.com/repo", user
+            "Nonexistent File Corpus", "https://example.com/repo", user,
         )
 
         response = await client.get(
-            f"/corpus/{corpus.id}?path=nonexistent/file.txt", headers=headers
+            f"/corpus/{corpus.id}?path=nonexistent/file.txt", headers=headers,
         )
         assert response.status_code == 404
 
@@ -48,7 +47,7 @@ class CorpusTextFileAPITestCase(TestCase):
         """Test retrieving a file by path without providing the required query parameter."""
         user, headers = await create_user_and_token()
         corpus = await create_corpus(
-            "Missing Query Param Corpus", "https://example.com/repo", user
+            "Missing Query Param Corpus", "https://example.com/repo", user,
         )
 
         response = await client.get(f"/corpus/{corpus.id}", headers=headers)
@@ -99,7 +98,7 @@ class CorpusTextFileAPITestCase(TestCase):
         """Test retrieving a file by ID."""
         user, headers = await create_user_and_token()
         corpus = await create_corpus(
-            "Retrieve File Corpus", "https://example.com/repo", user
+            "Retrieve File Corpus", "https://example.com/repo", user,
         )
         file = await create_file(corpus, "file1.txt", "Sample content")
 
@@ -115,6 +114,6 @@ class CorpusTextFileAPITestCase(TestCase):
         """Test retrieving a non-existent file."""
         _, headers = await create_user_and_token()
         response = await client.get(
-            "/00000000-0000-0000-0000-000000000000", headers=headers
+            "/00000000-0000-0000-0000-000000000000", headers=headers,
         )
         assert response.status_code == 404

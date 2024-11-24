@@ -23,34 +23,25 @@ from corpora_client.models.message_schema import MessageSchema
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class CorpusFileChatSchema(BaseModel):
     """
     CorpusFileChatSchema
-    """  # noqa: E501
-
+    """ # noqa: E501
     corpus_id: StrictStr
     messages: List[MessageSchema]
-    voice: Optional[StrictStr] = ""
-    purpose: Optional[StrictStr] = ""
-    structure: Optional[StrictStr] = ""
-    directions: Optional[StrictStr] = ""
+    voice: Optional[StrictStr] = ''
+    purpose: Optional[StrictStr] = ''
+    structure: Optional[StrictStr] = ''
+    directions: Optional[StrictStr] = ''
     path: StrictStr
-    __properties: ClassVar[List[str]] = [
-        "corpus_id",
-        "messages",
-        "voice",
-        "purpose",
-        "structure",
-        "directions",
-        "path",
-    ]
+    __properties: ClassVar[List[str]] = ["corpus_id", "messages", "voice", "purpose", "structure", "directions", "path"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -76,7 +67,8 @@ class CorpusFileChatSchema(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -89,7 +81,7 @@ class CorpusFileChatSchema(BaseModel):
             for _item_messages in self.messages:
                 if _item_messages:
                     _items.append(_item_messages.to_dict())
-            _dict["messages"] = _items
+            _dict['messages'] = _items
         return _dict
 
     @classmethod
@@ -101,23 +93,15 @@ class CorpusFileChatSchema(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "corpus_id": obj.get("corpus_id"),
-                "messages": (
-                    [MessageSchema.from_dict(_item) for _item in obj["messages"]]
-                    if obj.get("messages") is not None
-                    else None
-                ),
-                "voice": obj.get("voice") if obj.get("voice") is not None else "",
-                "purpose": obj.get("purpose") if obj.get("purpose") is not None else "",
-                "structure": (
-                    obj.get("structure") if obj.get("structure") is not None else ""
-                ),
-                "directions": (
-                    obj.get("directions") if obj.get("directions") is not None else ""
-                ),
-                "path": obj.get("path"),
-            }
-        )
+        _obj = cls.model_validate({
+            "corpus_id": obj.get("corpus_id"),
+            "messages": [MessageSchema.from_dict(_item) for _item in obj["messages"]] if obj.get("messages") is not None else None,
+            "voice": obj.get("voice") if obj.get("voice") is not None else '',
+            "purpose": obj.get("purpose") if obj.get("purpose") is not None else '',
+            "structure": obj.get("structure") if obj.get("structure") is not None else '',
+            "directions": obj.get("directions") if obj.get("directions") is not None else '',
+            "path": obj.get("path")
+        })
         return _obj
+
+

@@ -1,4 +1,5 @@
 from typing import List
+
 from ninja import Schema
 
 
@@ -31,7 +32,7 @@ def get_additional_context(payload: CorpusChatSchema, ext: str = "") -> str:
             payload.purpose,
             payload.structure,
             payload.directions,
-        ]
+        ],
     ):
         context += "\n\nADDITIONAL CONTEXT:\n\n"
 

@@ -1,5 +1,4 @@
-"""
-ASGI config for corpora_proj project.
+"""ASGI config for corpora_proj project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

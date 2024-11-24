@@ -28,7 +28,7 @@ pub fn load_config() -> Option<CorporaConfig> {
         let config_path = current_dir.join(".corpora.yaml");
         if config_path.exists() {
             let contents = fs::read_to_string(&config_path).ok()?;
-            println!("{}", contents);
+            // println!("{}", contents);
             let mut config: CorporaConfig = serde_yaml::from_str(&contents).ok()?;
 
             // Set additional fields that are not part of the config file
@@ -48,7 +48,7 @@ pub fn load_config() -> Option<CorporaConfig> {
                 config.id = None;
             }
 
-            println!("{:?}", config);
+            // println!("{:?}", config);
             return Some(config);
         }
 

@@ -1,5 +1,5 @@
-from typing import Union
 import hashlib
+from typing import Union
 
 
 def compute_checksum(content: Union[bytes, str]) -> str:
@@ -13,5 +13,5 @@ def compute_checksum(content: Union[bytes, str]) -> str:
         content = content.encode("utf-8")
 
     size = str(len(content))
-    sha = hashlib.sha1(f"blob {size}\0".encode("utf-8") + content).hexdigest()
+    sha = hashlib.sha1(f"blob {size}\0".encode() + content).hexdigest()
     return sha

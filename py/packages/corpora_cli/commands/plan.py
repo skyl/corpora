@@ -1,10 +1,11 @@
 from typing import List
-import typer
-from prompt_toolkit.shortcuts import PromptSession
 
+import typer
 from corpora_client.models.corpus_chat_schema import CorpusChatSchema
 from corpora_client.models.message_schema import MessageSchema
 from corpora_pm.providers.provider_loader import Corpus, load_provider
+from prompt_toolkit.shortcuts import PromptSession
+
 from corpora_cli.context import ContextObject
 
 app = typer.Typer(help="Interactive issue creation CLI")
@@ -19,7 +20,7 @@ def extract_repo_path(url: str) -> str:
 
 def get_file_content_or_create(path: str) -> str:
     try:
-        with open(path, "r") as f:
+        with open(path) as f:
             return f.read()
     except FileNotFoundError:
         with open(path, "w") as f:
@@ -28,9 +29,7 @@ def get_file_content_or_create(path: str) -> str:
 
 @app.command()
 def issue(ctx: typer.Context):
-    """
-    Interactively create and refine a prospective issue for a given corpus.
-    """
+    """Interactively create and refine a prospective issue for a given corpus."""
     c: ContextObject = ctx.obj
     c.console.print("Entering interactive issue creation...", style="bold blue")
 
@@ -51,7 +50,10 @@ def issue(ctx: typer.Context):
         c.console.print("Thinking...", style="bold blue")
 
         if not user_input:
-            c.console.print("No input provided. Please try again.", style="yellow")
+            c.console.print(
+                "No input provided. Please try again.",
+                style="yellow",
+            )
             continue
 
         # Add the user's input as a new message
@@ -73,17 +75,17 @@ def issue(ctx: typer.Context):
                 purpose=purpose,
                 structure=structure,
                 directions=directions,
-            )
+            ),
         )
         # Display the generated draft issue
-        c.console.print(f"Draft Issue:", style="bold green")
+        c.console.print("Draft Issue:", style="bold green")
         c.console.print(f"Title: {draft_issue.title}", style="magenta")
         c.console.print(f"Body:\n{draft_issue.body}", style="dim")
 
         # Confirm if the user wants to post
         if typer.confirm("\nPost this issue?"):
             issue_tracker = load_provider(
-                Corpus(url=c.config["url"], id=c.config["id"])
+                Corpus(url=c.config["url"], id=c.config["id"]),
             )
             resp = issue_tracker.create_issue(
                 extract_repo_path(c.config["url"]),
@@ -93,36 +95,36 @@ def issue(ctx: typer.Context):
             c.console.print("Issue posted!", style="green")
             c.console.print(f"URL: {resp.url}", style="magenta")
             return
-        else:
-            c.console.print(
-                "You chose not to post the issue. Refine your messages or add new ones.",
-                style="yellow",
-            )
-            messages.append(
-                MessageSchema(
-                    role="assistant",
-                    text=f"{draft_issue.title}\n{draft_issue.body}",
-                )
-            )
+        c.console.print(
+            "You chose not to post the issue. Refine your messages or add new ones.",
+            style="yellow",
+        )
+        messages.append(
+            MessageSchema(
+                role="assistant",
+                text=f"{draft_issue.title}\n{draft_issue.body}",
+            ),
+        )
 
 
 @app.command()
 def update_issue(ctx: typer.Context, issue_number: int):
-    """
-    Interactively update an existing issue for a given corpus.
-    """
+    """Interactively update an existing issue for a given corpus."""
     c: ContextObject = ctx.obj
     c.console.print("Fetching existing issue...", style="bold blue")
 
-    issue_tracker = load_provider(Corpus(url=c.config["url"], id=c.config["id"]))
+    issue_tracker = load_provider(
+        Corpus(url=c.config["url"], id=c.config["id"]),
+    )
     repo_path = extract_repo_path(c.config["url"])
     existing_issue = issue_tracker.get_issue(repo_path, issue_number)
 
     # Start with the existing issue state
     messages: List[MessageSchema] = [
         MessageSchema(
-            role="user", text=f"Title: {existing_issue.title}\n{existing_issue.body}"
-        )
+            role="user",
+            text=f"Title: {existing_issue.title}\n{existing_issue.body}",
+        ),
     ]
 
     c.console.print("Existing Issue:", style="bold green")
@@ -143,7 +145,10 @@ def update_issue(ctx: typer.Context, issue_number: int):
         c.console.print("Thinking...", style="bold blue")
 
         if not user_input:
-            c.console.print("No input provided. Please try again.", style="yellow")
+            c.console.print(
+                "No input provided. Please try again.",
+                style="yellow",
+            )
             continue
 
         # Add the user's input as a new message
@@ -165,10 +170,10 @@ def update_issue(ctx: typer.Context, issue_number: int):
                 purpose=purpose,
                 structure=structure,
                 directions=directions,
-            )
+            ),
         )
         # Display the updated draft issue
-        c.console.print(f"Updated Draft Issue:", style="bold green")
+        c.console.print("Updated Draft Issue:", style="bold green")
         c.console.print(f"Title: {updated_issue.title}", style="magenta")
         c.console.print(f"Body:\n{updated_issue.body}", style="dim")
 
@@ -183,14 +188,13 @@ def update_issue(ctx: typer.Context, issue_number: int):
             c.console.print("Issue updated!", style="green")
             c.console.print(f"URL: {resp.url}", style="magenta")
             return
-        else:
-            c.console.print(
-                "You chose not to update the issue. Refine your messages or add new ones.",
-                style="yellow",
-            )
-            messages.append(
-                MessageSchema(
-                    role="assistant",
-                    text=f"{updated_issue.title}\n{updated_issue.body}",
-                )
-            )
+        c.console.print(
+            "You chose not to update the issue. Refine your messages or add new ones.",
+            style="yellow",
+        )
+        messages.append(
+            MessageSchema(
+                role="assistant",
+                text=f"{updated_issue.title}\n{updated_issue.body}",
+            ),
+        )

@@ -1,13 +1,14 @@
 from unittest.mock import patch
+
 import pytest
-from django.test import TestCase
+from asgiref.sync import sync_to_async
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
 from ninja.testing import TestAsyncClient
-from asgiref.sync import sync_to_async
 
 from .corpus import corpus_router
-from .test_lib import create_user_and_token, create_corpus
+from .test_lib import create_corpus, create_user_and_token
 
 User = get_user_model()
 client = TestAsyncClient(corpus_router)
@@ -21,12 +22,12 @@ class CorpusAPITestCase(TestCase):
         data = {"name": "Test Corpus", "url": "https://example.com/repo"}
         file_content = b"Dummy tarball content"
         file = SimpleUploadedFile(
-            "test.tar.gz", file_content, content_type="application/gzip"
+            "test.tar.gz", file_content, content_type="application/gzip",
         )
 
         with patch("corpora.tasks.sync.process_tarball.delay") as mock_delay:
             response = await client.post(
-                "", data=data, FILES={"tarball": file}, headers=headers
+                "", data=data, FILES={"tarball": file}, headers=headers,
             )
             response_data = response.json()
             mock_delay.assert_called_once_with(response_data["id"], file_content)
@@ -46,7 +47,7 @@ class CorpusAPITestCase(TestCase):
         # Prepare the tarball file
         file_content = b"Updated tarball content"
         file = SimpleUploadedFile(
-            "update.tar.gz", file_content, content_type="application/gzip"
+            "update.tar.gz", file_content, content_type="application/gzip",
         )
 
         # Mock process_tarball to prevent actual processing
@@ -76,11 +77,11 @@ class CorpusAPITestCase(TestCase):
         data = {"name": "Duplicate Corpus", "url": "https://example.com/repo"}
         file_content = b"Dummy tarball content"
         file = SimpleUploadedFile(
-            "test.tar.gz", file_content, content_type="application/gzip"
+            "test.tar.gz", file_content, content_type="application/gzip",
         )
 
         response = await client.post(
-            "", data=data, FILES={"tarball": file}, headers=headers
+            "", data=data, FILES={"tarball": file}, headers=headers,
         )
         assert response.status_code == 409
         assert (
@@ -105,7 +106,7 @@ class CorpusAPITestCase(TestCase):
         """Test retrieving a non-existent corpus."""
         _, headers = await create_user_and_token()
         response = await client.get(
-            "/00000000-0000-0000-0000-000000000000", headers=headers
+            "/00000000-0000-0000-0000-000000000000", headers=headers,
         )
         assert response.status_code == 404
 
@@ -124,7 +125,7 @@ class CorpusAPITestCase(TestCase):
         """Test deleting a non-existent corpus."""
         _, headers = await create_user_and_token()
         response = await client.delete(
-            "?corpus_name=NonExistentCorpus", headers=headers
+            "?corpus_name=NonExistentCorpus", headers=headers,
         )
         assert response.status_code == 404
 

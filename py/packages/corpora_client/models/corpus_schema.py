@@ -22,12 +22,10 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class CorpusSchema(BaseModel):
     """
     CorpusSchema
-    """  # noqa: E501
-
+    """ # noqa: E501
     name: StrictStr
     url: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = ["name", "url"]
@@ -37,6 +35,7 @@ class CorpusSchema(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -62,7 +61,8 @@ class CorpusSchema(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -72,7 +72,7 @@ class CorpusSchema(BaseModel):
         # set to None if url (nullable) is None
         # and model_fields_set contains the field
         if self.url is None and "url" in self.model_fields_set:
-            _dict["url"] = None
+            _dict['url'] = None
 
         return _dict
 
@@ -85,5 +85,10 @@ class CorpusSchema(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"name": obj.get("name"), "url": obj.get("url")})
+        _obj = cls.model_validate({
+            "name": obj.get("name"),
+            "url": obj.get("url")
+        })
         return _obj
+
+

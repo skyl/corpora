@@ -1,7 +1,8 @@
 from io import StringIO
 from unittest.mock import patch
-from typer.testing import CliRunner
+
 from rich.console import Console
+from typer.testing import CliRunner
 
 from corpora_cli.commands.file import app
 
@@ -40,7 +41,7 @@ def test_remove_command(mock_context):
     file_id = "test_file_id"
 
     result = runner.invoke(
-        app, ["remove", corpus_id, file_id], obj=mock_context_instance
+        app, ["remove", corpus_id, file_id], obj=mock_context_instance,
     )
     output = console_output.getvalue()
 
