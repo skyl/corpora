@@ -1,6 +1,5 @@
 use crate::context::Context;
 use corpora_client::models::{CorpusChatSchema, MessageSchema};
-use dialoguer::{theme::ColorfulTheme, Input};
 use std::fs;
 use termimad::MadSkin;
 
@@ -10,13 +9,15 @@ pub fn run(ctx: &Context) {
 
     // REPL loop
     loop {
-        // TODO: multiline input
-        let user_input: String = Input::with_theme(&ColorfulTheme::default())
-            .with_prompt("Can I help you?")
-            .allow_empty(false)
-            .interact_text()
-            .unwrap();
-
+        // // TODO: multiline input
+        // let user_input: String = Input::with_theme(&ColorfulTheme::default())
+        //     .with_prompt("Can I help you?")
+        //     .allow_empty(false)
+        //     .interact_text()
+        //     .unwrap();
+        let user_input = ctx
+            .get_user_input_via_editor("Put your prompt here and close")
+            .expect("FML");
         // Add the user's input as a new message
         messages.push(MessageSchema {
             role: "user".to_string(),
