@@ -66,19 +66,17 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
                 Vec::new()
             }
         }
+    } else if !current_file_content.is_empty() {
+        vec![MessageSchema {
+            role: "user".to_string(),
+            text: format!(
+                "The original content of `{}` was:\n```\n{}\n```",
+                relative_path.display(),
+                current_file_content
+            ),
+        }]
     } else {
-        if !current_file_content.is_empty() {
-            vec![MessageSchema {
-                role: "user".to_string(),
-                text: format!(
-                    "The original content of `{}` was:\n```\n{}\n```",
-                    relative_path.display(),
-                    current_file_content
-                ),
-            }]
-        } else {
-            Vec::new()
-        }
+        Vec::new()
     };
 
     loop {
