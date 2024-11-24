@@ -2,15 +2,18 @@ pub mod auth;
 pub mod collector;
 pub mod config;
 
+use std::process::Command;
 use std::sync::Arc;
+use std::time::Duration;
 
 use console::{Style, Term};
-// use dialoguer::Editor;
-use std::process::Command;
-use tempfile::NamedTempFile;
 
 use indicatif::{ProgressBar, ProgressStyle};
+use reqwest::blocking::ClientBuilder;
+use tempfile::NamedTempFile;
 
+use crate::history::files::FileChatHistory;
+use crate::history::ChatHistory;
 use corpora_client::apis::configuration::Configuration;
 
 use auth::get_bearer_token;
@@ -22,6 +25,7 @@ pub struct Context {
     pub corpora_config: CorporaConfig,
     pub collector: Box<dyn Collector>,
     pub term: Arc<Term>, // Terminal for colorful and interactive output
+    pub history: Box<dyn ChatHistory>,
 }
 
 impl Context {
@@ -34,9 +38,15 @@ impl Context {
         let token = get_bearer_token(&corpora_config)
             .expect("Failed to authenticate and retrieve bearer token");
 
+        let client = ClientBuilder::new()
+            .timeout(Duration::from_secs(60))
+            .build()
+            .expect("Failed to build the reqwest client");
+
         // Configure the API client
         let api_config = Configuration {
             base_path: corpora_config.server.base_url.clone(),
+            client,
             bearer_access_token: Some(token),
             ..Default::default()
         };
@@ -47,12 +57,14 @@ impl Context {
 
         // Create terminal instance for interactive output
         let term = Arc::new(Term::stdout());
+        let history = FileChatHistory::new(corpora_config.root_path.join(".corpora/chat"));
 
         Context {
             api_config,
             corpora_config,
             collector,
             term,
+            history: Box::new(history),
         }
     }
 
