@@ -15,8 +15,11 @@ def process_tarball(corpus_id: str, tarball: bytes) -> None:
         for member in tar.getmembers():
             if member.isfile():
                 file_content = (
-                    tar.extractfile(member).read().decode("utf-8", errors="replace")
+                    tar.extractfile(member)
+                    .read()
+                    .decode("utf-8", errors="replace")
                 )
+
                 checksum = compute_checksum(file_content)
 
                 corpus_file, _ = CorpusTextFile.objects.get_or_create(

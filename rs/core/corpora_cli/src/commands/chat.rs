@@ -6,12 +6,6 @@ use termimad::MadSkin;
 
 #[derive(Args)]
 pub struct ChatArgs {
-    // Both of these should be optional
-    // #[arg(help = "name of persistent session")]
-    // pub persist: String,
-    // #[arg(short, long, help = "list available sessions")]
-    // pub list: bool,
-    // this is how you make them optional:
     #[arg(short, long, help = "name of persistent session")]
     pub persist: Option<String>,
     #[arg(short, long, help = "list available sessions")]

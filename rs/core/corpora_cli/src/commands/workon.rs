@@ -10,6 +10,9 @@ use std::path::Path;
 pub struct WorkonArgs {
     #[arg(help = "Path to the file or directory")]
     pub path: String,
+
+    #[arg(short, long, help = "name of persistent session")]
+    pub persist: Option<String>,
 }
 
 /// The `workon` command operation
@@ -38,17 +41,45 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
     ctx.success("Current file content:");
     ctx.dim(&current_file_content);
 
-    let mut messages: Vec<MessageSchema> = vec![];
-    if !current_file_content.is_empty() {
-        messages.push(MessageSchema {
-            role: "user".to_string(),
-            text: format!(
-                "The original content of `{}` was:\n```{}\n```",
-                relative_path.display(),
-                current_file_content
-            ),
-        });
-    }
+    let mut messages: Vec<MessageSchema> = if let Some(session_name) = &args.persist {
+        match ctx.history.load_session(session_name) {
+            Ok(mut existing_messages) => {
+                ctx.success(&format!("Loaded session: {}", session_name));
+                for message in &existing_messages {
+                    ctx.dim(&format!("{}: {}", message.role, message.text));
+                }
+                // add the original content of the file to the chat history
+                if !current_file_content.is_empty() {
+                    existing_messages.push(MessageSchema {
+                        role: "user".to_string(),
+                        text: format!(
+                            "The current content of `{}` is:\n```\n{}\n```",
+                            relative_path.display(),
+                            current_file_content
+                        ),
+                    });
+                }
+                existing_messages
+            }
+            Err(_) => {
+                ctx.warn(&format!("No existing session found for: {}", session_name));
+                Vec::new()
+            }
+        }
+    } else {
+        if !current_file_content.is_empty() {
+            vec![MessageSchema {
+                role: "user".to_string(),
+                text: format!(
+                    "The original content of `{}` was:\n```\n{}\n```",
+                    relative_path.display(),
+                    current_file_content
+                ),
+            }]
+        } else {
+            Vec::new()
+        }
+    };
 
     loop {
         let user_input = ctx
@@ -103,6 +134,15 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
             role: "assistant".to_string(),
             text: revision.clone(),
         });
+
+        if let Some(session_name) = &args.persist {
+            if let Err(err) = ctx.history.save_session(session_name, &messages) {
+                ctx.error(&format!(
+                    "Failed to save session '{}': {:?}",
+                    session_name, err
+                ));
+            }
+        }
 
         if Confirm::with_theme(&ColorfulTheme::default())
             .with_prompt("Write file?")
