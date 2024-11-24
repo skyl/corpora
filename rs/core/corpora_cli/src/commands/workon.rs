@@ -1,7 +1,7 @@
 use crate::context::Context;
 use clap::Args;
 use corpora_client::models::{CorpusFileChatSchema, MessageSchema};
-use dialoguer::{theme::ColorfulTheme, Confirm, Input};
+use dialoguer::{theme::ColorfulTheme, Confirm};
 use std::fs::{self, File};
 use std::io::Write;
 use std::path::Path;
@@ -14,32 +14,20 @@ pub struct WorkonArgs {
 
 /// The `workon` command operation
 pub fn run(ctx: &Context, args: WorkonArgs) {
-    // get path as a path from the string
     let path = Path::new(&args.path);
-    // get cwd
-    let cwd = std::env::current_dir().unwrap();
-    ctx.print(
-        &format!("Current working directory: {}", cwd.display()),
-        dialoguer::console::Style::new().dim(),
-    );
-    // add cwd and args.path
-    let absolute_path = Path::join(&cwd, path);
-    // rm the config.root_path to get the relative path
+    let cwd = std::env::current_dir().expect("Failed to get current directory");
+    ctx.dim(&format!("Current working directory: {}", cwd.display()));
+    let absolute_path = cwd.join(path);
     let relative_path = absolute_path
         .strip_prefix(&ctx.corpora_config.root_path)
-        .unwrap();
-    // ctx.success(&format!("Working on file: {}", relative_path.display()));
-    ctx.print(
-        &format!("Working on file: {}", relative_path.display()),
-        dialoguer::console::Style::new().dim().green(),
-    );
+        .expect("Failed to get relative path");
+
+    ctx.magenta(&format!("Working on file: {}", relative_path.display()));
     let ext = relative_path
         .extension()
-        .unwrap_or_default()
-        .to_str()
+        .and_then(|s| s.to_str())
         .unwrap_or("");
 
-    // Show current file content, load the content from the
     let current_file_content = match fs::read_to_string(path) {
         Ok(content) => content,
         Err(_) => {
@@ -47,15 +35,10 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
             String::new()
         }
     };
-
     ctx.success("Current file content:");
-    ctx.print(
-        &current_file_content,
-        dialoguer::console::Style::new().dim(),
-    );
+    ctx.dim(&current_file_content);
 
-    let mut messages: Vec<MessageSchema> = Vec::new();
-
+    let mut messages: Vec<MessageSchema> = vec![];
     if !current_file_content.is_empty() {
         messages.push(MessageSchema {
             role: "user".to_string(),
@@ -67,25 +50,19 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
         });
     }
 
-    // REPL loop
     loop {
-        let user_input: String = Input::with_theme(&ColorfulTheme::default())
-            .with_prompt(if messages.is_empty() {
-                "What to do?"
-            } else {
-                "How to revise?"
-            })
-            .allow_empty(false)
-            .interact_text()
-            .unwrap();
+        let user_input = ctx
+            .get_user_input_via_editor(&format!(
+                "Put your prompt here for {}, save and close",
+                path.display()
+            ))
+            .expect("Failed to get user input");
 
-        // Add the user's input as a new message
         messages.push(MessageSchema {
             role: "user".to_string(),
             text: user_input.trim().to_string(),
         });
 
-        // Generate revision
         ctx.success("Generating revision...");
 
         let root_path = &ctx.corpora_config.root_path;
@@ -120,12 +97,8 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
             }
         };
 
-        ctx.print(&revision, dialoguer::console::Style::new().dim());
-        // println!("{}", relative_path.display());
-        ctx.print(
-            &format!("Revision for `{}`:", relative_path.display()),
-            dialoguer::console::Style::new().dim().magenta().on_green(),
-        );
+        ctx.dim(&revision);
+        ctx.highlight(&format!("^^Revision for `{}`^^", relative_path.display()));
         messages.push(MessageSchema {
             role: "assistant".to_string(),
             text: revision.clone(),

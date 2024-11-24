@@ -2,9 +2,14 @@ pub mod auth;
 pub mod collector;
 pub mod config;
 
-use console::{Style, Term};
-use indicatif::{ProgressBar, ProgressStyle};
 use std::sync::Arc;
+
+use console::{Style, Term};
+// use dialoguer::Editor;
+use std::process::Command;
+use tempfile::NamedTempFile;
+
+use indicatif::{ProgressBar, ProgressStyle};
 
 use corpora_client::apis::configuration::Configuration;
 
@@ -151,4 +156,68 @@ impl Context {
         let dim_style = Style::new().dim();
         self.print(message, dim_style);
     }
+
+    /// Print a magenta message
+    /// Magenta messages are used for highlighting information
+    /// # Arguments
+    /// * `message` - The message to print.
+    pub fn magenta(&self, message: &str) {
+        let magenta_style = Style::new().magenta();
+        self.print(message, magenta_style);
+    }
+
+    /// Print a highlighted message
+    /// Highlighted messages are used for important information
+    /// # Arguments
+    /// * `message` - The message to print.
+    pub fn highlight(&self, message: &str) {
+        let style = Style::new().bold().green().on_magenta();
+        self.print(message, style);
+    }
+
+    /// Get user input via an editor
+    /// Opens the user's default editor with the provided content
+    /// # Arguments
+    /// * `initial_content` - The initial content to display in the editor.
+    /// # Returns
+    /// The edited content as a `String`.
+    pub fn get_user_input_via_editor(&self, initial_content: &str) -> Result<String, String> {
+        get_user_input_via_editor(initial_content)
+    }
+}
+
+pub fn get_user_input_via_editor(initial_content: &str) -> Result<String, String> {
+    // Create a temporary file
+    let temp_file =
+        NamedTempFile::new().map_err(|e| format!("Failed to create temp file: {}", e))?;
+
+    // Write the initial content to the temporary file
+    std::fs::write(temp_file.path(), initial_content)
+        .map_err(|e| format!("Failed to write to temp file: {}", e))?;
+
+    // Get the editor from $EDITOR or default to 'vim'
+    let editor = std::env::var("EDITOR").unwrap_or_else(|_| "vim".to_string());
+    let mut command = Command::new(&editor);
+
+    // Add flags for non-blocking editors
+    if editor.contains("code") || editor.contains("subl") {
+        command.arg("--wait");
+    } else if editor.contains("gedit") {
+        command.arg("--standalone");
+    }
+
+    // Open the file in the editor and wait for it to close
+    let status = command
+        .arg(temp_file.path())
+        .status()
+        .map_err(|e| format!("Failed to launch editor '{}': {}", editor, e))?;
+
+    // Check if the editor exited successfully
+    if !status.success() {
+        return Err(format!("Editor '{}' exited with a non-zero status", editor));
+    }
+
+    // Read the edited content back from the file
+    std::fs::read_to_string(temp_file.path())
+        .map_err(|e| format!("Failed to read edited file: {}", e))
 }
