@@ -15,18 +15,17 @@ pub struct WorkonArgs {
 /// The `workon` command operation
 pub fn run(ctx: &Context, args: WorkonArgs) {
     let path = Path::new(&args.path);
-    let cwd = std::env::current_dir().unwrap();
+    let cwd = std::env::current_dir().expect("Failed to get current directory");
     ctx.dim(&format!("Current working directory: {}", cwd.display()));
-    let absolute_path = Path::join(&cwd, path);
+    let absolute_path = cwd.join(path);
     let relative_path = absolute_path
         .strip_prefix(&ctx.corpora_config.root_path)
-        .unwrap();
+        .expect("Failed to get relative path");
 
     ctx.magenta(&format!("Working on file: {}", relative_path.display()));
     let ext = relative_path
         .extension()
-        .unwrap_or_default()
-        .to_str()
+        .and_then(|s| s.to_str())
         .unwrap_or("");
 
     let current_file_content = match fs::read_to_string(path) {
@@ -39,7 +38,7 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
     ctx.success("Current file content:");
     ctx.dim(&current_file_content);
 
-    let mut messages: Vec<MessageSchema> = Vec::new();
+    let mut messages: Vec<MessageSchema> = vec![];
     if !current_file_content.is_empty() {
         messages.push(MessageSchema {
             role: "user".to_string(),
@@ -51,17 +50,7 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
         });
     }
 
-    // REPL loop
     loop {
-        // let user_input: String = Input::with_theme(&ColorfulTheme::default())
-        //     .with_prompt(if messages.is_empty() {
-        //         "What to do?"
-        //     } else {
-        //         "How to revise?"
-        //     })
-        //     .allow_empty(false)
-        //     .interact_text()
-        //     .unwrap();
         let user_input = ctx
             .get_user_input_via_editor(&format!(
                 "Put your prompt here for {}, save and close",
@@ -69,7 +58,6 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
             ))
             .expect("Failed to get user input");
 
-        // Add the user's input as a new message
         messages.push(MessageSchema {
             role: "user".to_string(),
             text: user_input.trim().to_string(),
@@ -108,6 +96,7 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
                 continue;
             }
         };
+
         ctx.dim(&revision);
         ctx.highlight(&format!("Revision for `{}`:", relative_path.display()));
         messages.push(MessageSchema {
