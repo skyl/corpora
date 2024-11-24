@@ -5,12 +5,13 @@ pub mod config;
 use std::sync::Arc;
 
 use console::{Style, Term};
-// use dialoguer::Editor;
 use std::process::Command;
 use tempfile::NamedTempFile;
 
 use indicatif::{ProgressBar, ProgressStyle};
 
+use crate::history::files::FileChatHistory;
+use crate::history::ChatHistory;
 use corpora_client::apis::configuration::Configuration;
 
 use auth::get_bearer_token;
@@ -22,6 +23,7 @@ pub struct Context {
     pub corpora_config: CorporaConfig,
     pub collector: Box<dyn Collector>,
     pub term: Arc<Term>, // Terminal for colorful and interactive output
+    pub history: Box<dyn ChatHistory>,
 }
 
 impl Context {
@@ -47,12 +49,14 @@ impl Context {
 
         // Create terminal instance for interactive output
         let term = Arc::new(Term::stdout());
+        let history = FileChatHistory::new(corpora_config.root_path.join(".corpora/chat"));
 
         Context {
             api_config,
             corpora_config,
             collector,
             term,
+            history: Box::new(history),
         }
     }
 

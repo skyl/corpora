@@ -1,6 +1,7 @@
 dump.txt
 tmp/
 .corpora/.id
+.corpora/chat/
 test-corpora/
 /.env
 
