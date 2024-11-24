@@ -98,7 +98,7 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
         };
 
         ctx.dim(&revision);
-        ctx.highlight(&format!("Revision for `{}`:", relative_path.display()));
+        ctx.highlight(&format!("^^Revision for `{}`^^", relative_path.display()));
         messages.push(MessageSchema {
             role: "assistant".to_string(),
             text: revision.clone(),

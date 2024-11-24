@@ -3,22 +3,15 @@ use corpora_client::models::{CorpusChatSchema, MessageSchema};
 use std::fs;
 use termimad::MadSkin;
 
-/// The `workon` command operation
+/// Executes the chat command operation
 pub fn run(ctx: &Context) {
-    let mut messages: Vec<MessageSchema> = Vec::new();
+    let mut messages = Vec::new();
 
-    // REPL loop
     loop {
-        // // TODO: multiline input
-        // let user_input: String = Input::with_theme(&ColorfulTheme::default())
-        //     .with_prompt("Can I help you?")
-        //     .allow_empty(false)
-        //     .interact_text()
-        //     .unwrap();
         let user_input = ctx
             .get_user_input_via_editor("Put your prompt here and close")
-            .expect("FML");
-        // Add the user's input as a new message
+            .expect("Failed to obtain user input");
+
         messages.push(MessageSchema {
             role: "user".to_string(),
             text: user_input.trim().to_string(),
@@ -31,11 +24,7 @@ pub fn run(ctx: &Context) {
         let structure =
             fs::read_to_string(root_path.join(".corpora/STRUCTURE.md")).unwrap_or_default();
 
-        // println!("Voice: {}", voice);
-        // println!("Purpose: {}", purpose);
-        // println!("Structure: {}", structure);
-
-        let response = match corpora_client::apis::corpus_api::chat(
+        match corpora_client::apis::corpus_api::chat(
             &ctx.api_config,
             CorpusChatSchema {
                 messages: messages.clone(),
@@ -50,21 +39,18 @@ pub fn run(ctx: &Context) {
                 directions: None,
             },
         ) {
-            Ok(response) => response,
+            Ok(response) => {
+                let skin = MadSkin::default();
+                skin.print_text(&response);
+                messages.push(MessageSchema {
+                    role: "assistant".to_string(),
+                    text: response.clone(),
+                });
+            }
             Err(err) => {
                 ctx.error(&format!("Failed to get response: {:?}", err));
                 continue;
             }
         };
-
-        // ctx.print(&response, dialoguer::console::Style::new().dim());
-        let skin = MadSkin::default();
-        skin.print_text(&response);
-
-        // println!("{}", relative_path.display());
-        messages.push(MessageSchema {
-            role: "assistant".to_string(),
-            text: response.clone(),
-        });
     }
 }
