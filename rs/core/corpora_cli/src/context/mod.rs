@@ -200,9 +200,7 @@ pub fn get_user_input_via_editor(initial_content: &str) -> Result<String, String
     let mut command = Command::new(&editor);
 
     // Add flags for non-blocking editors
-    if editor.contains("code") {
-        command.arg("--wait");
-    } else if editor.contains("subl") {
+    if editor.contains("code") || editor.contains("subl") {
         command.arg("--wait");
     } else if editor.contains("gedit") {
         command.arg("--standalone");
