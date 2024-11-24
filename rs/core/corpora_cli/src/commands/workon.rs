@@ -63,7 +63,10 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
         //     .interact_text()
         //     .unwrap();
         let user_input = ctx
-            .get_user_input_via_editor("Put prompt here")
+            .get_user_input_via_editor(&format!(
+                "Put your prompt here for {}, save and close",
+                path.display()
+            ))
             .expect("Failed to get user input");
 
         // Add the user's input as a new message
