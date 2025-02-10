@@ -28,6 +28,7 @@ fn main() {
         Commands::Sync => commands::sync::run(&ctx),
         Commands::Chat(args) => commands::chat::run(&ctx, args),
         Commands::Workon(args) => commands::workon::run(&ctx, args),
+        Commands::Infer(args) => commands::infer::run(&ctx, args),
         Commands::Issue(issue_command) => match issue_command {
             issue::IssueCommands::Create => issue::create(&ctx),
             issue::IssueCommands::Update(args) => issue::update(&ctx, args),

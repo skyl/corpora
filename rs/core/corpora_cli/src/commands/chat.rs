@@ -52,7 +52,7 @@ pub fn run(ctx: &Context, args: ChatArgs) {
     loop {
         ctx.magenta("Opening editor for user input...");
         let user_input = ctx
-            .get_user_input_via_editor("Put your prompt here, save and close")
+            .get_user_input_via_editor("")
             .expect("Failed to obtain user input");
 
         // Add the user's input to the chat history
