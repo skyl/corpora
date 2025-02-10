@@ -81,11 +81,13 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
 
     loop {
         let user_input = ctx
-            .get_user_input_via_editor(&format!(
-                "Put your prompt here for {}, save and close",
-                path.display()
-            ))
+            .get_user_input_via_editor(&format!(""))
             .expect("Failed to get user input");
+
+        if user_input.trim().is_empty() {
+            ctx.warn("No input provided. Exiting...");
+            return;
+        }
 
         messages.push(MessageSchema {
             role: "user".to_string(),

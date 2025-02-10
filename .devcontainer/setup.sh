@@ -8,6 +8,9 @@ echo "alias git-delete-branches=\"git branch | grep -v 'main' | xargs git branch
 # Alias for dumpdir
 echo "alias dumpdir='git ls-files | xargs file --mime-type | grep text/ | cut -d: -f1 | while read -r file; do echo -e \"\\n==== Contents of: \$file ====\\n\"; cat \"\$file\"; done'" >> ~/.zshrc
 # Symbolic link for corpora
-sudo ln -s /workspace/py/packages/corpora_cli/main.py /usr/local/bin/corpora
+# moving to rust CLI completely ...
+# sudo ln -s /workspace/py/packages/corpora_cli/main.py /usr/local/bin/corpora
+sudo ln -s /workspace/rs/target/debug/corpora /usr/local/bin/corpora
 # Rust on PATH
+rustup update stable
 echo "export PATH=\"/home/vscode/.cargo/bin:\${PATH}\"" >> ~/.zshrc

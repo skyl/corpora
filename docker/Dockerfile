@@ -15,6 +15,11 @@ RUN apt-get update && \
     git \
     libffi-dev \
     python3-dev \
+    pandoc \
+    texlive-xetex \
+    texlive-fonts-recommended \
+    texlive-latex-extra \
+    texlive-luatex \
     && rm -rf /var/lib/apt/lists/*
 
 # TODO: for dev this could probably be in setup.sh

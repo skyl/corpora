@@ -1,4 +1,5 @@
 pub mod chat;
+pub mod infer;
 pub mod init;
 pub mod issue;
 pub mod sync;
@@ -17,6 +18,8 @@ pub enum Commands {
     Sync,
     #[command(about = "Work on a specific file")]
     Workon(workon::WorkonArgs),
+    #[command(about = "Infer a file")]
+    Infer(infer::InferArgs),
     #[command(about = "Manage issues", subcommand)]
     Issue(issue::IssueCommands),
 }
