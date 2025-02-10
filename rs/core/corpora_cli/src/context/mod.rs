@@ -162,5 +162,5 @@ fn is_command_available(cmd: &str) -> bool {
     Command::new("which")
         .arg(cmd)
         .status()
-        .map_or(false, |s| s.success())
+        .is_ok_and(|s| s.success())
 }

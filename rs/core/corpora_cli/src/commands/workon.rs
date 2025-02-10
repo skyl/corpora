@@ -81,7 +81,7 @@ pub fn run(ctx: &Context, args: WorkonArgs) {
 
     loop {
         let user_input = ctx
-            .get_user_input_via_editor(&format!(""))
+            .get_user_input_via_editor("")
             .expect("Failed to get user input");
 
         if user_input.trim().is_empty() {

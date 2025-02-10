@@ -77,11 +77,7 @@ pub fn run(ctx: &Context) {
     // Determine files to update/add and delete
     let files_to_update: HashMap<String, String> = local_files_hash_map
         .iter()
-        .filter(|(path, hash)| {
-            remote_files_map
-                .get(*path) // `*path` is a `String`, matching the remote map keys
-                .map_or(true, |remote_hash| remote_hash != *hash)
-        })
+        .filter(|(path, hash)| remote_files_map.get(*path) != Some(hash))
         .map(|(path, hash)| (path.clone(), hash.clone()))
         .collect();
 
