@@ -6,7 +6,7 @@ use std::io::Write;
 use std::path::Path;
 use std::process::{Command, Stdio};
 
-const MAX_RETRIES: u8 = 1;
+const MAX_RETRIES: u8 = 2;
 
 #[derive(Args)]
 pub struct InferArgs {
@@ -68,7 +68,7 @@ pub fn run(ctx: &Context, args: InferArgs) {
             messages.push(MessageSchema {
                 role: "user".to_string(),
                 text: format!(
-                    "Previous attempt failed. Here is the error output:\n```\n{}\n```",
+                    "Previous attempt failed. Here is the error output:\n```\n{}\n```\n Please fix the error and try again.",
                     error_msg
                 ),
             });
@@ -121,7 +121,7 @@ pub fn run(ctx: &Context, args: InferArgs) {
 
                     if attempts >= MAX_RETRIES {
                         ctx.error("Max retries reached. Aborting.");
-                        return;
+                        std::process::exit(1);
                     }
                     continue; // Retry with new AI request including error output
                 }

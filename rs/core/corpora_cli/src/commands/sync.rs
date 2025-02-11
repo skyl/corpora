@@ -1,14 +1,12 @@
 use crate::context::Context;
+use clap::Args;
 use std::{collections::HashMap, fs, path::PathBuf};
 
-// Implement the `cleanup_temp_files` function
-// // Clean up the tarball
-// ctx.success("Cleaning up temporary tarball file...");
-// if let Err(err) = fs::remove_file(&tarball_path) {
-//     ctx.warn(&format!("Failed to remove temporary tarball: {:?}", err));
-// } else {
-//     ctx.success("Temporary tarball file removed successfully.");
-// }
+#[derive(Args)]
+pub struct SyncArgs {
+    #[arg(long, help = "Run without asking for confirmation")]
+    pub noinput: bool,
+}
 
 /// Clean up a list of temporary files
 pub fn cleanup_temp_files(files: &[PathBuf], ctx: &Context) {
@@ -23,7 +21,7 @@ pub fn cleanup_temp_files(files: &[PathBuf], ctx: &Context) {
 }
 
 /// Run the `sync` command
-pub fn run(ctx: &Context) {
+pub fn run(ctx: &Context, args: SyncArgs) {
     ctx.success("Starting corpus sync...");
 
     // Ensure corpus ID exists in the configuration
@@ -123,13 +121,19 @@ pub fn run(ctx: &Context) {
         }
     };
 
-    let upload = ctx.prompt_confirm("Do you want to upload?");
-    if !upload {
-        cleanup_temp_files(&[tarball_path], ctx);
-        ctx.warn("Aborting sync. No changes have been made.");
-        return;
+    // Handle `--noinput` flag
+    if !args.noinput {
+        let upload = ctx.prompt_confirm("Do you want to upload?");
+        if !upload {
+            cleanup_temp_files(&[tarball_path], ctx);
+            ctx.warn("Aborting sync. No changes have been made.");
+            return;
+        }
+    } else {
+        ctx.success("Auto-confirming upload due to --noinput flag.");
     }
 
+    // Perform the sync
     match corpora_client::apis::corpus_api::update_files(
         &ctx.api_config,
         &corpus_id,
