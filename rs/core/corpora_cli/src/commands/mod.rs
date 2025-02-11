@@ -15,7 +15,7 @@ pub enum Commands {
     #[command(about = "Chat the corpus")]
     Chat(chat::ChatArgs),
     #[command(about = "Find the diff and sync changes to the server")]
-    Sync,
+    Sync(sync::SyncArgs),
     #[command(about = "Work on a specific file")]
     Workon(workon::WorkonArgs),
     #[command(about = "Infer a file")]

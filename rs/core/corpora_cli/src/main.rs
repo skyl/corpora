@@ -25,7 +25,7 @@ fn main() {
 
     match cli.command {
         Commands::Init => commands::init::run(&ctx),
-        Commands::Sync => commands::sync::run(&ctx),
+        Commands::Sync(args) => commands::sync::run(&ctx, args),
         Commands::Chat(args) => commands::chat::run(&ctx, args),
         Commands::Workon(args) => commands::workon::run(&ctx, args),
         Commands::Infer(args) => commands::infer::run(&ctx, args),
