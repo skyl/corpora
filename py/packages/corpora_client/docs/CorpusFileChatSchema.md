@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **structure** | **str** |  | [optional] [default to '']
 **directions** | **str** |  | [optional] [default to '']
 **path** | **str** |  | 
+**num_splits** | **int** |  | [optional] [default to 2]
 
 ## Example
 
