@@ -33,6 +33,7 @@ async def file(request, payload: CorpusFileChatSchema):
     # A separate endpoint could be used by the client to "compress conversation"
     split_context = await sync_to_async(corpus.get_relevant_splits_context)(
         "\n".join(message.text for message in payload.messages[-2:]),
+        limit=payload.num_splits,
     )
 
     print(payload.messages[-1].text)

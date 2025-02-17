@@ -16,7 +16,8 @@ class OpenAIClient(LLMBaseInterface):
         # to specify in runtime which model to use ;/
         # I think we will have to expand the interface with options
         # completion_model: str = "gpt-4o-mini",
-        completion_model: str = "gpt-4o",
+        # completion_model: str = "gpt-4o",
+        completion_model: str = "o3-mini",
         embedding_model: str = "text-embedding-3-small",
         azure_endpoint: str = None,
     ):
@@ -32,18 +33,26 @@ class OpenAIClient(LLMBaseInterface):
         self.completion_model = completion_model
         self.embedding_model = embedding_model
 
-    def get_text_completion(self, messages: List[ChatCompletionTextMessage]) -> str:
+    def get_text_completion(
+        self,
+        messages: List[ChatCompletionTextMessage],
+    ) -> str:
         if not messages:
             raise ValueError("Input messages must not be empty.")
         # Convert Message objects to dictionaries for the OpenAI API
-        message_dicts = [{"role": msg.role, "content": msg.text} for msg in messages]
+        message_dicts = [
+            {"role": msg.role, "content": msg.text} for msg in messages
+        ]
         response = self.client.chat.completions.create(
-            model=self.completion_model, messages=message_dicts,
+            model=self.completion_model,
+            messages=message_dicts,
         )
         return response.choices[0].message.content
 
     def get_data_completion(
-        self, messages: List[ChatCompletionTextMessage], model: Type[T],
+        self,
+        messages: List[ChatCompletionTextMessage],
+        model: Type[T],
     ) -> T:
         """Generates structured data completion using OpenAI's function calling.
 
@@ -62,7 +71,9 @@ class OpenAIClient(LLMBaseInterface):
             raise ValueError("Input messages must not be empty.")
 
         # Prepare messages for OpenAI API
-        message_dicts = [{"role": msg.role, "content": msg.text} for msg in messages]
+        message_dicts = [
+            {"role": msg.role, "content": msg.text} for msg in messages
+        ]
 
         # Generate JSON Schema from the Pydantic model
         json_schema = model.model_json_schema()
@@ -95,5 +106,8 @@ class OpenAIClient(LLMBaseInterface):
     def get_embedding(self, text: str) -> List[float]:
         if not text:
             raise ValueError("Input text must not be empty.")
-        response = self.client.embeddings.create(input=text, model=self.embedding_model)
+        response = self.client.embeddings.create(
+            input=text,
+            model=self.embedding_model,
+        )
         return response.data[0].embedding

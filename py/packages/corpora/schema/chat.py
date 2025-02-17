@@ -20,6 +20,7 @@ class CorpusChatSchema(Schema):
 
 class CorpusFileChatSchema(CorpusChatSchema):
     path: str
+    num_splits: int = 2
 
 
 def get_additional_context(payload: CorpusChatSchema, ext: str = "") -> str:
