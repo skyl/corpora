@@ -2,7 +2,9 @@ dump.txt
 tmp/
 .corpora/.id
 .corpora/chat/
-test-corpora/
+test-corpora/*
+!test-corpora/books/
+!test-corpora/books/**
 /.env
 
 # macOS system files

@@ -45,7 +45,8 @@ class TestCorpusFileChatSchema(unittest.TestCase):
                 purpose = '',
                 structure = '',
                 directions = '',
-                path = ''
+                path = '',
+                num_splits = 56
             )
         else:
             return CorpusFileChatSchema(
