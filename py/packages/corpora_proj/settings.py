@@ -18,10 +18,10 @@ import os
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "django-insecure-&amtx9f($xhj8vof6pn#gczuu6c!0^3!^9po+l_279q(6h_soa",
+    "SECRET_KEY",
+    "django-insecure-&amtx9f($xhj8vof6pn#gczuu6c!0^3!^9po+l_279q(6h_soa",
 )
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = [
     "host.docker.internal",
     "127.0.0.1",
@@ -134,3 +134,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Celery settings
 CELERY_BROKER_URL = os.getenv("REDIS_URL", "redis://corpora-redis:6379/0")
 CELERY_RESULT_BACKEND = os.getenv("REDIS_URL", "redis://corpora-redis:6379/0")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "ERROR",
+    },
+}
