@@ -10,7 +10,7 @@ services:
       REDIS_URL: "redis://corpora-redis:6379/0"
       OPENAI_API_KEY: "${OPENAI_API_KEY}"
       OPENAI_AZURE_ENDPOINT: "${OPENAI_AZURE_ENDPOINT}"
-    command: python manage.py runserver 0.0.0.0:8877
+    command: uvicorn corpora_proj.asgi:application --host 0.0.0.0 --port 8877 --timeout-keep-alive 3600 --reload
     working_dir: /workspace/py/packages/corpora_proj
     depends_on:
       - corpora-db
