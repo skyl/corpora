@@ -20,6 +20,15 @@ RUN apt-get update && \
     texlive-fonts-recommended \
     texlive-latex-extra \
     texlive-luatex \
+    libwebkit2gtk-4.1-dev \
+    build-essential \
+    curl \
+    wget \
+    file \
+    libxdo-dev \
+    libssl-dev \
+    libayatana-appindicator3-dev \
+    librsvg2-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # TODO: for dev this could probably be in setup.sh
