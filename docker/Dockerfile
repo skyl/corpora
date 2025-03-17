@@ -20,6 +20,7 @@ RUN apt-get update && \
     texlive-fonts-recommended \
     texlive-latex-extra \
     texlive-luatex \
+    texlive-lang-chinese \
     && rm -rf /var/lib/apt/lists/*
 
 # TODO: for dev this could probably be in setup.sh
