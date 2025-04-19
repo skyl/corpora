@@ -38,33 +38,10 @@ class TestOpenAIClient(unittest.TestCase):
             messages=[{"role": "user", "content": "Tell me a joke."}],
         )
 
-    def test_get_embedding_success(self):
-        """Test that get_embedding returns the correct embedding vector."""
-        # Mock response from OpenAI API
-        mock_response = MagicMock()
-        mock_response.data = [MagicMock()]
-        mock_response.data[0].embedding = [0.1, 0.2, 0.3]
-        self.mock_openai_client.embeddings.create.return_value = mock_response
-
-        # Call get_embedding and assert response
-        response = self.client.get_embedding("Sample text for embedding")
-        self.assertEqual(response, [0.1, 0.2, 0.3])
-
-        # Ensure OpenAI API was called with correct parameters
-        self.mock_openai_client.embeddings.create.assert_called_once_with(
-            input="Sample text for embedding",
-            model="text-embedding-3-small",
-        )
-
     def test_get_text_completion_empty_messages(self):
         """Test that get_text_completion raises an error when messages list is empty."""
         with self.assertRaises(ValueError):
             self.client.get_text_completion([])
-
-    def test_get_embedding_empty_text(self):
-        """Test that get_embedding raises an error when text is empty."""
-        with self.assertRaises(ValueError):
-            self.client.get_embedding("")
 
 
 if __name__ == "__main__":
