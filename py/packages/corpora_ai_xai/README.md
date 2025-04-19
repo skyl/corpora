@@ -5,7 +5,8 @@
 ## Features
 
 - **Text Completion**: Generate natural language responses using XAI's chat models.
-- **Text Embedding**: Create embeddings for text data, ready for storage and analysis.
+
+No text embedding support is available yet from XAI.
 
 ## Usage
 

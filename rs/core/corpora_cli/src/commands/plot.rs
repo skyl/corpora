@@ -108,7 +108,7 @@ pub fn run(ctx: &Context, args: PlotArgs) {
         };
 
         // Write PNG to file
-        let mut file = match File::create(&output_path) {
+        let mut file = match File::create(output_path) {
             Ok(file) => file,
             Err(err) => {
                 ctx.error(&format!("Failed to create file: {:?}", err));
