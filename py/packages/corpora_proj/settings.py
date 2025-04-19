@@ -21,7 +21,7 @@ SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "django-insecure-&amtx9f($xhj8vof6pn#gczuu6c!0^3!^9po+l_279q(6h_soa",
 )
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = [
     "host.docker.internal",
     "127.0.0.1",
