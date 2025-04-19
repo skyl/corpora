@@ -23,5 +23,6 @@ from corpora_client.models.file_response_schema import FileResponseSchema
 from corpora_client.models.file_schema import FileSchema
 from corpora_client.models.issue_schema import IssueSchema
 from corpora_client.models.message_schema import MessageSchema
+from corpora_client.models.plot_response_schema import PlotResponseSchema
 from corpora_client.models.split_response_schema import SplitResponseSchema
 from corpora_client.models.split_vector_search_schema import SplitVectorSearchSchema

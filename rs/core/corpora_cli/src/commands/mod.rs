@@ -2,6 +2,7 @@ pub mod chat;
 pub mod infer;
 pub mod init;
 pub mod issue;
+pub mod plot;
 pub mod sync;
 pub mod workon;
 
@@ -22,4 +23,6 @@ pub enum Commands {
     Infer(infer::InferArgs),
     #[command(about = "Manage issues", subcommand)]
     Issue(issue::IssueCommands),
+    #[command(about = "Generate a plot")]
+    Plot(plot::PlotArgs),
 }

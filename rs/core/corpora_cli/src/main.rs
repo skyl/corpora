@@ -34,5 +34,6 @@ fn main() {
             issue::IssueCommands::Update(args) => issue::update(&ctx, args),
             issue::IssueCommands::Label(args) => issue::label(&ctx, args),
         },
+        Commands::Plot(args) => commands::plot::run(&ctx, args),
     }
 }
