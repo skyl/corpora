@@ -1,27 +1,28 @@
 import os
 from typing import Optional
 
-from corpora_ai.llm_interface import LLMBaseInterface
+from corpora_ai_openai.llm_client import OpenAIClient
+from corpora_ai_xai.llm_client import XAIClient
 
-try:
-    from corpora_ai_openai.llm_client import OpenAIClient
-except ImportError:
-    OpenAIClient = None
+from corpora_ai.llm_interface import LLMBaseInterface
 
 # Future imports for other providers,
 # e.g., Anthropic or Cohere, would follow the same pattern
 
 
-def load_llm_provider() -> Optional[LLMBaseInterface]:
+def load_llm_provider(provider_name="") -> Optional[LLMBaseInterface]:
     """Dynamically loads the best LLM provider based on environment variables.
 
     Returns:
         Optional[LLMBaseInterface]: An instance of the best available LLM provider.
 
     """
-    provider_name = os.getenv("LLM_PROVIDER", "openai")
     # TODO: we need to specify the model in the interface really
     # model_name = os.getenv("LLM_MODEL", "gpt-4o-mini")
+
+    # Passed argument takes precedence over environment variable
+    if not provider_name:
+        provider_name = os.getenv("LLM_PROVIDER", "openai")
 
     # Check for the OpenAI provider
     if provider_name == "openai" and OpenAIClient:
@@ -33,6 +34,12 @@ def load_llm_provider() -> Optional[LLMBaseInterface]:
             # completion_model=model_name,
             azure_endpoint=os.getenv("OPENAI_AZURE_ENDPOINT", None),
         )
+
+    if provider_name == "xai" and XAIClient:
+        api_key = os.getenv("XAI_API_KEY")
+        if not api_key:
+            raise ValueError("XAI_API_KEY environment variable is not set.")
+        return XAIClient(api_key=api_key)
 
     # Placeholder for additional providers (e.g., Anthropic)
     # elif provider_name == "anthropic" and AnthropicClient:

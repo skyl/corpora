@@ -15,13 +15,13 @@ class XAIClient(LLMBaseInterface):
     def __init__(
         self,
         api_key: str,
-        completion_model: str = "grok-3-beta",
-        embedding_model: str = "text-embedding-3-small",
+        # completion_model: str = "grok-3-beta",
+        completion_model: str = "grok-3-mini-fast-beta",
         base_url: str = "https://api.x.ai/v1",
+        # XAI has no embedding model
     ):
         self.client = OpenAI(api_key=api_key, base_url=base_url)
         self.completion_model = completion_model
-        self.embedding_model = embedding_model
 
     def get_text_completion(
         self,
@@ -40,8 +40,6 @@ class XAIClient(LLMBaseInterface):
         self,
         messages: List[ChatCompletionTextMessage],
         model: Type[T],
-        tool_name: str,
-        tool_description: str,
     ) -> T:
         """
         Uses XAI tool-calling to return a Pydantic-validated model.
@@ -59,6 +57,10 @@ class XAIClient(LLMBaseInterface):
             raise ValueError("Schema must subclass pydantic.BaseModel.")
         if not messages:
             raise ValueError("Input messages must not be empty.")
+
+        print(f"XAI: {model.__name__} tool-calling. {model.__doc__}")
+        tool_name = f"{model.__name__}"
+        tool_description = f"Generate data based on the provided schema using the tool_calls. {model.__doc__}"
 
         payload = [{"role": m.role, "content": m.text} for m in messages]
         schema = model.model_json_schema()
@@ -97,10 +99,7 @@ class XAIClient(LLMBaseInterface):
             raise RuntimeError(f"XAI request failed: {e}")
 
     def get_embedding(self, text: str) -> List[float]:
-        if not text:
-            raise ValueError("Input text must not be empty.")
-        resp = self.client.embeddings.create(
-            input=text,
-            model=self.embedding_model,
+        raise NotImplementedError(
+            "XAI does not support embedding generation. "
+            "Use OpenAIClient for embedding generation.",
         )
-        return resp.data[0].embedding

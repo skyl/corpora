@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from corpora_client.models.message_schema import MessageSchema
 from typing import Optional, Set
@@ -34,8 +34,7 @@ class CorpusFileChatSchema(BaseModel):
     structure: Optional[StrictStr] = ''
     directions: Optional[StrictStr] = ''
     path: StrictStr
-    num_splits: Optional[StrictInt] = 2
-    __properties: ClassVar[List[str]] = ["corpus_id", "messages", "voice", "purpose", "structure", "directions", "path", "num_splits"]
+    __properties: ClassVar[List[str]] = ["corpus_id", "messages", "voice", "purpose", "structure", "directions", "path"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -101,8 +100,7 @@ class CorpusFileChatSchema(BaseModel):
             "purpose": obj.get("purpose") if obj.get("purpose") is not None else '',
             "structure": obj.get("structure") if obj.get("structure") is not None else '',
             "directions": obj.get("directions") if obj.get("directions") is not None else '',
-            "path": obj.get("path"),
-            "num_splits": obj.get("num_splits") if obj.get("num_splits") is not None else 2
+            "path": obj.get("path")
         })
         return _obj
 
