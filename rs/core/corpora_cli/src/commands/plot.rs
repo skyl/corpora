@@ -37,10 +37,10 @@ pub fn run(ctx: &Context, args: PlotArgs) {
     let voice = std::fs::read_to_string(root_path.join(".corpora/VOICE.md")).unwrap_or_default();
     let purpose =
         std::fs::read_to_string(root_path.join(".corpora/PURPOSE.md")).unwrap_or_default();
-    let structure =
-        std::fs::read_to_string(root_path.join(".corpora/STRUCTURE.md")).unwrap_or_default();
-    let directions =
-        std::fs::read_to_string(root_path.join(".corpora/PLOT/DIRECTIONS.md")).unwrap_or_default();
+    // TODO: ... these could be optional in the struct but then passed via command line?
+    let structure: String =
+        "A professional plot, well though out in terms of labels and ranges".to_string();
+    let directions: String = "Produce a perfect plot for a college algebra textbook".to_string();
 
     let mut attempts = 0;
     let mut previous_error_message = None;
