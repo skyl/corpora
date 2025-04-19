@@ -1,3 +1,5 @@
+test-corpora/
+apps/
 dump.txt
 tmp/
 .corpora/.id

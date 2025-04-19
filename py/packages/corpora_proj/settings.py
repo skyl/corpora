@@ -13,6 +13,8 @@ This is just a test project for corpora app.
 
 import os
 
+print(f"Using {os.environ.get("LLM_PROVIDER")}")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
