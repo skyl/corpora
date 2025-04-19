@@ -26,3 +26,6 @@ if settings.DEBUG:
     urlpatterns += [
         path("bin/<str:arch>", BinaryView.as_view(), name="binary"),
     ]
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+    urlpatterns += staticfiles_urlpatterns()

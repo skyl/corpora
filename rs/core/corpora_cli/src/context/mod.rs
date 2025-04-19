@@ -34,7 +34,7 @@ impl Context {
         let token = get_bearer_token(&corpora_config)
             .expect("Failed to authenticate and retrieve bearer token");
         let client = ClientBuilder::new()
-            .timeout(Duration::from_secs(60))
+            .timeout(Duration::from_secs(600))
             .build()
             .expect("Failed to build the reqwest client");
         let api_config = Configuration {

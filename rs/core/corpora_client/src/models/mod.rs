@@ -16,6 +16,8 @@ pub mod issue_schema;
 pub use self::issue_schema::IssueSchema;
 pub mod message_schema;
 pub use self::message_schema::MessageSchema;
+pub mod plot_response_schema;
+pub use self::plot_response_schema::PlotResponseSchema;
 pub mod split_response_schema;
 pub use self::split_response_schema::SplitResponseSchema;
 pub mod split_vector_search_schema;

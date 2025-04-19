@@ -13,6 +13,8 @@ This is just a test project for corpora app.
 
 import os
 
+print(f"Using {os.environ.get("LLM_PROVIDER")}")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -21,7 +23,7 @@ SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "django-insecure-&amtx9f($xhj8vof6pn#gczuu6c!0^3!^9po+l_279q(6h_soa",
 )
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = [
     "host.docker.internal",
     "127.0.0.1",

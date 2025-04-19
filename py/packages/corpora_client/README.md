@@ -105,6 +105,7 @@ Class | Method | HTTP request | Description
 *FileApi* | [**get_file**](docs/FileApi.md#get_file) | **GET** /api/corpora/file/{file_id} | Get File
 *FileApi* | [**get_file_by_path**](docs/FileApi.md#get_file_by_path) | **GET** /api/corpora/file/corpus/{corpus_id} | Get File By Path
 *PlanApi* | [**get_issue**](docs/PlanApi.md#get_issue) | **POST** /api/corpora/plan/issue | Get Issue
+*PlotsApi* | [**get_matplotlib_plot**](docs/PlotsApi.md#get_matplotlib_plot) | **POST** /api/corpora/plots/matplotlib | Get Matplotlib Plot
 *SplitApi* | [**get_split**](docs/SplitApi.md#get_split) | **GET** /api/corpora/split/{split_id} | Get Split
 *SplitApi* | [**list_splits_for_file**](docs/SplitApi.md#list_splits_for_file) | **GET** /api/corpora/split/file/{file_id} | List Splits For File
 *SplitApi* | [**vector_search**](docs/SplitApi.md#vector_search) | **POST** /api/corpora/split/search | Vector Search
@@ -122,6 +123,7 @@ Class | Method | HTTP request | Description
  - [FileSchema](docs/FileSchema.md)
  - [IssueSchema](docs/IssueSchema.md)
  - [MessageSchema](docs/MessageSchema.md)
+ - [PlotResponseSchema](docs/PlotResponseSchema.md)
  - [SplitResponseSchema](docs/SplitResponseSchema.md)
  - [SplitVectorSearchSchema](docs/SplitVectorSearchSchema.md)
 

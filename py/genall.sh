@@ -4,7 +4,7 @@ set -e
 rm -rf packages/corpora_client
 mkdir -p packages/corpora_client/docs packages/corpora_client/test
 rm -rf gen/corpora_client
-openapi-generator-cli generate -i http://corpora-app:8877/api/openapi.json \
+sudo openapi-generator-cli generate -i http://corpora-app:8877/api/openapi.json \
     -g python -o gen/corpora_client \
     --additional-properties=packageName=corpora_client
     # --additional-properties=library=asyncio

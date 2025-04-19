@@ -19,6 +19,12 @@ FILE_EDITOR_SYSTEM_MESSAGE = (
 
 
 class FileRevisionResponse(Schema):
+    """
+    Schema to force "new_file_revision" to be the only output of the LLM.
+    This is used to ensure that the LLM only returns the new revision of the file
+    and nothing else.
+    """
+
     new_file_revision: str
 
 
@@ -26,14 +32,8 @@ class FileRevisionResponse(Schema):
 async def file(request, payload: CorpusFileChatSchema):
     corpus = await Corpus.objects.aget(id=payload.corpus_id)
 
-    # TODO: last 2 messages? Eventually we need to worry about
-    # token count limits.
-    # Ideally we might roll-up a summary of the entire conversation.
-    # But, in the current design, we let the client decide the messages.
-    # A separate endpoint could be used by the client to "compress conversation"
     split_context = await sync_to_async(corpus.get_relevant_splits_context)(
         "\n".join(message.text for message in payload.messages[-2:]),
-        limit=payload.num_splits,
     )
 
     print(payload.messages[-1].text)

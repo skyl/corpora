@@ -30,6 +30,7 @@ rm -rf "$TEMP_DIR"
 
 echo "Step 5: Formatting the codebase..."
 cargo fmt
+cargo clippy --workspace --all-targets -- -D warnings
 
 echo "Step 6: Verifying the workspace..."
 cargo build

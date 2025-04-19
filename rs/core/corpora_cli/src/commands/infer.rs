@@ -15,13 +15,21 @@ pub struct InferArgs {
 
     #[arg(short, long, help = "Check script to validate the output")]
     pub check: Option<String>,
+
+    #[arg(short, long, help = "Instructions for the AI")]
+    pub instructions: Option<String>,
 }
 
 /// Read existing file content or return a default message
 fn get_current_file_content(path: &Path) -> String {
     match fs::read_to_string(path) {
         Ok(content) if !content.trim().is_empty() => content,
-        _ => "FILE CURRENTLY EMPTY. PLEASE INFER CONTENT.".to_string(),
+        // _ => "FILE CURRENTLY EMPTY. PLEASE INFER CONTENT.".to_string(),
+        // add file path to message:
+        _ => format!(
+            "FILE CURRENTLY EMPTY. PLEASE INFER CONTENT FOR `{}`.",
+            path.display()
+        ),
     }
 }
 
@@ -60,7 +68,15 @@ pub fn run(ctx: &Context, args: InferArgs) {
 
         let mut messages = vec![MessageSchema {
             role: "user".to_string(),
-            text: current_file_content.clone(),
+            // Use the current file content and the instructions provided by the user
+            // text: current_file_content.clone(),
+            text: format!(
+                "{}\n\n{}",
+                current_file_content,
+                args.instructions
+                    .clone()
+                    .unwrap_or_else(|| { "".to_string() })
+            ),
         }];
 
         // If previous attempt failed, add error details to AI request

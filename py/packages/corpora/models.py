@@ -1,15 +1,20 @@
+from __future__ import annotations
+
 import logging
 import os
 import uuid
+from typing import TYPE_CHECKING
 
 from corpora_ai.split import get_text_splitter
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models.manager import BaseManager
 from django.utils import timezone
-
-# from django.contrib.postgres.fields import ArrayField
 from pgvector.django import CosineDistance, VectorField
+
+if TYPE_CHECKING:
+    from corpora_ai.llm_interface import LLMBaseInterface
+    from django.db.models.manager import BaseManager
+
 
 # TODO: This loads too early and makes it hard to mock
 # from corpora_ai.provider_loader import load_llm_provider
@@ -62,10 +67,7 @@ class Corpus(models.Model):
         """Given a text query, return the most relevant splits from this corpus."""
         from corpora_ai.provider_loader import load_llm_provider
 
-        llm = load_llm_provider()
-        # better_text = llm.get_synthetic_embedding_text(text)
-        # print(f"better_text: {better_text}")
-        # vector = llm.get_embedding(better_text)
+        llm: LLMBaseInterface = load_llm_provider("openai")
         vector = llm.get_embedding(text)
         return (
             Split.objects.filter(
@@ -76,7 +78,7 @@ class Corpus(models.Model):
             .order_by("similarity")[:limit]
         )
 
-    def get_relevant_splits_context(self, text: str, limit: int = 10) -> str:
+    def get_relevant_splits_context(self, text: str, limit: int = 5) -> str:
         """Given a text query, return the most relevant splits from this corpus
         along with the context of the split.
         """
