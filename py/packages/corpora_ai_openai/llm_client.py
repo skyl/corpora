@@ -17,7 +17,8 @@ class OpenAIClient(LLMBaseInterface):
         # I think we will have to expand the interface with options
         # completion_model: str = "gpt-4o-mini",
         # completion_model: str = "gpt-4o",
-        completion_model: str = "o3-mini",
+        # completion_model: str = "o3-mini",
+        completion_model: str = "o4-mini",
         embedding_model: str = "text-embedding-3-small",
         azure_endpoint: str = None,
     ):
