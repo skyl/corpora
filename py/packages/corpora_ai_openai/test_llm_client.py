@@ -36,7 +36,7 @@ class TestOpenAIClient(unittest.TestCase):
         self.mock_openai_client.chat.completions.create.assert_called_once_with(
             # TODO: share constants?
             # model="gpt-4o",
-            model="o3-mini",
+            model="o4-mini",
             messages=[{"role": "user", "content": "Tell me a joke."}],
         )
 
