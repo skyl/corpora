@@ -15,7 +15,7 @@ class XAIClient(LLMBaseInterface):
     def __init__(
         self,
         api_key: str,
-        completion_model: str = "grok-3-beta",
+        completion_model: str = "grok-3",
         # completion_model: str = "grok-3-mini-fast-beta",
         base_url: str = "https://api.x.ai/v1",
         # XAI has no embedding model
@@ -58,9 +58,11 @@ class XAIClient(LLMBaseInterface):
         if not messages:
             raise ValueError("Input messages must not be empty.")
 
-        print(f"XAI: {model.__name__} tool-calling. {model.__doc__}")
+        print(f"XAI: {model.__name__} tool-calling")
         tool_name = f"{model.__name__}"
-        tool_description = f"Generate data based on the provided schema using the tool_calls. {model.__doc__}"
+        tool_description = (
+            f"Generate data based on the provided parameters {tool_name} schema"
+        )
 
         payload = [{"role": m.role, "content": m.text} for m in messages]
         schema = model.model_json_schema()
@@ -85,6 +87,10 @@ class XAIClient(LLMBaseInterface):
                 },
             )
             msg = resp.choices[0].message
+            # print(f"XAI: {msg}")
+            # import IPython
+
+            # IPython.embed()
             if not getattr(msg, "tool_calls", None):
                 raise RuntimeError("No tool_call in XAI response")
             call = msg.tool_calls[0]

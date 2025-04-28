@@ -14,19 +14,20 @@ T = TypeVar("T", bound=BaseModel)
 
 @dataclass
 class ChatCompletionTextMessage:
-    """Represents a message in a conversation, with a specific role and text.
-    """
+    """Represents a message in a conversation, with a specific role and text."""
 
     role: str  # e.g., "user", "system", "assistant"
     text: str
 
 
 class LLMBaseInterface(ABC):
-    """Abstract base class for LLM providers, defining methods for text generation and embeddings.
-    """
+    """Abstract base class for LLM providers, defining methods for text generation and embeddings."""
 
     @abstractmethod
-    def get_text_completion(self, messages: List[ChatCompletionTextMessage]) -> str:
+    def get_text_completion(
+        self,
+        messages: List[ChatCompletionTextMessage],
+    ) -> str:
         """Generates a text completion based on a list of Message objects.
 
         Args:
@@ -39,7 +40,9 @@ class LLMBaseInterface(ABC):
 
     @abstractmethod
     def get_data_completion(
-        self, messages: List[ChatCompletionTextMessage], model: Type[T],
+        self,
+        messages: List[ChatCompletionTextMessage],
+        model: Type[T],
     ) -> T:
         """Generates an instance of the provided schema based on a list of Message objects.
 
