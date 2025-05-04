@@ -34,7 +34,7 @@ class TestOpenAIClient(unittest.TestCase):
 
         # Ensure OpenAI API was called with correct parameters
         self.mock_openai_client.chat.completions.create.assert_called_once_with(
-            model="grok-3-beta",
+            model="grok-3-fast",
             messages=[{"role": "user", "content": "Tell me a joke."}],
         )
 
