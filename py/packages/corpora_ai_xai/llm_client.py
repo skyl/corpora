@@ -15,7 +15,7 @@ class XAIClient(LLMBaseInterface):
     def __init__(
         self,
         api_key: str,
-        completion_model: str = "grok-3",
+        completion_model: str = "grok-3-fast",
         # completion_model: str = "grok-3-mini-fast-beta",
         base_url: str = "https://api.x.ai/v1",
         # XAI has no embedding model
@@ -40,6 +40,7 @@ class XAIClient(LLMBaseInterface):
         self,
         messages: List[ChatCompletionTextMessage],
         model: Type[T],
+        retries: int = 3,
     ) -> T:
         """
         Uses XAI tool-calling to return a Pydantic-validated model.
@@ -76,33 +77,42 @@ class XAIClient(LLMBaseInterface):
             },
         }
 
-        try:
-            resp = self.client.chat.completions.create(
-                model=self.completion_model,
-                messages=payload,
-                tools=[tool_def],
-                tool_choice={
-                    "type": "function",
-                    "function": {"name": tool_name},
-                },
-            )
-            msg = resp.choices[0].message
-            # print(f"XAI: {msg}")
-            # import IPython
+        tries = 0
+        while tries < retries:
+            tries += 1
+            try:
+                resp = self.client.chat.completions.create(
+                    model=self.completion_model,
+                    messages=payload,
+                    tools=[tool_def],
+                    tool_choice={
+                        "type": "function",
+                        "function": {"name": tool_name},
+                    },
+                )
+                msg = resp.choices[0].message
+                if not getattr(msg, "tool_calls", None):
+                    # raise RuntimeError("No tool_call in XAI response")
+                    if tries >= retries:
+                        raise RuntimeError("No tool_call in XAI response")
+                    continue
+                call = msg.tool_calls[0]
+                if call.function.name != tool_name:
+                    if tries >= retries:
+                        raise RuntimeError(
+                            f"Unexpected tool: {call.function.name}",
+                        )
+                    continue
 
-            # IPython.embed()
-            if not getattr(msg, "tool_calls", None):
-                raise RuntimeError("No tool_call in XAI response")
-            call = msg.tool_calls[0]
-            if call.function.name != tool_name:
-                raise RuntimeError(f"Unexpected tool: {call.function.name}")
+                # The arguments are a JSON string:
+                data = model.model_validate_json(call.function.arguments)
+                return data
 
-            # The arguments are a JSON string:
-            data = model.model_validate_json(call.function.arguments)
-            return data
-
-        except OpenAIError as e:
-            raise RuntimeError(f"XAI request failed: {e}")
+            except OpenAIError as e:
+                if tries >= retries:
+                    raise RuntimeError(f"XAI request failed: {e}")
+                print(f"XAI request failed: {e}")
+                continue
 
     def get_embedding(self, text: str) -> List[float]:
         raise NotImplementedError(
