@@ -10,7 +10,7 @@ from corpora_ai.llm_interface import LLMBaseInterface
 # e.g., Anthropic or Cohere, would follow the same pattern
 
 
-def load_llm_provider(provider_name="") -> Optional[LLMBaseInterface]:
+def load_llm_provider(provider_name="", **kwargs) -> Optional[LLMBaseInterface]:
     """Dynamically loads the best LLM provider based on environment variables.
 
     Returns:
@@ -33,13 +33,17 @@ def load_llm_provider(provider_name="") -> Optional[LLMBaseInterface]:
             api_key=api_key,
             # completion_model=model_name,
             azure_endpoint=os.getenv("OPENAI_AZURE_ENDPOINT", None),
+            **kwargs,
         )
 
     if provider_name == "xai" and XAIClient:
         api_key = os.getenv("XAI_API_KEY")
         if not api_key:
             raise ValueError("XAI_API_KEY environment variable is not set.")
-        return XAIClient(api_key=api_key)
+        return XAIClient(
+            api_key=api_key,
+            **kwargs,
+        )
 
     # Placeholder for additional providers (e.g., Anthropic)
     # elif provider_name == "anthropic" and AnthropicClient:
