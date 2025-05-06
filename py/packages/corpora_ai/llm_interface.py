@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List, Type, TypeVar
+from typing import List, Optional, Type, TypeVar
 
 from pydantic import BaseModel
 
@@ -18,6 +18,14 @@ class ChatCompletionTextMessage:
 
     role: str  # e.g., "user", "system", "assistant"
     text: str
+
+
+@dataclass
+class GeneratedImage:
+    """Holds one generated image's raw bytes plus an optional format hint."""
+
+    data: bytes
+    format: Optional[str] = "png"
 
 
 class LLMBaseInterface(ABC):
@@ -53,6 +61,22 @@ class LLMBaseInterface(ABC):
         Returns:
             T: The generated instance of the schema type.
 
+        """
+
+    @abstractmethod
+    def get_image(
+        self,
+        prompt: str,
+        **kwargs,
+    ) -> List[GeneratedImage]:
+        """Generate `n` images of size 1024x768 px from the given text prompt.
+
+        Args:
+            prompt: Natural-language description of the desired image.
+            kwargs: arguments to pass to the image generation API.
+
+        Returns:
+            A list of GeneratedImage with raw bytes and the appropriate format.
         """
 
     @abstractmethod
