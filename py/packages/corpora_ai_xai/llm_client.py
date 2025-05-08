@@ -1,8 +1,18 @@
-from typing import List, Type, TypeVar
+import base64
+from typing import TYPE_CHECKING, List, Type, TypeVar
 
-from corpora_ai.llm_interface import ChatCompletionTextMessage, LLMBaseInterface
+from corpora_ai.llm_interface import (
+    ChatCompletionTextMessage,
+    GeneratedImage,
+    LLMBaseInterface,
+)
 from openai import OpenAI, OpenAIError
+
+# openai.types.images_response.ImagesResponse
 from pydantic import BaseModel
+
+if TYPE_CHECKING:
+    from openai.types.images_response import Image, ImagesResponse
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -18,10 +28,12 @@ class XAIClient(LLMBaseInterface):
         completion_model: str = "grok-3-fast",
         # completion_model: str = "grok-3-mini-fast-beta",
         base_url: str = "https://api.x.ai/v1",
+        image_model: str = "grok-2-image",
         # XAI has no embedding model
     ):
         self.client = OpenAI(api_key=api_key, base_url=base_url)
         self.completion_model = completion_model
+        self.image_model = image_model
 
     def get_text_completion(
         self,
@@ -113,6 +125,40 @@ class XAIClient(LLMBaseInterface):
                     raise RuntimeError(f"XAI request failed: {e}")
                 print(f"XAI request failed: {e}")
                 continue
+
+    def get_image(
+        self,
+        prompt: str,
+        **kwargs,
+    ) -> List[GeneratedImage]:
+        """
+        Generate one or more images of size 1024x768 px from the given text prompt.
+
+        Args:
+            prompt: Natural-language description of the desired image.
+            kwargs: Passed through to xAI (e.g. n_images).
+
+        Returns:
+            A list of GeneratedImage with raw bytes and the appropriate format ("jpg").
+        """
+        # ensure we’re using the right model
+        params = {
+            "model": self.image_model,
+            "prompt": prompt,
+            "response_format": "b64_json",
+            **kwargs,
+        }
+        resp: ImagesResponse = self.client.images.generate(
+            **params,
+        )  # xAI Python SDK call
+        images: List[GeneratedImage] = []
+        for item in resp.data:
+            item: Image
+            # b64 = item["b64_json"]
+            b64 = item.b64_json
+            blob = base64.b64decode(b64)
+            images.append(GeneratedImage(data=blob, format="jpg"))
+        return images
 
     def get_embedding(self, text: str) -> List[float]:
         raise NotImplementedError(
