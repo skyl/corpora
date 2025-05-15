@@ -19,7 +19,8 @@ jobs:
 
     services:
       postgres:
-        image: ghcr.io/${{ github.repository_owner }}/postgres-pgvector:17
+        # TODO: could move to corpora-inc
+        image: ghcr.io/skyl/postgres-pgvector:17
         ports:
           - 5432:5432
         env:

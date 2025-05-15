@@ -1,9 +1,18 @@
+import base64
 import json
-from typing import List, Type, TypeVar
+from typing import TYPE_CHECKING, List, Type, TypeVar
 
-from corpora_ai.llm_interface import ChatCompletionTextMessage, LLMBaseInterface
+from corpora_ai.llm_interface import (
+    ChatCompletionTextMessage,
+    GeneratedImage,
+    LLMBaseInterface,
+)
 from openai import AzureOpenAI, OpenAI, OpenAIError
 from pydantic import BaseModel
+
+if TYPE_CHECKING:
+    from openai.types.images_response import ImagesResponse
+
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -18,8 +27,11 @@ class OpenAIClient(LLMBaseInterface):
         # completion_model: str = "gpt-4o-mini",
         # completion_model: str = "gpt-4o",
         # completion_model: str = "o3-mini",
-        completion_model: str = "o4-mini",
+        # completion_model: str = "o4-mini",
+        # completion_model: str = "o3",
+        completion_model: str = "gpt-4.1",
         embedding_model: str = "text-embedding-3-small",
+        image_model: str = "gpt-image-1",
         azure_endpoint: str = None,
     ):
         if azure_endpoint:
@@ -33,6 +45,7 @@ class OpenAIClient(LLMBaseInterface):
             self.client = OpenAI(api_key=api_key)
         self.completion_model = completion_model
         self.embedding_model = embedding_model
+        self.image_model = image_model
 
     def get_text_completion(
         self,
@@ -103,6 +116,40 @@ class OpenAIClient(LLMBaseInterface):
             raise RuntimeError(f"Failed to generate data completion: {e}")
         except json.JSONDecodeError as e:
             raise RuntimeError(f"Failed to parse function arguments: {e}")
+
+    def get_image(
+        self,
+        prompt: str,
+        **kwargs,
+    ) -> List[GeneratedImage]:
+        """
+        Generate one or more images.
+
+        Args:
+            prompt: Natural-language description of the desired image.
+            kwargs: Passed through to OpenAI API (e.g. n, size).
+
+        Returns:
+            A list of GeneratedImage with raw bytes and the appropriate format ("png").
+        """
+        # build the core params
+        params = {
+            "model": self.image_model,
+            "prompt": prompt,
+            # "response_format": "b64_json",
+            "n": 1,
+            "size": "1024x1024",
+        }
+        # merge in any overrides (e.g. size="1536x1024", n=2)
+        params.update(kwargs)
+        resp: ImagesResponse = self.client.images.generate(**params)
+
+        images: List[GeneratedImage] = []
+        for img in resp.data:
+            raw = base64.b64decode(img.b64_json)
+            images.append(GeneratedImage(data=raw, format="png"))
+
+        return images
 
     def get_embedding(self, text: str) -> List[float]:
         if not text:
