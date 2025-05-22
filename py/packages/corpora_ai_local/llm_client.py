@@ -1,5 +1,7 @@
+# import ast
 import json
-from typing import List, Type, TypeVar
+import re
+from typing import List, Type, TypeVar  # , get_origin
 
 from corpora_ai.llm_interface import (
     ChatCompletionTextMessage,
@@ -10,6 +12,47 @@ from openai import OpenAI, OpenAIError
 from pydantic import BaseModel
 
 T = TypeVar("T", bound=BaseModel)
+
+
+def extract_last_arguments_json(text: str) -> str:
+    # Remove <think>...</think> and <tool_call>...</tool_call>
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
+    text = re.sub(r"<tool_call>.*?</tool_call>", "", text, flags=re.DOTALL)
+    text = text.strip()
+
+    decoder = json.JSONDecoder()
+    idx = 0
+    last_arguments = None
+
+    while idx < len(text):
+        # Skip to the next '{' or '['
+        match = re.search(r"[\{\[]", text[idx:])
+        if not match:
+            break
+        start = idx + match.start()
+        try:
+            obj, end = decoder.raw_decode(text[start:])
+            if isinstance(obj, dict) and "arguments" in obj:
+                last_arguments = obj["arguments"]
+            idx = start + end
+        except json.JSONDecodeError:
+            idx = start + 1  # Move forward and try again
+
+    if last_arguments is None:
+        raise ValueError("No valid tool call with 'arguments' found.")
+
+    return json.dumps(last_arguments, ensure_ascii=False)
+
+
+# Usage example:
+def get_tool_args(msg):
+    # Try tool_calls first (if API ever returns it)
+    tool_calls = getattr(msg, "tool_calls", None)
+    if tool_calls:
+        # your normal tool call logic here
+        return tool_calls[0].function.arguments
+    # Fallback: generic JSON extraction from message content
+    return extract_last_arguments_json(msg.content)
 
 
 class LocalClient(LLMBaseInterface):
@@ -100,30 +143,23 @@ class LocalClient(LLMBaseInterface):
                     # TODO: for some reason, LM Studio doesn't like
                     # maybe later version will work.
                     # tool_choice=tool_choice,
+                    # tool_choice="required",
                     tool_choice="auto",
                 )
 
                 msg = response.choices[0].message
-                tool_calls = getattr(msg, "tool_calls", None)
-                if not tool_calls:
-                    print("No tool_call in response.")
+
+                try:
+                    arguments = get_tool_args(msg)
+                    return model.model_validate_json(arguments)
+                except Exception as e:  # noqa
+                    print(f"Failed to validate tool_call arguments: {e}")
+                    # print(tool.function.arguments)
                     if attempt == retries - 1:
-                        raise RuntimeError("No tool_call in response.")
+                        raise RuntimeError(
+                            f"Failed to validate tool_call arguments: {e}",
+                        )
                     continue
-
-                tool = tool_calls[0]
-                # if tool.function.name != tool_name:
-                #     print(
-                #         f"Unexpected tool name: {tool.function.name} "
-                #         f"(expected: {tool_name})",
-                #     )
-                #     if attempt == retries - 1:
-                #         raise RuntimeError(
-                #             f"Unexpected tool name: {tool.function.name}",
-                #         )
-                #     continue
-
-                return model.model_validate_json(tool.function.arguments)
 
             except OpenAIError as e:
                 print(f"Request failed: {e}")
